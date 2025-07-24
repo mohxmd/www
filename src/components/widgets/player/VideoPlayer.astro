@@ -4,31 +4,17 @@ import Controls from "./controls/Controls.astro";
 import Settings from "./settings/Settings.astro";
 
 // assets
-import TestVideo from "../../../assets/test.mp4";
-import EngSub from "../../../assets/test-sub-en.vtt";
-import TRSub from "../../../assets/test-sub-tr.vtt";
+// import TestVideo from "../../../assets/test.mp4";
 ---
 
 <div class="container">
   <div id="videoPlayer" aria-paused="true" transition:persist>
-    <video preload="metadata" id="mainVideo">
+    <!-- <video preload="metadata" id="mainVideo">
       <source src={TestVideo} type="video/mp4" />
       <source src={TestVideo} type="video/mp4" />
-      <track
-        id="englishSub"
-        label="English"
-        kind="subtitles"
-        srclang="en"
-        src={EngSub}
-      />
-      <track
-        id="turkishSub"
-        label="Turkish"
-        kind="subtitles"
-        srclang="tr"
-        src={TRSub}
-      />
-    </video>
+      <track id="englishSub" label="English" kind="subtitles" srclang="en" />
+      <track id="turkishSub" label="Turkish" kind="subtitles" srclang="tr" />
+    </video> -->
 
     <div class="loading-spinner"></div>
 

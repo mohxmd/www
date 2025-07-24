@@ -1,60 +1,60 @@
 ---
-const { Icon, description, idList } = Astro.props
+const { Icon, description, idList } = Astro.props;
 ---
 
 <div class="toast-container hidden" id={idList}>
-	<div class="toast" role="alert">
-		<div class="toast__icon">
-			<Icon size={18} />
-		</div>
-		<div class="toast__message">{description}</div>
-	</div>
+  <div class="toast" role="alert">
+    <div class="toast__icon">
+      <Icon size={18} />
+    </div>
+    <div class="toast__message">{description}</div>
+  </div>
 </div>
 
 <style lang="scss">
-	.hidden {
-		display: none !important;
-	}
-	.toast-container {
-		display: flex;
-		justify-content: center;
-		.toast {
-			position: fixed;
-			bottom: 1.5rem;
-			border-radius: 0.5rem;
-			padding: 0.7rem;
-			border: 1px solid var(--border-color);
+  .hidden {
+    display: none !important;
+  }
+  .toast-container {
+    display: flex;
+    justify-content: center;
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      border-radius: 0.5rem;
+      padding: 0.7rem;
+      border: 1px solid var(--border-color);
 
-			display: flex;
-			align-items: center;
-			width: 100%;
-			max-width: 20rem;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 20rem;
 
-			background-color: var(--secondary);
-			color: var(--title);
+      background-color: var(--secondary);
+      color: var(--title);
 
-			box-shadow:
-				0 4px 6px -1px rgba(0, 0, 0, 0.1),
-				0 2px 4px -2px rgba(0, 0, 0, 0.1);
-			.toast__icon {
-				display: inline-flex;
-				flex-shrink: 0;
-				align-items: center;
-				justify-content: center;
+      box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      .toast__icon {
+        display: inline-flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
 
-				width: 2rem;
-				height: 2rem;
-				border-radius: 0.5rem;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.5rem;
 
-				background-color: var(--tertiary);
-				color: var(--title);
-			}
-			.toast__message {
-				margin-inline-start: 0.75rem;
-				font-size: 1rem;
-				line-height: 1.25rem;
-				font-weight: 400;
-			}
-		}
-	}
+        background-color: var(--tertiary);
+        color: var(--title);
+      }
+      .toast__message {
+        margin-inline-start: 0.75rem;
+        font-size: 1rem;
+        line-height: 1.25rem;
+        font-weight: 400;
+      }
+    }
+  }
 </style>

@@ -8,19 +8,22 @@ image: "/images/blogs/computer-desk-workstation.jpg"
 tags: ["arch linux", "linux", "kde"]
 ---
 
-import Blockquote from "@components/widgets/Blockquote.astro"
+import Blockquote from "@/components/widgets/Blockquote.astro";
 
 After a successful Arch Linux installation and the first reboot, it's time to start setting things up! Here's how I began transforming my fresh Arch installation into a functional and personalized environment.
 
 ## First Things First: Update Your System
+
 Right after booting into my new Arch Linux system, I made sure everything was up to date. It's a simple yet crucial step:
 
 ```bash
 sudo pacman -Syyu
 ```
+
 This command updates the package database and upgrades all installed packages to the latest version.
 
 ## Essential Packages: Git and Development Tools
+
 Next, I needed some essential tools to get started. I installed `git` for version control and `base-devel`, which includes essential development tools:
 
 ```bash
@@ -28,6 +31,7 @@ sudo pacman -S --needed git base-devel
 ```
 
 With `git` installed, I configured my name and email for version control:
+
 ```bash
 git config --global user.name "Mohammed"
 git config --global user.email "hello@example.com"
@@ -57,6 +61,7 @@ Securing a system with a properly configured firewall is a critical step in main
 ### Install and Enable UFW
 
 1. Install UFW using **pacman**:
+
    ```bash
    sudo pacman -S ufw
    ```
@@ -81,17 +86,19 @@ sudo ufw enable                  # Enable the firewall
 ```
 
 To check the status and rules:
+
 ```bash
 sudo ufw status
 ```
 
 ## Installing Yay: The AUR Helper
+
 To easily manage and install AUR (Arch User Repository) packages, I decided to install `yay`, a handy AUR helper. But before jumping into that, I created a special directory for all my development tools—my secret stash, if you will.
 
 First, I set up a `"Developer"` directory. Why? Well, it's a great habit to keep all your personal building tools and projects organized. I also use this directory to store other development environments like Golang, Flutter, and more. Think of it as your project's headquarters—keeping everything tidy and in one place makes life so much easier.
 
-
 Here’s how I did it:
+
 ```bash
 mkdir Developer
 cd Developer
@@ -101,12 +108,15 @@ makepkg -si
 ```
 
 And just like that, yay was installed. I checked the installation with:
+
 ```bash
 yay --version
 ```
+
 For more about yay, check out its [GitHub page](https://github.com/Jguer/yay).
 
 ## Enabling Bluetooth: The Missing Link
+
 Sometimes, after installing Arch Linux, you might notice that the Bluetooth option is mysteriously missing. But don't worry—it's a quick fix!
 
 Just run these commands to enable and start Bluetooth:
@@ -144,7 +154,7 @@ Now that we've got the basics down, let's make our Arch Linux setup uniquely our
 
 ### 1. Customizing the Plasma Panels
 
-My desktop looks like: 
+My desktop looks like:
 
 ![Buraq Home](/images/blogs/buraq-home.jpg "Buraq home")
 
@@ -174,14 +184,14 @@ Go to `Settings > Window Management > Window Rules`.
 Click `Import` and select the downloaded `.kwinrule` file.
 
 <Blockquote title="Fun Fact" type="info">
-My system name is Buraq 😄. It’s a cool name, don’t you think?
+  My system name is Buraq 😄. It’s a cool name, don’t you think?
 </Blockquote>
 
 ### 3. Icon Pack Customization
 
 To give my desktop a cohesive and stylish look, I’m using the [**GruvBox Icon Theme**](https://store.kde.org/p/1327720). It adds a unique touch to the icons on my system.
 
-Here’s how my desktop looks with this icon pack: 
+Here’s how my desktop looks with this icon pack:
 
 ![GruvBox Icon Theme](/images/blogs/buraq-icon-theme.jpg "GruvBox Icon Theme")
 
@@ -233,8 +243,9 @@ For development, I use the following tools and languages:
 - [**MongoDB**](https://www.mongodb.com/): A NoSQL database for managing flexible and scalable data.
 - [**MySQL**](https://www.mysql.com/): A robust relational database management system.
 - [**Redis**](https://redis.io/): An in-memory data structure store used as a database, cache, and message broker.
+- [**postgresql-libs**](https://archlinux.org/packages/extra/x86_64/postgresql-libs/): Libraries required by applications that interact with PostgreSQL, even if you're not running a PostgreSQL server locally.
+- [**pgcli**](https://github.com/dbcli/pgcli): A command-line client for PostgreSQL with auto-completion and syntax highlighting — a more user-friendly psql.
 
 These tools and software are integral to my workflow, making my Arch Linux setup not only functional but also tailored to my needs. If you have any questions about these tools or need recommendations, feel free to reach out!
 
 And that’s a wrap on my personal Arch Linux setup from scratch! I hope you found this guide helpful and inspiring. Happy customizing! 😄
-

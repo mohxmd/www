@@ -7,7 +7,8 @@ author: "Mohammed"
 image: "/images/blogs/person-using-retro-computer.jpg"
 tags: ["zsh", "oh-my-zsh", "terminal", "linux"]
 ---
-import InPageNav from "@components/widgets/InPageNav.astro"
+
+import InPageNav from "@/components/widgets/InPageNav.astro";
 
 Are you tired of the same old boring terminal? Ready to give it a fresh, stylish upgrade? Well, you're in the right place! In this guide, we're going to set up Zsh with Oh My Zsh and PowerLevel10k to turn your terminal into something amazing. Whether you're a coding pro or just getting started, this setup will make your terminal not only look cool but also super efficient. Let's dive in and transform your terminal experience!
 
@@ -40,6 +41,7 @@ sudo dnf install zsh
 ```bash
 sudo pacman -S zsh
 ```
+
 </InPageNav>
 
 ### 2. Set Zsh as Your Default Shell
@@ -64,6 +66,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 ```bash
 sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 ```
+
 </InPageNav>
 
 ### 4. Install PowerLevel10k
@@ -98,10 +101,10 @@ fc-cache -f -v
 ```bash
 yay -S ttf-meslo-nerd-font-powerlevel10k
 ```
+
 </InPageNav>
 
 Once the font is installed, go to your terminal's settings and change the font to `MesloLGS NF`.
-
 
 ### 6. Activate PowerLevel10k
 
@@ -128,6 +131,7 @@ source ~/.zshrc
 ```
 
 ### 7. Configure PowerLevel10k
+
 When you restart your terminal after activating PowerLevel10k, the configuration wizard should start automatically. This wizard will guide you through customizing the appearance and features of your terminal prompt, allowing you to choose different styles, icons, and layouts.
 
 If the configuration wizard doesn't start automatically, don't worry! You can manually start it by running the following command:
@@ -140,13 +144,13 @@ This command will launch the configuration wizard, letting you set up or tweak y
 
 > Remember, you can run `p10k configure` anytime if you want to reconfigure your setup later.
 
-
 ### 8. Setting Up Plugins (Optional but Highly Recommended)
 
 To make your terminal even more powerful, you can install some useful plugins. Here’s how you can do it:
 
 **1. Autosuggestions Plugin**
 This plugin suggests commands as you type, based on your history and completions.
+
 ```zsh
 git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
 ```
@@ -154,12 +158,13 @@ git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugi
 **2. Syntax Highlighting Plugins**
 These plugins highlight command syntax in your terminal:
 
-- ***zsh-syntax-highlighting:***
+- **_zsh-syntax-highlighting:_**
+
   ```zsh
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
   ```
 
-- ***zsh-fast-syntax-highlighting:***
+- **_zsh-fast-syntax-highlighting:_**
   ```zsh
   git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
   ```
@@ -178,11 +183,13 @@ Now that you’ve installed the plugins, you need to enable them:
 - Open your `.zshrc` file:
 - Find the line that says plugins=(git).
 - Replace that line with:
+
 ```zsh title=".zshrc"
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)
 ```
 
 ### Note on zsh-autosuggestions Plugin
+
 Some users experience an issue with ghost text appearing when they paste something into the terminal and then move to the end of the command using the arrow keys. This happens because the autosuggestions plugin might conflict with the pasted text.
 
 To fix this issue, add the following line to your `.zshrc` file:
@@ -194,7 +201,7 @@ ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(bracketed-paste)
 Make sure to place this line after the following in your `.zshrc` file:
 
 ![help image](/images/blogs/oh-my-zsh.png)
- 
+
 This will help prevent any conflicts with the `zsh-autosuggestions` plugin when pasting commands into your terminal.
 
 🎉 That’s it! You’ve now transformed your terminal into a powerful, colorful, and super supportive workspace with Oh My Zsh and PowerLevel10k. Your terminal should be looking sharp and performing like a champ. Don’t forget to explore more plugins to keep enhancing your setup.

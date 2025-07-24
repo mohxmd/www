@@ -67,17 +67,17 @@ Open your `package.json` and make it look like this:
 Create a new file called `index.js` and add this code:
 
 ```javascript
-import express from "express"
+import express from "express";
 
-const app = express()
+const app = express();
 
 app.get("/api", (req, res) => {
   return res.status(200).json({
     message: "server working",
-  })
-})
+  });
+});
 
-app.listen(5000, () => console.log("Server is running on 5000"))
+app.listen(5000, () => console.log("Server is running on 5000"));
 ```
 
 ### Step 6: Hire a Building Manager (Install PM2) 👷

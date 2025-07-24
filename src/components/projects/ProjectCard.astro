@@ -1,140 +1,126 @@
 ---
-import { Book, Eye, GitFork, Star, ArrowUpRight } from "lucide-astro"
-const { name, description, source_code_link, demo_link } = Astro.props
+import { Book, Eye, GitFork, Star, ArrowUpRight } from "lucide-astro";
+const { name, description, source_code_link, demo_link } = Astro.props;
 ---
 
 <li class="repo-card">
-	<div class="repo-header">
-		<Book size={12} class="icon" aria-hidden="true" />
-		<span class="repo-name">{name}</span>
-	</div>
+  <div class="repo-header">
+    <Book size={12} class="icon" aria-hidden="true" />
+    <span class="repo-name">{name}</span>
+  </div>
 
-	<div class="repo-content">
-		<p class="repo-description">{description}</p>
+  <div class="repo-content">
+    <p class="repo-description">{description}</p>
 
-		<hr class="hr-line" />
+    <hr class="hr-line" />
 
-		<div class="repo-stats">
-			<div class="stat-group">
-				<div class="stat">
-					<Star size={12} class="icon" />
-					<span>8</span>
-				</div>
+    <div class="repo-stats">
+      <div class="stat-group">
+        <div class="stat">
+          <Star size={12} class="icon" />
+          <span>8</span>
+        </div>
 
-				<div class="stat">
-					<GitFork size={12} class="icon" />
-					<span>0</span>
-				</div>
+        <div class="stat">
+          <GitFork size={12} class="icon" />
+          <span>0</span>
+        </div>
 
-				<div class="stat">
-					<Eye size={12} class="icon" />
-					<span>9</span>
-				</div>
-			</div>
+        <div class="stat">
+          <Eye size={12} class="icon" />
+          <span>9</span>
+        </div>
+      </div>
 
-			{
-				source_code_link || demo_link ? (
-					<div class="links">
-						{source_code_link && (
-							<a href={source_code_link} target="_blank">
-								Code{" "}
-								<ArrowUpRight
-									size={12}
-									data-external-icon
-									aria-hidden
-								/>
-							</a>
-						)}
+      {
+        source_code_link || demo_link ? (
+          <div class="links">
+            {source_code_link && (
+              <a href={source_code_link} target="_blank">
+                Code <ArrowUpRight size={12} data-external-icon aria-hidden />
+              </a>
+            )}
 
-						{demo_link && (
-							<a href={demo_link}>
-								Live{" "}
-								<ArrowUpRight
-									size={12}
-									data-external-icon
-									aria-hidden
-								/>
-							</a>
-						)}
-					</div>
-				) : (
-					""
-				)
-			}
-		</div>
-	</div>
+            {demo_link && (
+              <a href={demo_link}>
+                Live <ArrowUpRight size={12} data-external-icon aria-hidden />
+              </a>
+            )}
+          </div>
+        ) : (
+          ""
+        )
+      }
+    </div>
+  </div>
 </li>
 
 <style>
-	.repo-card {
-		height: 100%;
-		border: 1px solid var(--border-color);
-		border-radius: 0.25rem;
-		box-shadow: var(--shadow);
-	}
-	.repo-header {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		border-bottom: 1px solid var(--border-color);
-		/* background-color: var(--secondary); */
-		padding: 0.25rem 0.5rem;
-		border-top-left-radius: 0.25rem;
-		border-top-right-radius: 0.25rem;
+  .repo-card {
+    height: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 0.25rem;
+    box-shadow: var(--shadow);
+  }
+  .repo-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    /* background-color: var(--secondary); */
+    padding: 0.25rem 0.5rem;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
 
-		background-color: #var(--tertiary);
-		background-image: linear-gradient(
-			95deg,
-			#fff3,
-			#ffffff0d
-		);
-		/* box-shadow: inset 0 0 0 1px #ffffff1a; */
-		backdrop-filter: blur(160px);
-	}
-	.icon {
-		flex-shrink: 0;
-		color: var(--gray);
-	}
-	.repo-content {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		padding: 0.75rem;
-		color: var(--gray);
-	}
-	.repo-stats {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 0.5rem;
-		line-height: 1.6;
-	}
-	.stat-group {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-	}
-	.stat {
-		display: flex;
-		align-items: center;
-		gap: 0.25rem;
-	}
-	.links {
-		display: flex;
-		gap: 1rem;
-	}
-	a {
-		color: var(--title);
-		text-decoration: none;
+    background-color: #var(--tertiary);
+    background-image: linear-gradient(95deg, #fff3, #ffffff0d);
+    /* box-shadow: inset 0 0 0 1px #ffffff1a; */
+    backdrop-filter: blur(160px);
+  }
+  .icon {
+    flex-shrink: 0;
+    color: var(--gray);
+  }
+  .repo-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    color: var(--gray);
+  }
+  .repo-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.6;
+  }
+  .stat-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .links {
+    display: flex;
+    gap: 1rem;
+  }
+  a {
+    color: var(--title);
+    text-decoration: none;
 
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
 
-		transition: all 0.2s ease-in;
-		&:hover {
-			color: var(--primary);
-		}
-	}
+    transition: all 0.2s ease-in;
+    &:hover {
+      color: var(--primary);
+    }
+  }
 </style>

@@ -1,107 +1,107 @@
-import { simplifyDate } from "@lib/index"
+import { simplifyDate } from "@/lib/index";
 
 interface Post {
-	slug: string
-	image?: string
-	title: string
-	description: string
-	pubDate: string
-	readingTime: number
-	tags: string[]
+  slug: string;
+  image?: string;
+  title: string;
+  description: string;
+  pubDate: string;
+  readingTime: number;
+  tags: string[];
 }
 
 document.addEventListener("astro:page-load", () => {
-	const executeSearch = async (
-		search: string,
-		activeTags: string[]
-	): Promise<Post[]> => {
-		const searchQuery = search.toLowerCase().trim()
+  const executeSearch = async (
+    search: string,
+    activeTags: string[],
+  ): Promise<Post[]> => {
+    const searchQuery = search.toLowerCase().trim();
 
-		const response = await fetch("/api/blog/search.json")
-		const searchData: Post[] = await response.json()
+    const response = await fetch("/api/blog/search.json");
+    const searchData: Post[] = await response.json();
 
-		const filteredPosts = searchData.filter((post) => {
-			const isVisible =
-				(searchQuery === "" ||
-					post.title.toLowerCase().includes(searchQuery) ||
-					post.description.toLowerCase().includes(searchQuery)) &&
-				(activeTags.length === 0 ||
-					activeTags.some((tag) => post.tags.includes(tag)))
+    const filteredPosts = searchData.filter((post) => {
+      const isVisible =
+        (searchQuery === "" ||
+          post.title.toLowerCase().includes(searchQuery) ||
+          post.description.toLowerCase().includes(searchQuery)) &&
+        (activeTags.length === 0 ||
+          activeTags.some((tag) => post.tags.includes(tag)));
 
-			return isVisible
-		})
+      return isVisible;
+    });
 
-		if (searchQuery === "" && activeTags.length === 0) {
-			return []
-		}
+    if (searchQuery === "" && activeTags.length === 0) {
+      return [];
+    }
 
-		return filteredPosts
-	}
+    return filteredPosts;
+  };
 
-	const searchFilter = document.querySelector(
-		"[data-post-filter-search]"
-	) as HTMLInputElement
-	const tagsFilter = document.querySelector(
-		"[data-post-filter-tags]"
-	) as HTMLElement
-	const staticPosts = document.querySelector(
-		"[data-static-posts]"
-	) as HTMLElement
-	const searchedPosts = document.querySelector(
-		"[data-searched-posts]"
-	) as HTMLElement
+  const searchFilter = document.querySelector(
+    "[data-post-filter-search]",
+  ) as HTMLInputElement;
+  const tagsFilter = document.querySelector(
+    "[data-post-filter-tags]",
+  ) as HTMLElement;
+  const staticPosts = document.querySelector(
+    "[data-static-posts]",
+  ) as HTMLElement;
+  const searchedPosts = document.querySelector(
+    "[data-searched-posts]",
+  ) as HTMLElement;
 
-	const activeTags: string[] = []
+  const activeTags: string[] = [];
 
-	searchFilter.oninput = () => requestSearch()
+  searchFilter.oninput = () => requestSearch();
 
-	tagsFilter.querySelectorAll("input").forEach((tag) => {
-		if (tag instanceof HTMLInputElement) {
-			tag.onchange = () => {
-				if (tag.checked) {
-					activeTags.push(tag.value)
-				} else {
-					const index = activeTags.indexOf(tag.value)
-					if (index !== -1) {
-						activeTags.splice(index, 1)
-					}
-				}
-				requestSearch()
-			}
-		}
-	})
+  tagsFilter.querySelectorAll("input").forEach((tag) => {
+    if (tag instanceof HTMLInputElement) {
+      tag.onchange = () => {
+        if (tag.checked) {
+          activeTags.push(tag.value);
+        } else {
+          const index = activeTags.indexOf(tag.value);
+          if (index !== -1) {
+            activeTags.splice(index, 1);
+          }
+        }
+        requestSearch();
+      };
+    }
+  });
 
-	async function requestSearch(): Promise<void> {
-		const payload = await executeSearch(
-			searchFilter.value,
-			Array.from(activeTags)
-		)
+  async function requestSearch(): Promise<void> {
+    const payload = await executeSearch(
+      searchFilter.value,
+      Array.from(activeTags),
+    );
 
-		searchedPosts.innerHTML = ""
+    searchedPosts.innerHTML = "";
 
-		if (payload.length) {
-			staticPosts.classList.add("hidden")
-			searchedPosts.classList.remove("hidden")
-		} else {
-			staticPosts.classList.remove("hidden")
-			searchedPosts.classList.add("hidden")
-		}
+    if (payload.length) {
+      staticPosts.classList.add("hidden");
+      searchedPosts.classList.remove("hidden");
+    } else {
+      staticPosts.classList.remove("hidden");
+      searchedPosts.classList.add("hidden");
+    }
 
-		payload.forEach((post) => {
-			const { image, title, description, pubDate, readingTime } = post
+    payload.forEach((post) => {
+      const { image, title, description, pubDate, readingTime } = post;
 
-			searchedPosts.innerHTML += `
+      searchedPosts.innerHTML += `
 			<article class="post-card">
 				<a href="/blog/${post.slug}" aria-label="${title}. ${description}">
 					${
-						image && image !== ""
-							? `
+            image && image !== ""
+              ? `
 					<div class="post-card__thumbnail-container">
 						<img src="${image}" alt="${title}" />
 					</div>
 					`
-							: ""
-					}
+              : ""
+          }
 
 					<div class="post-card__body">
 						<h2 class="title">${title}</h2>
@@ -178,7 +178,7 @@ document.addEventListener("astro:page-load", () => {
 				</a>
 			</article>
 
-    `
-		})
-	}
-})
+    `;
+    });
+  }
+});

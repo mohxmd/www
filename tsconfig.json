@@ -1,23 +1,13 @@
 {
-	"extends": "astro/tsconfigs/base",
-	"compilerOptions": {
-		"strictNullChecks": true,
-		"baseUrl": ".",
-		"plugins": [
-			{
-				"name": "@astrojs/ts-plugin"
-			}
-		],
-		"paths": {
-			"@components/*": ["src/components/*"],
-			"@layouts/*": ["src/layouts/*"],
-			"@lib/*": ["src/lib/*"],
-			"@firebase/*": ["src/firebase/*"],
-			"@styles/*": ["src/styles/*"],
-			"@scripts/*": ["src/scripts/*"],
-			"@api/*": ["src/pages/api/*"]
-		}
-	},
-	// env.d.ts
-	"include": ["src/**/*", "env.d.ts"]
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"],
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
 }

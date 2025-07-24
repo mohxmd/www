@@ -1,109 +1,110 @@
 <section id="newsletter">
-    <div class="wrapper">
-        <div class="newsletter__container">
-            <div class="newsletter__left">
-                <div class="newsletter__head">
-                    <h3 class="section-title">Subscribe to my <span>Newsletters</span></h3>
-                    <p>
-                        Get the latest posts delivered right to your inbox.
-                    </p>
-                </div>
-            </div>
-
-            <div class="newsletter__right">
-                <form action="">
-                    <div class="newsletter__input-container">
-                        <input type="text" placeholder="Work Email" />
-                        <button type="submit" aria-label="Submit newsletter">Subscribe</button>
-                    </div>
-                </form>
-            </div>
+  <div class="wrapper">
+    <div class="newsletter__container">
+      <div class="newsletter__left">
+        <div class="newsletter__head">
+          <h3 class="section-title">
+            Subscribe to my <span>Newsletters</span>
+          </h3>
+          <p>Get the latest posts delivered right to your inbox.</p>
         </div>
+      </div>
+
+      <div class="newsletter__right">
+        <form action="">
+          <div class="newsletter__input-container">
+            <input type="text" placeholder="Work Email" />
+            <button type="submit" aria-label="Submit newsletter"
+              >Subscribe</button
+            >
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </section>
 
 <style lang="scss">
-    .newsletter__container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1.5rem;
+  .newsletter__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
 
-        @media all and (max-width: 640px) {
-            flex-direction: column;
-            align-items: initial;
-        }
-        .newsletter__left {
-            width: 58.333333%;
-            @media all and (max-width: 640px) {
-                width: auto;
-            }
-            .newsletter__head {
-                h3 {
-                    span {
-                        color: transparent;
-                        background: var(--text-gradient);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                    }
-                }
-                p {
-                    margin-top: .75rem;
-                    color: var(--gray);
-                    font-family: "8-bit_regular";
-                }
-            }
-        }
-
-        .newsletter__right {
-            widows: 41.666667%;
-            @media all and (max-width: 640px) {
-                width: 100%;
-            }
-            form {
-                .newsletter__input-container {
-                    width: 100%;
-                    background-color: var(--secondary);
-                    border-radius: 9999px;
-                    display: flex;
-                    padding: .5rem 1rem;
-
-                    border: 2px solid var(--border-color);
-                    transition: all 0.2s ease-in;
-
-                    &:hover {
-                        border-color: var(--primary);
-                    }
-
-                    input {
-                        appearance: none;
-                        display: block;
-                        outline: none;
-                        border: none;
-                        flex: 1;
-                        background-color: var(--secondary);
-                        width: 100%;
-                        font-size: 100%;
-                        color: inherit;
-                    }
-
-                    button {
-                        cursor: pointer;
-                        outline: none;
-                        border: none;
-                        font-weight: 500;
-                        font-size: .875rem;
-                        line-height: 1.25rem;
-                        padding: .25rem .75rem;
-                        border-radius: 9999px;
-                        background: var(--primary);
-                        flex-shrink: 0;
-                        margin-left: .5rem;
-                        color: #fff;
-                    }
-                }
-            }
-        }
+    @media all and (max-width: 640px) {
+      flex-direction: column;
+      align-items: initial;
     }
-</style>
+    .newsletter__left {
+      width: 58.333333%;
+      @media all and (max-width: 640px) {
+        width: auto;
+      }
+      .newsletter__head {
+        h3 {
+          span {
+            color: transparent;
+            background: var(--text-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+          }
+        }
+        p {
+          margin-top: 0.75rem;
+          color: var(--gray);
+          font-family: "8-bit_regular";
+        }
+      }
+    }
 
+    .newsletter__right {
+      widows: 41.666667%;
+      @media all and (max-width: 640px) {
+        width: 100%;
+      }
+      form {
+        .newsletter__input-container {
+          width: 100%;
+          background-color: var(--secondary);
+          border-radius: 9999px;
+          display: flex;
+          padding: 0.5rem 1rem;
+
+          border: 2px solid var(--border-color);
+          transition: all 0.2s ease-in;
+
+          &:hover {
+            border-color: var(--primary);
+          }
+
+          input {
+            appearance: none;
+            display: block;
+            outline: none;
+            border: none;
+            flex: 1;
+            background-color: var(--secondary);
+            width: 100%;
+            font-size: 100%;
+            color: inherit;
+          }
+
+          button {
+            cursor: pointer;
+            outline: none;
+            border: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            background: var(--primary);
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+</style>

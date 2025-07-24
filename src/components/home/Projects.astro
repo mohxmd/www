@@ -1,32 +1,32 @@
 ---
-import ProjectCard from "../projects/ProjectCard.astro"
-import HeadTitle from "../common/HeadTitle.astro"
+import ProjectCard from "../projects/ProjectCard.astro";
+import HeadTitle from "../common/HeadTitle.astro";
 
-import projects from "../../data/projects.json"
-const lastThreeProjects = projects.slice(0, 2)
+import projects from "@/content/data/projects.json";
+const lastThreeProjects = projects.slice(0, 2);
 ---
 
 <section id="projects">
-	<div class="wrapper">
-		<HeadTitle t1="Recent" t2="Projects" url="/projects" />
+  <div class="wrapper">
+    <HeadTitle t1="Recent" t2="Projects" url="/projects" />
 
-		<ul class="projects-container">
-			{lastThreeProjects.map((project) => <ProjectCard {...project} />)}
-		</ul>
-	</div>
+    <ul class="projects-container">
+      {lastThreeProjects.map((project) => <ProjectCard {...project} />)}
+    </ul>
+  </div>
 </section>
 
 <style lang="scss">
-	.projects-container {
-		// display: flex;
-		// flex-direction: column;
-		// gap: 1.5rem;
+  .projects-container {
+    // display: flex;
+    // flex-direction: column;
+    // gap: 1.5rem;
 
-		display: grid;
-		column-gap: 1.5rem;
-		row-gap: 1.5rem;
-		@media (min-width: 768px) {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
+    display: grid;
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
 </style>

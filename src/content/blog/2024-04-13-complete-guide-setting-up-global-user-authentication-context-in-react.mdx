@@ -17,63 +17,60 @@ As we develop React applications, managing user authentication becomes crucial. 
 We'll start by creating a global context to manage user authentication state. Here's the code for our context provider:
 
 ```jsx title="/src/contexts/GlobalContext.jsx"
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState, useEffect } from "react";
 
 // Create a global context for managing user authentication state
 const StateContext = createContext({
   userData: {},
-  setUserData: () => { },
-  updateUserData: () => { },
-})
+  setUserData: () => {},
+  updateUserData: () => {},
+});
 
 // ContextProvider component encapsulates the user authentication state
 export const ContextProvider = ({ children }) => {
   // Initialize user data state using local storage
   const [userData, setUserData] = useState(
-    JSON.parse(localStorage.getItem("user_data"))
-  )
+    JSON.parse(localStorage.getItem("user_data")),
+  );
 
   // Function to update user data based on action type
   const updateUserData = (action) => {
     switch (action?.type) {
       case "LOGOUT":
-        setUserData(null)
-        localStorage.removeItem("user_data")
-        break
+        setUserData(null);
+        localStorage.removeItem("user_data");
+        break;
       case "LOGIN":
-        localStorage.setItem(
-          "user_data",
-          JSON.stringify(action?.payload)
-        )
-        setUserData(action?.payload)
-        break
+        localStorage.setItem("user_data", JSON.stringify(action?.payload));
+        setUserData(action?.payload);
+        break;
       default:
-        return
+        return;
     }
-  }
+  };
 
   // Fetch user data from local storage on component mount
   useEffect(() => {
-    setUserData(JSON.parse(localStorage.getItem("user_data")))
-  }, [])
+    setUserData(JSON.parse(localStorage.getItem("user_data")));
+  }, []);
 
   // Provide the user authentication state to child components
   return (
     <StateContext.Provider value={{ userData, updateUserData }}>
       {children}
     </StateContext.Provider>
-  )
-}
+  );
+};
 
 // Custom hook to access the user authentication state
-export const useStateContext = () => useContext(StateContext)
+export const useStateContext = () => useContext(StateContext);
 ```
 
 Next, let's integrate our context provider into the root of our React application:
 
 ```jsx title="/src/App.jsx"
-import { ContextProvider } from "./contexts/GlobalContext"
-import Routes from "./routes/Routes"
+import { ContextProvider } from "./contexts/GlobalContext";
+import Routes from "./routes/Routes";
 
 // Wrap the entire application with the ContextProvider to provide access to user authentication state
 const App = () => {
@@ -81,10 +78,10 @@ const App = () => {
     <ContextProvider>
       <Routes />
     </ContextProvider>
-  )
-}
+  );
+};
 
-export default App
+export default App;
 ```
 
 ## Managing Authentication State
@@ -93,34 +90,34 @@ With our global context set up, we can easily manage user authentication state t
 
 ```jsx title="/src/AuthForm.jsx"
 const handleSubmit = (event) => {
-  event.preventDefault()
+  event.preventDefault();
 
   // Determine API route based on form type
-  const apiRoute = type === "sign-in" ? "signin" : "signup"
+  const apiRoute = type === "sign-in" ? "signin" : "signup";
 
   /**
    * Extract form data
    * NOTE: Here, `idFormElement` is the id of the form (an alternative to using ref.current)
    */
-  const form = new FormData(idFormElement)
-  const formData = {}
+  const form = new FormData(idFormElement);
+  const formData = {};
 
   // Convert form data to object
   for (const [key, value] of form.entries()) {
-    formData[key] = value
+    formData[key] = value;
   }
 
   // Destructure form data
-  const { fullName, email, password } = formData
+  const { fullName, email, password } = formData;
 
   // Add your validations
   if (fullName && fullName.length < 3) {
-    return toast.error("Full name must be at least 3 letters long")
+    return toast.error("Full name must be at least 3 letters long");
   }
 
   // Call the authentication function
-  userAuthThroughApi(apiRoute, formData)
-}
+  userAuthThroughApi(apiRoute, formData);
+};
 ```
 
 ```jsx title="/src/AuthForm.jsx" showLineNumbers{31} /updateUserData/#v /LOGIN/#i
@@ -130,13 +127,13 @@ const userAuthThroughApi = (apiRoute, formData) => {
     .post(`${import.meta.env.VITE_API_URL}/auth/${apiRoute}`, formData)
     .then((response) => {
       // Update user data in global context upon successful login
-      updateUserData({ type: "LOGIN", payload: response?.data?.user })
+      updateUserData({ type: "LOGIN", payload: response?.data?.user });
     })
     .catch((error) => {
       // Display error message if login fails
-      toast.error(error?.response?.data?.message)
-    })
-}
+      toast.error(error?.response?.data?.message);
+    });
+};
 ```
 
 This function, `userAuthThroughApi`, handles user authentication by sending a POST request to the authentication API endpoint. It takes two parameters: apiRoute, which specifies the type of authentication (sign-in or sign-up), and formData, containing user credentials. Upon successful authentication, it updates the user data in the global context. In case of a failed authentication attempt, it displays an error message.
@@ -145,8 +142,8 @@ This function, `userAuthThroughApi`, handles user authentication by sending a PO
 // Function to sign out user
 const signOutUser = () => {
   // Clear user data from global context and local storage
-  updateUserData({ type: "LOGOUT" })
-}
+  updateUserData({ type: "LOGOUT" });
+};
 ```
 
 The `signOutUser` function clears the user data from the global context and local storage upon user logout. After clearing the user data, it performs any necessary cleanup actions. In the example, it logs the username for demonstration purposes.
@@ -156,12 +153,12 @@ The `signOutUser` function clears the user data from the global context and loca
 To ensure that certain routes are accessible only to authenticated users, we can create a Home component that redirects unauthorized users to the sign-in page:
 
 ```jsx title="HomeScreen.jsx"
-import { useEffect } from "react"
-import { Navigate } from "react-router-dom"
-import { useStateContext } from "../../contexts/GlobalContext"
+import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import { useStateContext } from "../../contexts/GlobalContext";
 
 const Home = () => {
-  const { userData } = useStateContext()
+  const { userData } = useStateContext();
 
   return !userData.access_token ? (
     <Navigate to="/signin" />
@@ -170,10 +167,10 @@ const Home = () => {
       <h1>Welcome to the Home Page!</h1>
       {/* Add your home page content here */}
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
 ```
 
 > **Note:** In this blog, the handling of registration, private routes, and other related functionalities are presented in a simplified manner for demonstration purposes. You can modify and adapt these components and functions according to your specific requirements and preferred coding style.

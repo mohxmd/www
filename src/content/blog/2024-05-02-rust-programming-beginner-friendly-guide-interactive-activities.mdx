@@ -22,48 +22,49 @@ Dive into the world of Rust programming with hands-on activities! This beginner-
 ## Technical Rust Goodies
 
 - First-class multithreading
-    - Compiler error to improperly access shared data
+  - Compiler error to improperly access shared data
 - Type system:
-    - Can uncover bugs at compile time
-    - Makes refactoring simple
-    - Reduces the number of tests needed
+  - Can uncover bugs at compile time
+  - Makes refactoring simple
+  - Reduces the number of tests needed
 - Module system makes code separation simple
 - Adding a dependency is 1 line in a config file
 - Tooling:
-    - Generate docs, lint code, auto format
+  - Generate docs, lint code, auto format
 
 ## Data Types
 
 - Memory only stores [binary data](https://)
-    - Anything can be represented in binary
-    - Program determines what the binary represents
+  - Anything can be represented in binary
+  - Program determines what the binary represents
 - Basic types that are universally useful are provided by the language
 
 ## Basic Data Types
 
 - Boolean
-    - true, false
+  - true, false
 - Integer
-    - 1, 2, 50, 99, -2
+  - 1, 2, 50, 99, -2
 - Double / Float
-    - 1.1, 5.5, 200.0001, 2.0
+  - 1.1, 5.5, 200.0001, 2.0
 - Character
-    - 'A', 'B', 'c', '6', '$'
+  - 'A', 'B', 'c', '6', '$'
 - String
-    - "Hello", "world", "this is a string", "it's 101"
+  - "Hello", "world", "this is a string", "it's 101"
 
 > ♟️ Anything can be represented with binary <br />
-  ♟️ Basic data types are:
+> ♟️ Basic data types are:
+
     `boolean`, `integer`, `double & float`, `character`, `string`
 
 ## What is a variable?
 
 - Assign data to a temporary memory location
-    - Allows programmer to easily work with memory
+  - Allows programmer to easily work with memory
 - Can be set to any value & type
 - Immutable by default, but can be mutable
-    - `Immutable`: cannot be changed
-    - `Mutable`: can be changed
+  - `Immutable`: cannot be changed
+  - `Mutable`: can be changed
 
 > Memory is essentially data; it serves as a space for storing information.
 
@@ -80,20 +81,21 @@ let your_half = my_half;
 ```
 
 > 🚀 Variables make it easier to work with data <br />
-  🚀 Variables can be assigned to any value This include other variables <br />
-  🚀 Immutable by default
+> 🚀 Variables can be assigned to any value This include other variables <br />
+> 🚀 Immutable by default
 
 ## What are functions?
 
 - A way to encapsulate program functionality
-    - Optionally accept data
-    - Optionally return data
+  - Optionally accept data
+  - Optionally return data
 - Utilized for code organization
-    - Also makes code easier to read
+  - Also makes code easier to read
 
 ## Anatomy of a function
 
 ### Structure
+
 ```rust
 fn fun_name(parameters: type) -> return_type {
     return something
@@ -101,6 +103,7 @@ fn fun_name(parameters: type) -> return_type {
 ```
 
 ### Example
+
 ```rust
 fn add(a: 132, b: i32) -> i32 {
     a + b
@@ -120,11 +123,11 @@ let z = add(x, 1);
 ```
 
 > ✴️ Functions encapsulate functionality <br />
-✴️ Useful to organize code <br />
-✴️ Can be executed by "calling" the function <br />
-&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;〽️ Parameters determine what data a function can work with <br />
-✴️ Optionally "returns" data <br />
-&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;〽️ Data sent back from the function
+> ✴️ Useful to organize code <br />
+> ✴️ Can be executed by "calling" the function <br />
+> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;〽️ Parameters determine what data a function can work with <br />
+> ✴️ Optionally "returns" data <br />
+> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;〽️ Data sent back from the function
 
 ## The println macro
 
@@ -150,17 +153,17 @@ println!("{x}");
 
 - Generate additional Rust code
 - Data can be printed using println!:
-    - `{:?}`
-    - `{varname:?}`
+  - `{:?}`
+  - `{varname:?}`
 
 ## Execution Flow
 
 - Code executed line-by-line
 - Actions are performed & control flow may change
 - Specific conditions can change control flow
-    - ► `if`
-    - ► `else`
-    - ► `else if`
+  - ► `if`
+  - ► `else`
+  - ► `else if`
 
 ## Example - Nested if..else
 
@@ -183,8 +186,8 @@ if a > 99 {
 +--------+
 | Start  |
 +---+----+
-    |                                                           
-    v                                   
+    |
+    v
 +---+------------+
 | Declare x = 1  |
 +---+------------+
@@ -211,8 +214,8 @@ if a > 99 {
 +-----------------------+
 |        Start          |
 +-----------------------+
-         |                                                           
-         v   
+         |
+         v
      +----------+
      |  x = 99  | (Assignment)
      +----------+
@@ -273,7 +276,7 @@ Yes          No             |             println! ("Small number");
       v            v        |
 +-----------------------+   |
 |        End            |<--/
-+-----------------------+   
++-----------------------+
 ```
 
 ### Example if..else if..else
@@ -283,12 +286,12 @@ Yes          No             |             println! ("Small number");
 |        Start          |
 +-----------------------+
          |
-         v    
+         v
     +----------+
     |  x = 99  | (Assignment)
     +----------+
          |
-         v                                                   
+         v
     +----------+
     |  x > 200?| (Decision)
     +----------+
@@ -301,30 +304,30 @@ Yes          No             |             println! ("Small number");
 | number   | |(Decision)|             } else {
 +----------+ +----------+                 println! ("Small number");
 |             /     \                 }
-|            Yes     No     
-|           /         \ 
-|          /           \  
+|            Yes     No
+|           /         \
+|          /           \
 |   +----------+ +----------+
 |   | Big      | | Small    |
 |   | number   | | number   |
 |   +----------+ +----------+
-|        |            |    
-|        v            v       
+|        |            |
+|        v            v
 |   +-----------------------+
 \-->|        End            |
     +-----------------------+
 ```
 
 > ✴️ Code executes line-by-line <br />
-✴️ This can be changed using `if` <br />
-✴️ Try to always include `else`, unless there truly is no alternative case
+> ✴️ This can be changed using `if` <br />
+> ✴️ Try to always include `else`, unless there truly is no alternative case
 
 ## Repetition
 
 - Called `looping` or `iteration`
 - Multiple types of loops
- - `loop` infinite loop
- - `while` conditional loop
+- `loop` infinite loop
+- `while` conditional loop
 
 ### Loop & While loop
 
@@ -361,16 +364,16 @@ Yes          No             |             println! ("Small number");
 |           | |(Increment)|----------->/
 +-----------+ +-----------+
         |
-        v  
+        v
      +------------------+
      |       End        |
      +------------------+
 ```
 
 > ♟️ Repetition can be performed using loops <br />
-&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;♟️ While loop <br />
-&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;♟️ Infinite loop <br />
-♟️ Both types of loops can exit using "break"
+> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;♟️ While loop <br />
+> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;♟️ Infinite loop <br />
+> ♟️ Both types of loops can exit using "break"
 
 ## Rust installation
 
@@ -381,6 +384,7 @@ Yes          No             |             println! ("Small number");
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
+
 2. Verify Installation: In the terminal, type `rustc --version` to verify Rust installation. Check Cargo with `cargo --version`.
 
 ### Installing Rust on macOS
@@ -401,12 +405,14 @@ cd hello_world
 ```
 
 **Exploring Project Files:** Inside the project directory, you'll find the following files:
+
 - `Cargo.toml`: This file contains metadata about the project and its dependencies. You can specify dependencies, project name, version, and other configurations here.
 - `src` directory: This directory contains your project's source code files. The `main.rs` file is the entry point for your Rust application.
 
 ## Running a Rust Project
 
 1. **Build the Project:** To compile your Rust project, run the following command in the project directory:
+
 ```bash
 cargo build
 ```
@@ -440,6 +446,7 @@ cargo run
 ```
 
 ### Output
+
 ```bash
 Hello, world!
 ```
@@ -457,7 +464,7 @@ Hello, world!
 - Keep comments concise and use them only when needed to explain complex parts of the code.
 
 ```rust
-/* This is the entry point of the 
+/* This is the entry point of the
    application.
 */
 fn main() {
@@ -480,6 +487,7 @@ In this activity, you'll learn how to define and use functions in Rust. Function
 Before we dive into the details, here's a challenge for you: Try to implement the functionality described below on your own. Once you've given it a shot, you can compare your implementation with the example provided to see how well you did.
 
 ### Steps
+
 - Display First Name: Define a function called `display_first_name` that prints your first name to the console.
 
 - Display Last Name: Define another function called `display_last_name` that prints your last name to the console.
@@ -501,7 +509,7 @@ fn display_last_name() {
 fn main() {
     // Call the display_first_name function
     display_first_name();
-    
+
     // Call the display_last_name function
     display_last_name();
 }
@@ -579,11 +587,12 @@ fn display_result(result: i32) {
 fn main() {
     // Call the add_numbers function to perform addition
     let result: i32 = add_numbers(10, 20);
-    
+
     // Display the result
     display_result(result);
 }
 ```
+
 ### Output
 
 ```
@@ -607,6 +616,7 @@ if condition {
     // Do something else if the condition is false
 }
 ```
+
 Let's say we want to check if someone is old enough to purchase something
 
 ```rust
@@ -635,7 +645,7 @@ Your task is to create a Rust program that displays a message based on the value
 Steps
 
 - **Define the Boolean Variable:** Create a boolean variable named `my_bool` and set it to either `true` or `false`.
-- **Check the Value:** Use an `if..else` block to check the value of the `my_bool` variable. 
+- **Check the Value:** Use an `if..else` block to check the value of the `my_bool` variable.
 - **Display Message:** If `my_bool` is `true`, display "Hello". If it's `false`, display "Goodbye".
 
 ```rust
@@ -704,7 +714,7 @@ Implement the activity on your own. Once you're done, compile and run your code 
 - Add logic to program
 - Similar to if..else
 - Exhaustive
-    - All options must be accounted for
+  - All options must be accounted for
 
 ### Example with boolean
 
@@ -735,15 +745,14 @@ fn main() {
 ### match vs else..if
 
 - `match` will be checked by the compiler
-    - If a new possibility is added, you will be notified when this occurs
+  - If a new possibility is added, you will be notified when this occurs
 - `else..if` is not checked by the compiler
-    - If a new possibility is added, your code may contain a bug
-
+  - If a new possibility is added, your code may contain a bug
 
 > ♟️ Prefer `match` over `else..if` when working with a single variable <br />
-♟️ `match` considers all possibilities <br />
-&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;♟️ More robust code <br />
-♟️ Use underscore (`_`) to `match` "anything else" <br />
+> ♟️ `match` considers all possibilities <br />
+> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;♟️ More robust code <br />
+> ♟️ Use underscore (`_`) to `match` "anything else" <br />
 
 ### Making decisions with match
 
@@ -771,6 +780,7 @@ fn main() {
 In this activity, you'll practice using the match expression in Rust to display a message based on the value of a boolean variable.
 
 ### Your task
+
 Your task is to create a Rust program that displays "it's true" if a boolean variable is true and "it's false" if the variable is false.
 
 ### Steps
@@ -847,7 +857,7 @@ In Rust, the loop keyword allows you to create a loop that repeats indefinitely 
 
 ```rust
 fn main() {
-    let mut i = 3;    
+    let mut i = 3;
     loop {
         println!("{:?}", i);
         i = i - 1;      // Decrement i by 1
@@ -862,7 +872,7 @@ fn main() {
 - We start with a variable `i` initialized to `3`.
 - Then, we enter an infinite `loop`.
 - Inside the `loop`, we print the current value of `i`.
-- We decrement `i` by    with each iteration of the `loop`.
+- We decrement `i` by with each iteration of the `loop`.
 - If `i` becomes `0`, we exit the loop using the `break` keyword.
 - After exiting the `loop`, we print "done!" to indicate that the `loop` has finished.
 
@@ -889,8 +899,8 @@ Your task is to create a Rust program that prints numbers from "1" through "4" i
 ```rust
 fn main() {
     let mut x = 1;
-    loop { 
-        println!("{:?}", x); 
+    loop {
+        println!("{:?}", x);
         if x == 4 {
             break;
         }
@@ -956,7 +966,7 @@ fn main() {
     while counter >= 1 {
         // Print the variable within the while loop
         println!("{:?}", counter);
-        
+
         // Decrement the counter
         counter -= 1;
     }
@@ -983,9 +993,9 @@ Compile and run your code using Cargo to see if it produces the expected output.
 ## Working With Data | enum (Enumeration)
 
 - Data that can be one of multiple different possibilities
-    - Each possibility is called a "variant"
+  - Each possibility is called a "variant"
 - Provides information about your program to the compiler
-    - More robust programs
+  - More robust programs
 
 ```rust
 enum Direction {
@@ -1008,8 +1018,8 @@ fn main() {
 - **Output:** Because `go` is `Left`, it prints `"Go Left"`.
 
 > ♦️ Enums can only be one variant at a time <br />
-♦️ More robust programs when paired with match <br />
-♦️ Make program code easier to read <br />
+> ♦️ More robust programs when paired with match <br />
+> ♦️ Make program code easier to read <br />
 
 ## Activity 7: Printing Color Names
 
@@ -1062,14 +1072,13 @@ Black
 
 Compile and run your code using Cargo to verify that it produces the expected output. If the output matches the expected result, then your implementation is correct! 🏆
 
-
 ## Working With Data | struct (Structure)
 
 - A type that contains multiple pieces of data
-    - All or nothing cannot have some pieces of data and not others
+  - All or nothing cannot have some pieces of data and not others
 - Each piece of data is called a "field"
 - Makes working with data easier
-    - Similar data can be grouped together
+  - Similar data can be grouped together
 
 ```rust
 struct GroceryItem {
@@ -1094,8 +1103,8 @@ fn main() {
 - We then print the stock and price of the `oats` item using `println!` statements.
 
 > ♦️ Structs deal with multiple pieces of data <br />
-♦️ All fields must be present to create a struct <br />
-♦️ Fields can be accessed using a dot `(.)` <br />
+> ♦️ All fields must be present to create a struct <br />
+> ♦️ Fields can be accessed using a dot `(.)` <br />
 
 ## Activity 7: Organizing Data with Structs and Enums
 
@@ -1168,12 +1177,11 @@ Fluid Ounces: 10.0
 
 Compile and run your code using Cargo to ensure it produces the expected output. If the output matches the expected result, then your implementation is correct! 🏆
 
-
 ## Working With Data | Tuples
 
 - A type of "record".
 - Store data anonymously.
-    - No need to name fields.
+  - No need to name fields.
 - Useful to return pairs of data from functions.
 - Can be "destructured" easily into variables.
 
@@ -1198,12 +1206,10 @@ fn main() {
 - **Tuple Destructuring with Different Types**: We create a tuple `(name, age)` with values `"Liviya"` and `18`.
 - **Printing Destructured Tuple with Different Types**: Print the values of `name` and `age`.
 
-
 > ♦️ Allow for anonymous data access <br />
-♦️ Useful when destructuring <br />
-♦️ Can contain any number of fields <br />
-&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;♦️ Use struct when more than 2 or 3 fields <br />
-
+> ♦️ Useful when destructuring <br />
+> ♦️ Can contain any number of fields <br />
+> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;♦️ Use struct when more than 2 or 3 fields <br />
 
 ## Activity 9: Data Management using Tuples
 
@@ -1253,9 +1259,9 @@ Compile and run your code using Cargo to see if it produces the expected output.
 ## Fundamentals | Expressions
 
 - Rust is an expression-based language.
-    - Most things are evaluated and return some value.
+  - Most things are evaluated and return some value.
 - Expression values coalesce to a single point.
-    - Can be used for nesting logic.
+  - Can be used for nesting logic.
 
 ```rust
 enum Access {
@@ -1285,10 +1291,9 @@ fn main() {
   - Otherwise (for all other access levels), we set `can_access_file` to `false`.
 - **Print Result**: Print the value of `can_access_file` to the console.
 
-
 > ♦️ Expressions allow nested logic <br />
-♦️ if and match expressions can be nested <br />
-&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;♦️ Best to not use more than two or three levels
+> ♦️ if and match expressions can be nested <br />
+> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;♦️ Best to not use more than two or three levels
 
 ## Activity 10: Working with Expressions
 

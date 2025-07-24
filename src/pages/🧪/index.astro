@@ -1,39 +1,39 @@
 ---
-// import Layout from "@layouts/Layout.astro"
-import LabLayout from "@layouts/LabLayout.astro"
-import DemosCard from "@components/demos/DemosCard.astro"
+// import Layout from "@/layouts/Layout.astro"
+import LabLayout from "@/layouts/LabLayout.astro";
+import DemosCard from "@/components/demos/DemosCard.astro";
 
-import { getCollection } from "astro:content"
+import { getCollection } from "astro:content";
 
-const demos = await getCollection("demos")
-demos.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+const demos = await getCollection("demos");
+demos.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <LabLayout
-	title="Mohammed's Blog | Project Demos"
-	description="Explore demos of my latest projects and experiments."
+  title="Mohammed's Blog | Project Demos"
+  description="Explore demos of my latest projects and experiments."
 >
-	<div class="demos-container">
-		<ul class="demos__demos-list">
-			{demos.map((demo) => <DemosCard demo={demo} />)}
-		</ul>
-	</div>
+  <div class="demos-container">
+    <ul class="demos__demos-list">
+      {demos.map((demo) => <DemosCard demo={demo} />)}
+    </ul>
+  </div>
 </LabLayout>
 
 <style lang="scss">
-	.demos-container {
-		margin-top: 2rem;
-		.demos__demos-list {
-			columns: 3;
-			gap: 1rem;
+  .demos-container {
+    margin-top: 2rem;
+    .demos__demos-list {
+      columns: 3;
+      gap: 1rem;
 
-			@media all and (max-width: 768px) {
-				columns: 2;
-			}
+      @media all and (max-width: 768px) {
+        columns: 2;
+      }
 
-			@media all and (max-width: 480px) {
-				columns: 1;
-			}
-		}
-	}
+      @media all and (max-width: 480px) {
+        columns: 1;
+      }
+    }
+  }
 </style>

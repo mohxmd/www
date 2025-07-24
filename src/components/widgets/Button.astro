@@ -1,48 +1,48 @@
 ---
-import type { HTMLAttributes } from "astro/types"
-import type { LucideIconComponent } from "../../types/LucideIcon.type"
+import type { HTMLAttributes } from "astro/types";
+import type { LucideIconComponent } from "../../types/LucideIcon.type";
 
 interface Props extends HTMLAttributes<"button"> {
-	Icon?: LucideIconComponent
-	text: string
+  Icon?: LucideIconComponent;
+  text: string;
 }
 
-const { Icon, text, ...props } = Astro.props
+const { Icon, text, ...props } = Astro.props;
 ---
 
 <button aria-label={`${text} button`} {...props} class="no-tap-highlight">
-	<span class="button_text">{text}</span>
-	{Icon ? <Icon size={16} class="button_icon" /> : ""}
+  <span class="button_text">{text}</span>
+  {Icon ? <Icon size={16} class="button_icon" /> : ""}
 </button>
 
 <style lang="scss">
-	button {
-		border: 1px solid var(--border-color);
-		outline: none;
-		background: transparent;
-		color: var(--grey);
-		padding: 8px 16px;
-		border-radius: 4px;
-		cursor: pointer;
-		transition: opacity 0.1s ease;
+  button {
+    border: 1px solid var(--border-color);
+    outline: none;
+    background: transparent;
+    color: var(--grey);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.1s ease;
 
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
 
-		&:active {
-			opacity: 0.8;
-		}
+    &:active {
+      opacity: 0.8;
+    }
 
-		.button_icon {
-			filter: brightness(0.4);
-			font-size: 16px;
-		}
-		&[disabled] {
-			.button_icon {
-				filter: inherit;
-			}
-		}
-	}
+    .button_icon {
+      filter: brightness(0.4);
+      font-size: 16px;
+    }
+    &[disabled] {
+      .button_icon {
+        filter: inherit;
+      }
+    }
+  }
 </style>

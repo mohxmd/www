@@ -1,52 +1,52 @@
 ---
 import {
-	Maximize2,
-	Minimize2,
-	Pause,
-	PictureInPicture2,
-	Play,
-	Settings,
-	CaptionsOff,
-	Captions,
-} from "lucide-astro"
+  Maximize2,
+  Minimize2,
+  Pause,
+  PictureInPicture2,
+  Play,
+  Settings,
+  CaptionsOff,
+  Captions,
+} from "lucide-astro";
 ---
 
 <div class="controls-right">
-	<span class="icon">
-		<button
-			class="auto-play-toggle"
-			title="Autoplay is off"
-			aria-checked="false"
-		>
-			<span class="toggle-slide">
-				<Pause size={14} class="pause-icon" />
-				<Play size={14} class="play-icon" />
-			</span>
-		</button>
-	</span>
+  <span class="icon">
+    <button
+      class="auto-play-toggle"
+      title="Autoplay is off"
+      aria-checked="false"
+    >
+      <span class="toggle-slide">
+        <Pause size={14} class="pause-icon" />
+        <Play size={14} class="play-icon" />
+      </span>
+    </button>
+  </span>
 
-	<span class="icon">
-		<button class="caption-btn" aria-caption-opened="false">
-			<Captions size={22} class="settings-icon" />
-		</button>
-	</span>
+  <span class="icon">
+    <button class="caption-btn" aria-caption-opened="false">
+      <Captions size={22} class="settings-icon" />
+    </button>
+  </span>
 
-	<span class="icon">
-		<button class="settings-btn" aria-settings-opened="false">
-			<Settings size={22} class="settings-icon" />
-		</button>
-	</span>
+  <span class="icon">
+    <button class="settings-btn" aria-settings-opened="false">
+      <Settings size={22} class="settings-icon" />
+    </button>
+  </span>
 
-	<span class="icon picture">
-		<button class="picture-in-picture">
-			<PictureInPicture2 size={24} />
-		</button>
-	</span>
+  <span class="icon picture">
+    <button class="picture-in-picture">
+      <PictureInPicture2 size={24} />
+    </button>
+  </span>
 
-	<span class="icon">
-		<button class="full-screen" aria-maximized="false">
-			<Maximize2 size={22} class="max-icon" />
-			<Minimize2 size={22} class="min-icon" />
-		</button>
-	</span>
+  <span class="icon">
+    <button class="full-screen" aria-maximized="false">
+      <Maximize2 size={22} class="max-icon" />
+      <Minimize2 size={22} class="min-icon" />
+    </button>
+  </span>
 </div>

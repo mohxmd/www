@@ -1,51 +1,51 @@
 ---
-import "@styles/player.scss"
-import Controls from "./controls/Controls.astro"
-import Settings from "./settings/Settings.astro"
+import "@/styles/player.scss";
+import Controls from "./controls/Controls.astro";
+import Settings from "./settings/Settings.astro";
 
 // assets
-import TestVideo from "../../../assets/test.mp4"
-import EngSub from "../../../assets/test-sub-en.vtt"
-import TRSub from "../../../assets/test-sub-tr.vtt"
+import TestVideo from "../../../assets/test.mp4";
+import EngSub from "../../../assets/test-sub-en.vtt";
+import TRSub from "../../../assets/test-sub-tr.vtt";
 ---
 
 <div class="container">
-	<div id="videoPlayer" aria-paused="true" transition:persist>
-		<video preload="metadata" id="mainVideo">
-			<source src={TestVideo} type="video/mp4" />
-			<source src={TestVideo} type="video/mp4" />
-			<track
-				id="englishSub"
-				label="English"
-				kind="subtitles"
-				srclang="en"
-				src={EngSub}
-			/>
-			<track
-				id="turkishSub"
-				label="Turkish"
-				kind="subtitles"
-				srclang="tr"
-				src={TRSub}
-			/>
-		</video>
+  <div id="videoPlayer" aria-paused="true" transition:persist>
+    <video preload="metadata" id="mainVideo">
+      <source src={TestVideo} type="video/mp4" />
+      <source src={TestVideo} type="video/mp4" />
+      <track
+        id="englishSub"
+        label="English"
+        kind="subtitles"
+        srclang="en"
+        src={EngSub}
+      />
+      <track
+        id="turkishSub"
+        label="Turkish"
+        kind="subtitles"
+        srclang="tr"
+        src={TRSub}
+      />
+    </video>
 
-		<div class="loading-spinner"></div>
+    <div class="loading-spinner"></div>
 
-		<p class="sub-text" aria-caption-active="true"></p>
+    <p class="sub-text" aria-caption-active="true"></p>
 
-		<Controls />
+    <Controls />
 
-		<Settings />
-	</div>
+    <Settings />
+  </div>
 </div>
 
 <style lang="scss">
-	.container {
-		position: relative;
-		width: 100%;
-		height: 100%;
-	}
+  .container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
 </style>
 
 <script src="../../../scripts/player.ts"></script>

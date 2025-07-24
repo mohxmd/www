@@ -1,42 +1,41 @@
 export const slugify = (text) => {
-	return text
-		.toString()
-		.toLowerCase()
-		.replace(/\s+/g, "-")
-		.replace(/[^\w-]+/g, "")
-		.replace(/--+/g, "-")
-		.replace(/^-+/, "")
-		.replace(/-+$/, "")
-}
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "");
+};
 
 export const sortByDate = (posts) => {
-	return posts.sort(
-		(a, b) =>
-			new Date(b.data.pubDate).valueOf() -
-			new Date(a.data.pubDate).valueOf()
-	)
-}
+  return posts.sort(
+    (a, b) =>
+      new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf(),
+  );
+};
 
 export const nonDraftPosts = (posts) => {
-	return posts.filter((post) => !post.data.draft)
-}
+  return posts.filter((post) => !post.data.draft);
+};
 
 export const simplifyDate = (date) => {
-	const dateObj = new Date(date)
+  const dateObj = new Date(date);
 
-	const simplifiedDate = dateObj.toLocaleDateString("en-US", {
-		weekday: "short",
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	})
+  const simplifiedDate = dateObj.toLocaleDateString("en-US", {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
-	const simplifiedTime = dateObj.toLocaleTimeString("en-US", {
-		timeStyle: "short",
-	})
+  const simplifiedTime = dateObj.toLocaleTimeString("en-US", {
+    timeStyle: "short",
+  });
 
-	return { simplifiedDate, simplifiedTime }
-}
+  return { simplifiedDate, simplifiedTime };
+};
 
 // export function markdownToPlainText(markdownContent) {
 // 	// Remove headings
@@ -66,6 +65,6 @@ export const simplifyDate = (date) => {
 // 	return markdownContent.trim()
 // }
 
-export const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+export const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-export const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/
+export const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;

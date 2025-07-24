@@ -1,96 +1,95 @@
 ---
-import Layout from "@layouts/Layout.astro"
-import ProjectCard from "@components/projects/ProjectCard.astro"
+import Layout from "@/layouts/Layout.astro";
+import ProjectCard from "@/components/projects/ProjectCard.astro";
 
-import projects from "../data/projects.json"
+import projects from "@/content/data/projects.json";
 ---
 
 <Layout
-	title="Mohammed's Blog | Projects"
-	description="Showcase of my selected projects over the years."
+  title="Mohammed's Blog | Projects"
+  description="Showcase of my selected projects over the years."
 >
-	<section id="projects">
-		<div class="wrapper">
-			<div class="projects-head">
-				<h1 class="projects__title">🛠️ Projects !</h1>
-				<p class="projects__sub-title">
-					Showcase of my selected projects over the years.
-				</p>
-			</div>
+  <section id="projects">
+    <div class="wrapper">
+      <div class="projects-head">
+        <h1 class="projects__title">🛠️ Projects !</h1>
+        <p class="projects__sub-title">
+          Showcase of my selected projects over the years.
+        </p>
+      </div>
 
-			<div class="projects-container">
-				<ul class="projects__projects-list">
-					{projects.map((project) => <ProjectCard {...project} />)}
-				</ul>
-			</div>
+      <div class="projects-container">
+        <ul class="projects__projects-list">
+          {projects.map((project) => <ProjectCard {...project} />)}
+        </ul>
+      </div>
 
-			<div class="projects-footer">
-				<p>
-					These are just a few examples of the projects I've enjoyed
-					working on. Each one has taught me something valuable and
-					contributed to my growth as a developer.
-				</p>
+      <div class="projects-footer">
+        <p>
+          These are just a few examples of the projects I've enjoyed working on.
+          Each one has taught me something valuable and contributed to my growth
+          as a developer.
+        </p>
 
-				<p>
-					Feel free to explore them on <a
-						href="https://github.com/mhdZhHan">Github</a
-					>
-					and <a href="https://gitlab.com/mhdZhHan">Gitlab</a>, and if
-					you have any questions or feedback, I'd love to hear from
-					you!
-					<br />
-					Happy coding! 🚀💻
-				</p>
-			</div>
-		</div>
-	</section>
+        <p>
+          Feel free to explore them on <a href="https://github.com/mhdZhHan"
+            >Github</a
+          >
+          and <a href="https://gitlab.com/mhdZhHan">Gitlab</a>, and if you have
+          any questions or feedback, I'd love to hear from you!
+          <br />
+          Happy coding! 🚀💻
+        </p>
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <style lang="scss">
-	.projects-head {
-		width: 100%;
-		text-align: center;
-		margin-bottom: 1.5rem;
-		.projects__title {
-			font-size: 1.875rem;
-			line-height: 2.25rem;
-			font-weight: 700;
-			font-family: "8-bit_bold";
-		}
-		.projects__sub-title {
-			margin-top: 0.75rem;
-			color: var(--gray);
-		}
-	}
+  .projects-head {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    .projects__title {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+      font-weight: 700;
+      font-family: "8-bit_bold";
+    }
+    .projects__sub-title {
+      margin-top: 0.75rem;
+      color: var(--gray);
+    }
+  }
 
-	.projects-container {
-		margin-top: 2rem;
-		font-family: 'syne-mono';
-		.projects__projects-list {
-			display: grid;
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-			gap: 1rem;
+  .projects-container {
+    margin-top: 2rem;
+    font-family: "syne-mono";
+    .projects__projects-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
 
-			@media all and (max-width: 980px) {
-				grid-template-columns: repeat(2, minmax(0, 1fr));
-			}
+      @media all and (max-width: 980px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
 
-			@media all and (max-width: 768px) {
-				grid-template-columns: repeat(1, minmax(0, 1fr));
-			}
-		}
-	}
+      @media all and (max-width: 768px) {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+    }
+  }
 
-	.projects-footer {
-		width: 100%;
-		margin-top: 1.5rem;
-		font-family: 'syne-mono';
-		p {
-			margin-top: 0.75rem;
-			color: var(--text);
-			a {
-				color: var(--primary);
-			}
-		}
-	}
+  .projects-footer {
+    width: 100%;
+    margin-top: 1.5rem;
+    font-family: "syne-mono";
+    p {
+      margin-top: 0.75rem;
+      color: var(--text);
+      a {
+        color: var(--primary);
+      }
+    }
+  }
 </style>

@@ -23,9 +23,11 @@ Imagine you've got servers floating in the cloud ☁️, but you're tired of usi
 2. In the address bar, type your SFTP URL, but hold on! For AWS EC2, it's not that simple. 🛑
 
    If you try something like:
+
    ```bash
    sftp://ubuntu@ec2-3-81-34-220.compute-1.amazonaws.com
    ```
+
    You'll likely see an `"authentication failed"` error. Don't worry, we've got a life preserver! 🦺
 
 3. For AWS EC2 instances, you'll need to use the SSH config method (our "Smooth Swim"). But fear not, it's just as easy once set up!
@@ -50,6 +52,7 @@ Imagine you've got servers floating in the cloud ☁️, but you're tired of usi
 5. Hit Enter and glide right in! 🏄‍♂️
 
 **Note:** The `IdentityFile` line might vary depending on your setup:
+
 - For AWS EC2, it's typically `~/.ssh/your-key.pem`
 - For many VPS providers, it might be `~/.ssh/id_rsa` or `~/.ssh/id_ed25519`
 - Some setups might not need this line at all if you're using password authentication
@@ -59,7 +62,7 @@ Always check with your hosting provider or system administrator for the correct 
 > **Pro Tip:** 🧠 If you're using a `.pem` file (common with AWS) and forgot to set permissions, you might see an error like `"WARNING: UNPROTECTED PRIVATE KEY FILE!"` Don't panic! Just run the chmod 400 command on your key file, and you'll be back in business.
 
 > **Bonus Trick:** 🎩✨ With this config, you can also connect via terminal:
-Just type `ssh my-cool-server` and you're in! It's like magic, but geekier! 🧙‍♂️
+> Just type `ssh my-cool-server` and you're in! It's like magic, but geekier! 🧙‍♂️
 
 ## Why It's Fin-tastic 🦈
 

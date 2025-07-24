@@ -26,17 +26,21 @@ Picture this: a magical computer floating in the cloud, all yours to command! Th
 
 3. **Knock Knock, Who's There? It's You!**
    Time to say hello to your new digital friend! Use SSH to connect - it's like a secret handshake for computers. Open your terminal and type:
+
    ```bash
    ssh root@192.IP.IP.IP
    ```
+
    Replace "192.IP.IP.IP" with your server's actual IP address. It's like dialing a phone number, but cooler!
 
 4. **Feed Your Server Some Digital Veggies**
    Your server is hungry for updates! Let's give it a nutritious meal:
+
    ```bash
    apt update
    apt upgrade
    ```
+
    This is like serving a gourmet dinner to your server. Bon appétit, little VPS!
 
 5. **Secure Your Fort**
@@ -54,6 +58,7 @@ So, you've got Ubuntu up and running, and you've done the basic updates. What's 
 
 8. **Set Up a Swanky Firewall** 🧱
    UFW (Uncomplicated Firewall) is your new bouncer. Tell it who's allowed in and who's not. It's like having a VIP list for your server!
+
    ```bash
    sudo ufw allow OpenSSH
    sudo ufw enable
@@ -61,6 +66,7 @@ So, you've got Ubuntu up and running, and you've done the basic updates. What's 
 
 9. **Create a Cool New User** 👤
    Don't be basic and use 'root'. Create a new user and give them superpowers (sudo privileges). It's like creating your own superhero alter ego!
+
    ```bash
    sudo adduser your_awesome_username
    sudo usermod -aG sudo your_awesome_username
@@ -68,18 +74,21 @@ So, you've got Ubuntu up and running, and you've done the basic updates. What's 
 
 10. **Spice Up Your SSH** 🌶️
     Edit the SSH config file to make it extra secure. Disable root login and password authentication. It's like adding a secret knock to your treehouse!
+
     ```bash
     sudo nano /etc/ssh/sshd_config
     ```
 
 11. **Install Some Awesome Tools** 🧰
     Grab some handy utilities. They're like Swiss Army knives for your server!
+
     ```bash
     sudo apt install htop iftop iotop ncdu
     ```
 
 12. **Set Up Automatic Updates** 🤖
     Keep your server fresh and clean with automatic updates. It's like having a robot maid for your digital home!
+
     ```bash
     sudo apt install unattended-upgrades
     sudo dpkg-reconfigure --priority=low unattended-upgrades

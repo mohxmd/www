@@ -1,137 +1,98 @@
 ---
-import { Rss } from "lucide-astro"
-
-const { user } = Astro.locals
+import { Rss } from "lucide-astro";
 ---
 
 <footer>
-	<div class="wrapper">
-		<div class="footer-content">
-			<p>
-				©{new Date().getFullYear()} Mohammed’s Blog - All Rights Reserved.
-			</p>
+  <div class="wrapper">
+    <div class="footer-content">
+      <p>
+        ©{new Date().getFullYear()} Mohammed’s Blog - All Rights Reserved.
+      </p>
 
-			<ul class="nav">
-				<>
-					<li class="authRoute">
-						<a href="/auth/login" aria-label="Login route" data-astro-reload>
-							Login
-						</a>
-					</li>
-					<li class="authRoute">
-						<a href="/auth/signup" aria-label="Sign up route" data-astro-reload>
-							Signup
-						</a>
-					</li>
-				</>
+      <ul class="nav">
+        <>
+          <li class="authRoute">
+            <a href="/auth/login" aria-label="Login route" data-astro-reload>
+              Login
+            </a>
+          </li>
+          <li class="authRoute">
+            <a href="/auth/signup" aria-label="Sign up route" data-astro-reload>
+              Signup
+            </a>
+          </li>
+        </>
 
-				<>
-					<li class="userRoute hidden">
-						<a href="/auth/user" aria-label="User profile" data-astro-reload>
-							Profile
-						</a>
-					</li>
-					<li
-						class="userRoute hidden"
-						id="logout"
-						aria-label="Option for logout"
-					>
-						<span>Logout</span>
-					</li>
-				</>
+        <>
+          <li class="userRoute hidden">
+            <a href="/auth/user" aria-label="User profile" data-astro-reload>
+              Profile
+            </a>
+          </li>
+          <li
+            class="userRoute hidden"
+            id="logout"
+            aria-label="Option for logout"
+          >
+            <span>Logout</span>
+          </li>
+        </>
 
-				<li class="rssRoute">
-					<a
-						href="/rss.xml"
-						class="rss-feed"
-						aria-label="RSS feed of the site"
-					>
-						<Rss size="16" />
-					</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+        <li class="rssRoute">
+          <a href="/rss.xml" class="rss-feed" aria-label="RSS feed of the site">
+            <Rss size="16" />
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </footer>
 
 <style lang="scss">
-	.footer-content {
-		width: 100%;
+  .footer-content {
+    width: 100%;
 
-		padding-top: 1.25rem;
-		border-color: var(--border-color);
-		border-top-width: 1px;
-		border-top-style: solid;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		color: var(--gray);
+    padding-top: 1.25rem;
+    border-color: var(--border-color);
+    border-top-width: 1px;
+    border-top-style: solid;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--gray);
 
-		font-family: "8-bit_regular";
-		p {
-			font-size: 0.875rem;
-			line-height: 1.25rem;
-		}
+    font-family: "8-bit_regular";
+    p {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
 
-		.nav {
-			display: flex;
-			align-items: center;
-			gap: 0.5rem;
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
 
-			li {
-				cursor: pointer;
-				a,
-				span {
-					display: block;
-					color: var(--gray);
-					transition: all 0.2s ease;
+      li {
+        cursor: pointer;
+        a,
+        span {
+          display: block;
+          color: var(--gray);
+          transition: all 0.2s ease;
 
-					color: var(--gray);
-					font-size: 14px;
-					font-family: "Ubuntu", sans-serif;
-					font-weight: 500;
-					svg {
-						margin-top: 0.4rem;
-					}
+          color: var(--gray);
+          font-size: 14px;
+          font-family: "Ubuntu", sans-serif;
+          font-weight: 500;
+          svg {
+            margin-top: 0.4rem;
+          }
 
-					&:hover {
-						color: var(--primary);
-					}
-				}
-			}
-		}
-	}
+          &:hover {
+            color: var(--primary);
+          }
+        }
+      }
+    }
+  }
 </style>
-
-<script>
-	import { AccountLogout } from "@scripts/auth"
-	const logoutBtn = document.querySelector("#logout") as HTMLLIElement
-
-	AccountLogout(logoutBtn)
-
-	/**
-	 * Showing and hiding the userRoutes and authRoutes based on the session cookie
-	 */
-	function getCookie(name: string): string | null {
-		const value = `; ${document.cookie}`
-		const parts = value.split(`; ${name}=`)
-		if (parts.length === 2) {
-			return parts.pop()?.split(";").shift() ?? null
-		}
-		return null
-	}
-
-	const sessionCookie = getCookie("session")
-
-	const authRoutes = document.querySelectorAll(".authRoute")
-	const userRoutes = document.querySelectorAll(".userRoute")
-
-	if (sessionCookie) {
-		userRoutes.forEach((userRoute) => {
-			userRoute.classList.remove("hidden")
-		})
-		authRoutes.forEach((authRoute) => {
-			authRoute.classList.add("hidden")
-		})
-	}
-</script>

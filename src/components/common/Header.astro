@@ -1,178 +1,174 @@
 ---
-import { Image } from "astro:assets"
-import { SunMoon, MoonStar } from "lucide-astro"
+import { Image } from "astro:assets";
+import { SunMoon, MoonStar } from "lucide-astro";
 
 //assets
-import StarBoy from "../../assets/star-boy.svg"
+import StarBoy from "../../assets/star-boy.svg";
 
-const currentPath = Astro.url.pathname
+const currentPath = Astro.url.pathname;
 ---
 
 <header class="header wrapper">
-	<div class="header__container">
-		<a class="header__logo" href="/" aria-label="Header logo">
-			<div class="logo-container">
-				<Image src={StarBoy} alt="star-boy" />
-				Mohammed's Blog
-			</div>
-		</a>
+  <div class="header__container">
+    <a class="header__logo" href="/" aria-label="Header logo">
+      <div class="logo-container">
+        <Image src={StarBoy} alt="star-boy" />
+        Mohammed's Blog
+      </div>
+    </a>
 
-		<nav class="header__menu">
-			<ul>
-				<li>
-					<a
-						class={currentPath === "/" ? "active" : ""}
-						href="/"
-						aria-label="Home page">Root</a
-					>
-				</li>
-				<li>
-					<a
-						class={currentPath === "/blog" ? "active" : ""}
-						href="/blog"
-						aria-label="All blogs page">Blog</a
-					>
-				</li>
-				<li>
-					<a
-						class={currentPath === "/projects" ? "active" : ""}
-						href="/projects"
-						aria-label="Projects listing page">Projects</a
-					>
-				</li>
-				<li>
-					<a
-						class={currentPath === "/about" ? "active" : ""}
-						href="/about"
-						aria-label="About page">About</a
-					>
-				</li>
-				<li>
-					<a
-						class={currentPath === "/donate" ? "active" : ""}
-						href="/donate"
-						aria-label="Donate page">Donate</a
-					>
-				</li>
-				<li>
-					<a
-						class={currentPath === "/🧪" ? "active" : ""}
-						href="/🧪"
-						aria-label="My personal lab page">🧪</a
-					>
-				</li>
-			</ul>
+    <nav class="header__menu">
+      <ul>
+        <li>
+          <a
+            class={currentPath === "/" ? "active" : ""}
+            href="/"
+            aria-label="Home page">Root</a
+          >
+        </li>
+        <li>
+          <a
+            class={currentPath === "/blog" ? "active" : ""}
+            href="/blog"
+            aria-label="All blogs page">Blog</a
+          >
+        </li>
+        <li>
+          <a
+            class={currentPath === "/projects" ? "active" : ""}
+            href="/projects"
+            aria-label="Projects listing page">Projects</a
+          >
+        </li>
+        <li>
+          <a
+            class={currentPath === "/about" ? "active" : ""}
+            href="/about"
+            aria-label="About page">About</a
+          >
+        </li>
+        <li>
+          <a
+            class={currentPath === "/donate" ? "active" : ""}
+            href="/donate"
+            aria-label="Donate page">Donate</a
+          >
+        </li>
+        <li>
+          <a
+            class={currentPath === "/🧪" ? "active" : ""}
+            href="/🧪"
+            aria-label="My personal lab page">🧪</a
+          >
+        </li>
+      </ul>
 
-			<button
-				id="toggle_theme"
-				class="toggle-theme"
-				aria-label="Toggle theme"
-			>
-				<SunMoon size={22} id="sun" aria-hidden />
-				<MoonStar size={22} id="moon" aria-hidden />
-			</button>
-		</nav>
-	</div>
+      <button id="toggle_theme" class="toggle-theme" aria-label="Toggle theme">
+        <SunMoon size={22} id="sun" aria-hidden />
+        <MoonStar size={22} id="moon" aria-hidden />
+      </button>
+    </nav>
+  </div>
 </header>
 
 <style lang="scss">
-	.header {
-		width: 100%;
-		user-select: none;
-		.header__container {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			flex-direction: row;
-			gap: 0.75rem;
+  .header {
+    width: 100%;
+    user-select: none;
+    .header__container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+      gap: 0.75rem;
 
-			@media all and (max-width: 640px) {
-				flex-direction: column;
-				justify-content: initial;
-				align-items: initial;
-			}
-			.header__logo {
-				display: block;
-				.logo-container {
-					font-weight: 700;
-					font-size: 1.25rem;
-					font-family: "8-bit_bold";
-					line-height: 1.75rem;
+      @media all and (max-width: 640px) {
+        flex-direction: column;
+        justify-content: initial;
+        align-items: initial;
+      }
+      .header__logo {
+        display: block;
+        .logo-container {
+          font-weight: 700;
+          font-size: 1.25rem;
+          font-family: "8-bit_bold";
+          line-height: 1.75rem;
 
-					color: transparent;
-					background: var(--text-gradient);
-					-webkit-background-clip: text;
-					background-clip: text;
+          color: transparent;
+          background: var(--text-gradient);
+          -webkit-background-clip: text;
+          background-clip: text;
 
-					display: flex;
-					align-items: center;
+          display: flex;
+          align-items: center;
 
-					svg,
-					img {
-						display: block;
-						filter: invert(var(--dl-invert));
-						width: 2.5rem;
-						height: 2.5rem;
-						margin-right: 0.25rem;
-						vertical-align: middle;
+          svg,
+          img {
+            display: block;
+            filter: invert(var(--dl-invert));
+            width: 2.5rem;
+            height: 2.5rem;
+            margin-right: 0.25rem;
+            vertical-align: middle;
 
-						pointer-events: none;
-					}
-				}
-			}
+            pointer-events: none;
+          }
+        }
+      }
 
-			.header__menu {
-				display: flex;
-				align-items: center;
-				gap: 0.7rem;
-				flex-wrap: wrap;
+      .header__menu {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        flex-wrap: wrap;
 
-				@media all and (max-width: 640px) {
-					justify-content: space-between;
-				}
-				ul {
-					list-style: none;
-					font-weight: 500;
+        @media all and (max-width: 640px) {
+          justify-content: space-between;
+        }
+        ul {
+          list-style: none;
+          font-weight: 500;
 
-					display: flex;
-					column-gap: 0.75rem;
+          display: flex;
+          column-gap: 0.75rem;
 
-					padding: 0.5rem 0.75rem;
-					background: transparent;
-					border-radius: 999px;
-					box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
-					border: 1px solid var(--border-color);
-					li {
-						a {
-							color: var(--text);
-							font-weight: 500;
-							transition: all 0.2s ease-in;
-							&:hover {
-								color: var(--primary);
-							}
-							&.active {
-								color: var(--primary);
-							}
-						}
-					}
-				}
+          padding: 0.5rem 0.75rem;
+          background: transparent;
+          border-radius: 999px;
+          box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+          border: 1px solid var(--border-color);
+          li {
+            a {
+              color: var(--text);
+              font-weight: 500;
+              transition: all 0.2s ease-in;
+              &:hover {
+                color: var(--primary);
+              }
+              &.active {
+                color: var(--primary);
+              }
+            }
+          }
+        }
 
-				.toggle-theme {
-					outline: none;
-					border: none;
-					cursor: pointer;
-					background: none;
+        .toggle-theme {
+          outline: none;
+          border: none;
+          cursor: pointer;
+          background: none;
 
-					margin-left: auto;
-					#sun {
-						display: var(--sun_icon_visibility);
-					}
+          margin-left: auto;
+          #sun {
+            display: var(--sun_icon_visibility);
+          }
 
-					#moon {
-						display: var(--mon_icon_visibility);
-					}
-				}
-			}
-		}
-	}
+          #moon {
+            display: var(--mon_icon_visibility);
+          }
+        }
+      }
+    }
+  }
 </style>

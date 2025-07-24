@@ -1,136 +1,132 @@
 ---
-import { Book } from "lucide-astro"
-const { name, description, tags, source_code_link, demo_link } = Astro.props
+import { Book } from "lucide-astro";
+const { name, description, tags, source_code_link, demo_link } = Astro.props;
 ---
 
 <li class="project-card">
-	<h1 class="project-card__title">
-		<Book slot="prefix" size={16} aria-hidden />
-		<a href="#" aria-label={`Blog post about ${{ name }}`}>{name}</a>
-	</h1>
+  <h1 class="project-card__title">
+    <Book slot="prefix" size={16} aria-hidden />
+    <a href="#" aria-label={`Blog post about ${{ name }}`}>{name}</a>
+  </h1>
 
-	<p class="project-card__description">{description}</p>
+  <p class="project-card__description">{description}</p>
 
-	<nav class="project-card__links">
-		{
-			demo_link && (
-				<a
-					href={demo_link}
-					target="_blank"
-					aria-label={`${name} demo link`}
-				>
-					Live
-				</a>
-			)
-		}
-		{
-			source_code_link && (
-				<a
-					href={source_code_link}
-					target="_blank"
-					aria-label={`${name} source code link`}
-				>
-					Source
-				</a>
-			)
-		}
-	</nav>
+  <nav class="project-card__links">
+    {
+      demo_link && (
+        <a href={demo_link} target="_blank" aria-label={`${name} demo link`}>
+          Live
+        </a>
+      )
+    }
+    {
+      source_code_link && (
+        <a
+          href={source_code_link}
+          target="_blank"
+          aria-label={`${name} source code link`}
+        >
+          Source
+        </a>
+      )
+    }
+  </nav>
 
-	<ul class="project-card__tags">
-		{
-			tags.map((tag) => (
-				<li class="tag">
-					<span class={`label ${tag}`} />
-					<a>{tag}</a>
-				</li>
-			))
-		}
-	</ul>
+  <ul class="project-card__tags">
+    {
+      tags.map((tag) => (
+        <li class="tag">
+          <span class={`label ${tag}`} />
+          <a>{tag}</a>
+        </li>
+      ))
+    }
+  </ul>
 </li>
 
 <style lang="scss">
-	.project-card {
-		border: 1px solid var(--border-color);
-		border-radius: 0.25rem;
-		padding: 0.5rem;
-		color: var(--gray);
+  .project-card {
+    border: 1px solid var(--border-color);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    color: var(--gray);
 
-		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-		&:hover {
-			border-color: var(--primary);
-		}
+    &:hover {
+      border-color: var(--primary);
+    }
 
-		.project-card__title {
-			display: flex;
-			align-items: center;
-			margin-bottom: 0.4rem;
+    .project-card__title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.4rem;
 
-			a {
-				font-size: 1.1rem;
-				font-weight: 700;
-				color: var(--gray);
-				font-family: "8-bit_regular";
-				margin-left: 0.8rem;
-			}
-		}
+      a {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--gray);
+        font-family: "8-bit_regular";
+        margin-left: 0.8rem;
+      }
+    }
 
-		.project-card__description {
-			font-size: 1rem;
-			margin-bottom: 0.2rem;
-		}
+    .project-card__description {
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
 
-		.project-card__links {
-			width: 100%;
+    .project-card__links {
+      width: 100%;
 
-			display: flex;
-			justify-content: flex-end;
-			align-items: center;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
 
-			margin-bottom: 0.4rem;
-			a {
-				display: block;
-				margin-right: 0;
-				padding: 0 0.7rem;
-				border: 3px solid transparent;
+      margin-bottom: 0.4rem;
+      a {
+        display: block;
+        margin-right: 0;
+        padding: 0 0.7rem;
+        border: 3px solid transparent;
 
-				font-size: 0.9rem;
-				font-weight: 500;
-				color: var(--gray);
-				text-decoration: underline;
-				&:last-child {
-					margin-right: 0;
-				}
-			}
-		}
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--gray);
+        text-decoration: underline;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
 
-		.project-card__tags {
-			display: flex;
-			align-items: center;
-			.tag {
-				margin-right: 0.9rem;
+    .project-card__tags {
+      display: flex;
+      align-items: center;
+      .tag {
+        margin-right: 0.9rem;
 
-				display: flex;
-				align-items: center;
-				span.label {
-					display: block;
-					width: 0.7rem;
-					height: 0.7rem;
-					border-radius: 50%;
-					margin-right: 0.6rem;
-					background-color: #531042;
-				}
-				a {
-					display: block;
-					font-size: 0.9rem;
-					font-weight: 400;
-					color: var(--gray);
-				}
-			}
-		}
-	}
+        display: flex;
+        align-items: center;
+        span.label {
+          display: block;
+          width: 0.7rem;
+          height: 0.7rem;
+          border-radius: 50%;
+          margin-right: 0.6rem;
+          background-color: #531042;
+        }
+        a {
+          display: block;
+          font-size: 0.9rem;
+          font-weight: 400;
+          color: var(--gray);
+        }
+      }
+    }
+  }
 </style>

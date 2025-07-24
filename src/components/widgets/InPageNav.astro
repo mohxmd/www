@@ -1,74 +1,74 @@
 ---
 interface Props {
-	routes: string[]
-	defaultActiveIndex?: number
+  routes: string[];
+  defaultActiveIndex?: number;
 }
 
-const { routes, defaultActiveIndex = 0 } = Astro.props
+const { routes, defaultActiveIndex = 0 } = Astro.props;
 ---
 
 <div class="tabs-container">
-	<div class="tab-buttons">
-		{
-			routes.map((route, index) => (
-				<button
-					class={`tab-button ${index === defaultActiveIndex ? "active" : ""} no-tap-highlight`}
-					data-index={index}
-				>
-					{route}
-				</button>
-			))
-		}
-	</div>
-	<div class="tab-content">
-		<slot />
-	</div>
+  <div class="tab-buttons">
+    {
+      routes.map((route, index) => (
+        <button
+          class={`tab-button ${index === defaultActiveIndex ? "active" : ""} no-tap-highlight`}
+          data-index={index}
+        >
+          {route}
+        </button>
+      ))
+    }
+  </div>
+  <div class="tab-content">
+    <slot />
+  </div>
 </div>
 
 <style>
-	.tabs-container {
-		width: 100%;
-	}
-	.tabs-container .tab-content > * {
-		display: none;
-	}
+  .tabs-container {
+    width: 100%;
+  }
+  .tabs-container .tab-content > * {
+    display: none;
+  }
 
-	.tabs-container .tab-content > *:first-child {
-		display: block;
-	}
-	.tab-buttons {
-		border-bottom: 1px solid var(--border-color);
+  .tabs-container .tab-content > *:first-child {
+    display: block;
+  }
+  .tab-buttons {
+    border-bottom: 1px solid var(--border-color);
 
-		white-space: nowrap;
-		overflow-x: auto;
-		-webkit-overflow-scrolling: touch;
-		scrollbar-width: none; /* Firefox */
-	}
-	.tab-buttons::-webkit-scrollbar {
-		display: none;
-	}
-	.tab-button {
-		display: inline-block;
-		padding: 0.4rem 1rem;
-		border: none;
-		background: none;
-		cursor: pointer;
-		font-weight: bold;
-		color: var(--text);
-	}
-	.tab-button.active {
-		border-bottom: 2px solid var(--primary);
-		color: var(--title);
-	}
-	.tab-content {
-		margin-top: 1rem;
-	}
-	.tab-content > :global(*) {
-		display: none;
-	}
-	.tab-content > :global(*:first-child) {
-		display: block;
-	}
+    white-space: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  .tab-buttons::-webkit-scrollbar {
+    display: none;
+  }
+  .tab-button {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text);
+  }
+  .tab-button.active {
+    border-bottom: 2px solid var(--primary);
+    color: var(--title);
+  }
+  .tab-content {
+    margin-top: 1rem;
+  }
+  .tab-content > :global(*) {
+    display: none;
+  }
+  .tab-content > :global(*:first-child) {
+    display: block;
+  }
 </style>
 
 <!-- <script>
@@ -99,36 +99,36 @@ const { routes, defaultActiveIndex = 0 } = Astro.props
 </script> -->
 
 <script>
-	document.addEventListener("astro:page-load", () => {
-		const navContainers =
-			document.querySelectorAll<HTMLElement>(".tabs-container")
+  document.addEventListener("astro:page-load", () => {
+    const navContainers =
+      document.querySelectorAll<HTMLElement>(".tabs-container");
 
-		navContainers.forEach((container) => {
-			const tabButtons =
-				container.querySelectorAll<HTMLButtonElement>(".tab-button")
-			const tabContents =
-				container.querySelectorAll<HTMLElement>(".tab-content > *")
+    navContainers.forEach((container) => {
+      const tabButtons =
+        container.querySelectorAll<HTMLButtonElement>(".tab-button");
+      const tabContents =
+        container.querySelectorAll<HTMLElement>(".tab-content > *");
 
-			function setActiveTab(index: number) {
-				tabButtons.forEach((button, i) => {
-					if (i === index) {
-						button.classList.add("active")
-					} else {
-						button.classList.remove("active")
-					}
-				})
+      function setActiveTab(index: number) {
+        tabButtons.forEach((button, i) => {
+          if (i === index) {
+            button.classList.add("active");
+          } else {
+            button.classList.remove("active");
+          }
+        });
 
-				tabContents.forEach((content, i) => {
-					content.style.display = i === index ? "block" : "none"
-				})
-			}
+        tabContents.forEach((content, i) => {
+          content.style.display = i === index ? "block" : "none";
+        });
+      }
 
-			tabButtons.forEach((button, index) => {
-				button.addEventListener("click", () => setActiveTab(index))
-			})
+      tabButtons.forEach((button, index) => {
+        button.addEventListener("click", () => setActiveTab(index));
+      });
 
-			// Initialize with the default active tab
-			setActiveTab(0)
-		})
-	})
+      // Initialize with the default active tab
+      setActiveTab(0);
+    });
+  });
 </script>

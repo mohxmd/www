@@ -1,246 +1,241 @@
 ---
-import { Copy } from "lucide-astro"
+import { Copy } from "lucide-astro";
 
-import { getLanguageIcon } from "@lib/languageIcons"
+import { getLanguageIcon } from "@/lib/languageIcons";
 
-let language: string | undefined = undefined
-let filename: string | undefined = undefined
+let language: string | undefined = undefined;
+let filename: string | undefined = undefined;
 
 if (Astro.slots.title) {
-	const titleSlot = await Astro.slots.render("title")
-	// language = titleSlot.match(/language="([^"]+)"/)?.[1] ?? "unknown"
+  const titleSlot = await Astro.slots.render("title");
+  // language = titleSlot.match(/language="([^"]+)"/)?.[1] ?? "unknown"
 
-	// Use a regular expression to extract the filename from the titleSlot string
-	const match = titleSlot.match(/>([^<]+)<\/div>/)
-	if (match) {
-		filename = match[1].trim() // Get the captured group and trim whitespace
-	}
+  // Use a regular expression to extract the filename from the titleSlot string
+  const match = titleSlot.match(/>([^<]+)<\/div>/);
+  if (match) {
+    filename = match[1].trim(); // Get the captured group and trim whitespace
+  }
 
-	// Extract the extension from the filename
-	language = filename?.split(".").pop()?.toLowerCase()
+  // Extract the extension from the filename
+  language = filename?.split(".").pop()?.toLowerCase();
 }
 ---
 
 <div {...Astro.props} class="breezeWindow">
-	{
-		Astro.slots.title && (
-			<div class="breezeWindow__header">
-				<span class="title">
-					<img
-						src={getLanguageIcon(language, filename)}
-						alt="lang"
-						class="language-icon"
-					/>
-					<slot name="title" />
-				</span>
-			</div>
-		)
-	}
+  {
+    Astro.slots.title && (
+      <div class="breezeWindow__header">
+        <span class="title">
+          <img
+            src={getLanguageIcon(language, filename)}
+            alt="lang"
+            class="language-icon"
+          />
+          <slot name="title" />
+        </span>
+      </div>
+    )
+  }
 
-	<div class="breezeWindow__body">
-		<div class="breezeWindow__content">
-			<slot />
-		</div>
+  <div class="breezeWindow__body">
+    <div class="breezeWindow__content">
+      <slot />
+    </div>
 
-		<div class="breezeWindow__copy-button">
-			<button
-				id="id_copy"
-				title="Copy to clipboard"
-				aria-label="Copy to clipboard"
-			>
-				<Copy size={20} class="shrink-0" />
-			</button>
-			<span class="copy-tooltip">Copied!</span>
-		</div>
-	</div>
+    <div class="breezeWindow__copy-button">
+      <button
+        id="id_copy"
+        title="Copy to clipboard"
+        aria-label="Copy to clipboard"
+      >
+        <Copy size={20} class="shrink-0" />
+      </button>
+      <span class="copy-tooltip">Copied!</span>
+    </div>
+  </div>
 </div>
 
 <style lang="scss">
-	html[data-theme="dark"] {
-		--code-bg: #121212;
-	}
-	html[data-theme="cool"] {
-		// --code-bg: #FDF6E3;
-		--code-bg: rgba(250, 240, 198, 0.445);
-	}
+  html[data-theme="dark"] {
+    --code-bg: #121212;
+  }
+  html[data-theme="cool"] {
+    // --code-bg: #FDF6E3;
+    --code-bg: rgba(250, 240, 198, 0.445);
+  }
 
-	.breezeWindow {
-		border-radius: 2px;
-		border: 1px solid var(--border-color);
-		margin: 1.25em 0;
-		@media all and (max-width: 768px) {
-			margin: 1rem 0;
-		}
-		.breezeWindow__header {
-			width: 100%;
-			height: 40px;
+  .breezeWindow {
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
+    margin: 1.25em 0;
+    @media all and (max-width: 768px) {
+      margin: 1rem 0;
+    }
+    .breezeWindow__header {
+      width: 100%;
+      height: 40px;
 
-			border-bottom: 1px solid var(--border-color);
-			border-top-right-radius: 2px;
-			border-top-left-radius: 2px;
-			background: var(--secondary);
-			.title {
-				height: 100%;
-				display: inline-flex;
-				align-items: center;
-				font-size: 0.8375rem;
+      border-bottom: 1px solid var(--border-color);
+      border-top-right-radius: 2px;
+      border-top-left-radius: 2px;
+      background: var(--secondary);
+      .title {
+        height: 100%;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.8375rem;
 
-				padding-top: 1rem;
-				padding-bottom: 1rem;
-				padding-left: 0.5rem;
-				padding-right: 1rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        padding-left: 0.5rem;
+        padding-right: 1rem;
 
-				border-top: 1px solid var(--gray);
-				border-radius: 0.2rem;
-				color: var(--title);
+        border-top: 1px solid var(--gray);
+        border-radius: 0.2rem;
+        color: var(--title);
 
-				background: var(--code-bg);
+        background: var(--code-bg);
 
-				.language-icon {
-					display: block;
-					width: 18px;
-					height: 18px;
-					margin-right: 0.5rem;
-				}
-			}
-		}
+        .language-icon {
+          display: block;
+          width: 18px;
+          height: 18px;
+          margin-right: 0.5rem;
+        }
+      }
+    }
 
-		.breezeWindow__body {
-			overflow: auto;
-			padding: 1rem;
-			font-size: 1rem;
-			height: 100%;
+    .breezeWindow__body {
+      overflow: auto;
+      padding: 1rem;
+      font-size: 1rem;
+      height: 100%;
 
-			background: var(--code-bg);
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
+      background: var(--code-bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-			// new bg
-			background-color: var(--tertiary);
-			background-image: radial-gradient(
-				circle farthest-corner at 0% 0%,
-				#fff3,
-				#ffffff1a
-			);
-			backdrop-filter: blur(160px);
-			.breezeWindow__content {
-				font-size: 14px;
-			}
-			.breezeWindow__copy-button {
-				position: relative;
-				align-self: flex-start;
+      // new bg
+      background-color: var(--tertiary);
+      background-image: radial-gradient(
+        circle farthest-corner at 0% 0%,
+        #fff3,
+        #ffffff1a
+      );
+      backdrop-filter: blur(160px);
+      .breezeWindow__content {
+        font-size: 14px;
+      }
+      .breezeWindow__copy-button {
+        position: relative;
+        align-self: flex-start;
 
-				border: 1px solid var(--border-color);
-				border-radius: 0.2rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.2rem;
 
-				opacity: 0;
-				visibility: hidden;
-				transition:
-					opacity 0.2s ease,
-					visibility 0.2s ease;
-				button {
-					outline: none;
-					background: inherit;
-					cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.2s ease,
+          visibility 0.2s ease;
+        button {
+          outline: none;
+          background: inherit;
+          cursor: pointer;
 
-					padding: 0.5rem;
+          padding: 0.5rem;
 
-					display: flex;
-					align-items: center;
-					justify-content: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
-					opacity: 0.75;
-					transition-property: opacity, background, border-color;
-					transition-duration: 0.2s;
-					transition-timing-function: cubic-bezier(
-						0.25,
-						0.46,
-						0.45,
-						0.94
-					);
+          opacity: 0.75;
+          transition-property: opacity, background, border-color;
+          transition-duration: 0.2s;
+          transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-					&:hover {
-						opacity: 1;
-						background-color: var(--secondary);
-					}
-				}
-			}
+          &:hover {
+            opacity: 1;
+            background-color: var(--secondary);
+          }
+        }
+      }
 
-			&:hover {
-				.breezeWindow__copy-button {
-					visibility: visible;
-					opacity: 1;
-				}
-			}
+      &:hover {
+        .breezeWindow__copy-button {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
 
-			// tooltip
-			.copy-tooltip {
-				position: absolute;
-				right: calc(100% + 0.75rem);
-				top: 50%;
-				transform: translateY(-50%) scale(0.8);
+      // tooltip
+      .copy-tooltip {
+        position: absolute;
+        right: calc(100% + 0.75rem);
+        top: 50%;
+        transform: translateY(-50%) scale(0.8);
 
-				border: 1px solid var(--border-color);
-				border-radius: 4px;
-				padding: 0.25rem 0.7rem;
-				color: var(--gray);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 0.25rem 0.7rem;
+        color: var(--gray);
 
-				opacity: 0;
-				transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-				pointer-events: none;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        pointer-events: none;
 
-				// new bg
-				background-color: var(--tertiary);
-				background-image: linear-gradient(95deg, #fff3, #ffffff0d);
-			}
+        // new bg
+        background-color: var(--tertiary);
+        background-image: linear-gradient(95deg, #fff3, #ffffff0d);
+      }
 
-			.copy-tooltip::after {
-				content: "";
-				position: absolute;
-				top: 50%;
-				left: 100%;
-				transform: translateY(-50%);
-				border: 0.4rem solid transparent;
-				border-left-color: var(--border-color);
-			}
+      .copy-tooltip::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        transform: translateY(-50%);
+        border: 0.4rem solid transparent;
+        border-left-color: var(--border-color);
+      }
 
-			.copy-tooltip.show {
-				opacity: 1;
-				transform: translateY(-50%) scale(1);
-			}
-		}
-	}
+      .copy-tooltip.show {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+      }
+    }
+  }
 </style>
 
 <script>
-	document.addEventListener("astro:page-load", (event) => {
-		const codeBlocks = document.querySelectorAll(".breezeWindow")
+  document.addEventListener("astro:page-load", (event) => {
+    const codeBlocks = document.querySelectorAll(".breezeWindow");
 
-		codeBlocks.forEach((block) => {
-			const copyButton = block.querySelector("#id_copy")
-			const codeContent = block.querySelector(
-				".breezeWindow__body .breezeWindow__content"
-			)
-			const tooltip = block.querySelector(".copy-tooltip")
+    codeBlocks.forEach((block) => {
+      const copyButton = block.querySelector("#id_copy");
+      const codeContent = block.querySelector(
+        ".breezeWindow__body .breezeWindow__content",
+      );
+      const tooltip = block.querySelector(".copy-tooltip");
 
-			if (copyButton && codeContent && tooltip) {
-				copyButton.addEventListener("click", () => {
-					const code = codeContent.textContent || ""
-					navigator.clipboard
-						.writeText(code)
-						// Show tooltip
-						.then(() => {
-							tooltip.classList.add("show")
-							setTimeout(() => {
-								tooltip.classList.remove("show")
-							}, 2000)
-						})
-						.catch((err) => {
-							console.error("Failed to copy: ", err)
-						})
-				})
-			}
-		})
-	})
+      if (copyButton && codeContent && tooltip) {
+        copyButton.addEventListener("click", () => {
+          const code = codeContent.textContent || "";
+          navigator.clipboard
+            .writeText(code)
+            // Show tooltip
+            .then(() => {
+              tooltip.classList.add("show");
+              setTimeout(() => {
+                tooltip.classList.remove("show");
+              }, 2000);
+            })
+            .catch((err) => {
+              console.error("Failed to copy: ", err);
+            });
+        });
+      }
+    });
+  });
 </script>

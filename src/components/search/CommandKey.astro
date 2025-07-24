@@ -1,14 +1,14 @@
 <kbd slot="suffix" class="indicator"> / </kbd>
 
 <script data-astro-exec="/">
-	;(function () {
-		const key = "/"
-		const selector = "[data-post-filter-search]"
-		const target = document.querySelector(selector)
+  (function () {
+    const key = "/";
+    const selector = "[data-post-filter-search]";
+    const target = document.querySelector(selector);
 
-		if (target)
-			document.addEventListener("keydown", (event) => {
-				if (event.key === key) event.preventDefault(), target.focus()
-			})
-	})()
+    if (target)
+      document.addEventListener("keydown", (event) => {
+        if (event.key === key) (event.preventDefault(), target.focus());
+      });
+  })();
 </script>

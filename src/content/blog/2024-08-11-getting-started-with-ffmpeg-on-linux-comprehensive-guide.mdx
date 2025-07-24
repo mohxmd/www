@@ -8,30 +8,22 @@ image: "/images/blogs/3d-film-reel.jpg"
 tags: []
 ---
 
-import InPageNav from "@components/widgets/InPageNav.astro"
+import InPageNav from "@/components/widgets/InPageNav.astro";
 
 FFmpeg is a powerful command-line tool for handling multimedia files. In this blog post, I’ll walk you through the basics of using FFMPEG on a Linux system, covering installation, common commands, and practical examples.
 
 ## What is FFMPEG?
+
 FFMPEG is a free and open-source command-line tool for processing multimedia files. It supports various formats, including MP4, AVI, MKV, MP3, and more. With FFMPEG, you can convert, record, edit, and stream audio and video files easily.
 
 ## Installation
+
 First, let's install FFmpeg. On most Linux distributions, you can use the package manager:
 For Ubuntu/Debian:
 
-<InPageNav
-    routes={["Ubuntu/Debian", "Fedora", "Arch"]}
->
-```bash
-sudo apt update
-sudo apt install ffmpeg
-```
-```bash
-sudo dnf install ffmpeg
-```
-```bash
-sudo pacman -S ffmpeg
-```
+<InPageNav routes={["Ubuntu/Debian", "Fedora", "Arch"]}>
+  ```bash sudo apt update sudo apt install ffmpeg ``` ```bash sudo dnf install
+  ffmpeg ``` ```bash sudo pacman -S ffmpeg ```
 </InPageNav>
 
 Once installed, you can verify the installation by running:
@@ -41,6 +33,7 @@ ffmpeg -version
 ```
 
 ## Basic FFMPEG Commands
+
 Let’s explore some basic commands that you can use to work with audio and video files.
 
 FFmpeg's basic syntax is:
@@ -50,104 +43,138 @@ ffmpeg [global_options] {[input_file_options] -i input_file} ... {[output_file_o
 ```
 
 ### 1. Converting Video Formats
+
 One of the most common tasks with `FFMPEG` is converting video files from one format to another. For example, to convert a video from MP4 to AVI, you can use the following command:
 
 ```bash
 ffmpeg -i input.mp4 output.avi
 ```
+
 In this command, `-i` specifies the input file, and the output file format is determined by the file extension.
 
 You can even specify more output files:
+
 ```bash
 ffmpeg -i input.wav output_1.mp3 output_2.ogg
 ```
+
 This will convert the input files to all specified formats.
 
 To see a list of all supported formats, use:
+
 ```bash
 ffmpeg -formats
 ```
 
 ### 2. Extracting Audio from Video
+
 You can also extract audio from a video file using FFMPEG. For example, to extract the audio from an MP4 video and save it as an MP3 file:
 
 ```bash
 ffmpeg -i input.mp4 -vn output.mp3
 ```
+
 This command extracts the audio without changing the original quality.
 
 Alternatively, you can use:
+
 ```bash
 ffmpeg -i input.mp4 -q:a 0 -map a output.mp3
 ```
+
 In this command:
+
 - `-q:a 0` sets the audio quality to the highest possible level.
 - `-map a` ensures that only the audio stream is extracted.
 
 Between these two, the second option (-q:a 0) offers better control over the audio quality, making it a better choice when you need to maintain the best sound.
 
 ### 3. Compressing Video
+
 FFMPEG allows you to compress video files to reduce their size while maintaining decent quality. To compress a video, you can use the following command:
+
 ```bash
 ffmpeg -i input.mp4 -vcodec libx264 -crf 28 output.mp4
 ```
+
 In this command, `-vcodec libx264` specifies the video codec, and `-crf 28` controls the quality of the video. Lower CRF values result in higher quality, while higher values reduce quality but decrease file size. A CRF of 28 is a good balance between quality and compression.
 
 ### 4. Merging Audio and Video Files
+
 If you have separate audio and video files and want to combine them into a single file, you can do this easily with FFMPEG:
+
 ```bash
 ffmpeg -i video.mp4 -i audio.mp3 -c:v copy -c:a aac output.mp4
 ```
+
 This command merges the video and audio files without re-encoding the video (`-c:v copy`), which preserves the original video quality. The audio is encoded with AAC (`-c:a aac`).
 
 ### 5. Trimming Video
+
 You can trim or cut a portion of a video using FFMPEG. For example, to trim the first 10 seconds of a video:
+
 ```bash
 ffmpeg -i input.mp4 -ss 00:00:10 -t 00:00:30 -c copy output.mp4
 ```
+
 Here, `-ss 00:00:10` sets the start time at 10 seconds, and `-t 00:00:30` sets the duration to 30 seconds. The `-c copy` option copies the streams without re-encoding, making the process faster and preserving quality.
 
 ### 6. Adding Subtitles
+
 You can add subtitles to your video using FFMPEG. Assuming you have a subtitle file (e.g., `subtitles.srt`), you can add it like this:
+
 ```bash
 ffmpeg -i input.mp4 -vf subtitles=subtitles.srt output.mp4
 ```
+
 This command burns the subtitles directly into the video, making them a permanent part of the file.
 
 ### 7. Adding Watermarks to Videos
+
 To add a watermark to a video, you can use the following FFMPEG command:
+
 ```bash
 ffmpeg -i input.mp4 -i watermark.png -filter_complex "overlay=10:10" output.mp4
 ```
-In this command, `watermark.png` is the image file used as the watermark, and `overlay=10:10` positions the watermark 10 pixels from the top and left edges of the video. You can adjust the overlay values to position the watermark wherever you prefer.
 
+In this command, `watermark.png` is the image file used as the watermark, and `overlay=10:10` positions the watermark 10 pixels from the top and left edges of the video. You can adjust the overlay values to position the watermark wherever you prefer.
 
 ## Advanced Usage
 
 ### 1. Concatenating Videos
+
 You can join multiple videos into one using FFMPEG. If your videos are in the same format, you can use the following command:
+
 ```bash
 ffmpeg -f concat -safe 0 -i filelist.txt -c copy output.mp4
 ```
+
 Here, `filelist.txt` is a text file listing the paths of the videos you want to concatenate, one per line, like this:
+
 ```shell
 file 'video1.mp4'
 file 'video2.mp4'
 file 'video3.mp4'
 ```
+
 The `-c copy` option tells FFMPEG to concatenate without re-encoding, preserving the original quality.
 
 ### 2 Creating a GIF from Video
+
 You can create a GIF from a video using FFMPEG, which is great for making short, looping animations:
+
 ```bash
 ffmpeg -i input.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" output.gif
 ```
+
 In this command, `fps=10` sets the frame rate to 10 frames per second, and `scale=320:-1` resizes the video to a width of 320 pixels while maintaining the aspect ratio. The `lanczos` filter provides high-quality scaling.
 
 ## Bonus Tips
 
 ### 1. Record Your Screen
+
 FFMPEG can record your screen, which is useful for creating tutorials or demonstrations. To capture your screen:
+
 ```bash
 ffmpeg -video_size 1920x1080 -framerate 25 -f x11grab -i :0.0 output.mp4
 ```
@@ -157,23 +184,31 @@ ffmpeg -video_size 1920x1080 -framerate 25 -f x11grab -i :0.0 output.mp4
 In this command, `-video_size 1920x1080` sets the resolution, `-framerate 25` sets the frame rate, and `-f x11grab -i :0.0` specifies the screen input on Linux.
 
 **Tip**: If you want FFMPEG to automatically detect your screen's resolution, you can use this alternative command:
+
 ```bash
 ffmpeg -f x11grab -s $(xdpyinfo | grep dimensions | awk '{print $2;}') -i :0.0 output.mp4
 ```
+
 This command will adjust to your screen's resolution without needing to specify it manually, making the recording process even easier.
 
 ### 2. Record Your Webcam
+
 You can also use FFMPEG to record video directly from your webcam:
+
 ```bash
 ffmpeg -f v4l2 -i /dev/video0 output.mp4
 ```
+
 Here, `-f v4l2` specifies the video input format, and `/dev/video0` is the default device for your webcam. Adjust the device path as needed.
 
 ### 3. Record Your Audio
+
 To record audio from your microphone, use the following command:
+
 ```bash
 ffmpeg -f alsa -i default output.wav
 ```
+
 In this command, `-f alsa -i default` selects your system's default microphone input. The output is saved as a WAV file, but you can choose other formats like MP3 or FLAC if needed.
 
 ## Conclusion

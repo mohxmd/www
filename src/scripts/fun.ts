@@ -1,5 +1,6 @@
-window.addEventListener("DOMContentLoaded", ()=> {
-     console.log(`%c  
+window.addEventListener("DOMContentLoaded", () => {
+  console.log(
+    `%c  
 
           888b     d888          888                                                         888 d8b              888888b.   888                   
           8888b   d8888          888                                                         888 88P              888  "88b  888                   
@@ -13,5 +14,7 @@ window.addEventListener("DOMContentLoaded", ()=> {
                                                                                                                                           Y8b d88P 
                                                                                                                                            "Y88P"  
           
-              `, 'font-family:monospace; color: #DB2251;');
-})
+              `,
+    "font-family:monospace; color: #DB2251;",
+  );
+});

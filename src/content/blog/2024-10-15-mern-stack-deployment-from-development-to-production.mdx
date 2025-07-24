@@ -8,7 +8,7 @@ image: "/images/blogs/truck-with-mern-payload.png"
 tags: ["MERN", "MongoDB", "express", "react", "node.js", "deployment", "DevOps"]
 ---
 
-Hey there, awesome developers! 👋 Today, we're diving into the world of MERN stack deployment. Whether you're a coding newbie or a seasoned pro, this guide will walk you through setting up your project for both development and production. Let's get started! 
+Hey there, awesome developers! 👋 Today, we're diving into the world of MERN stack deployment. Whether you're a coding newbie or a seasoned pro, this guide will walk you through setting up your project for both development and production. Let's get started!
 
 ## 1. 🏗️ Project Setup
 
@@ -42,12 +42,12 @@ In development, we run our backend and frontend separately. This setup allows fo
 In `server/server.js`:
 
 ```js title="server/server.js"
-const express = require('express');
+const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from the server! 👋' });
+app.get("/api/hello", (req, res) => {
+  res.json({ message: "Hello from the server! 👋" });
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT} 🚀`));
@@ -58,14 +58,14 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT} 🚀`));
 In `client/vite.config.js`:
 
 ```javascript title="client/vite.config.js"
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:5000',
+      "/api": "http://localhost:5000",
     },
   },
 });
@@ -88,6 +88,7 @@ In the root `package.json`, add these scripts:
 ```
 
 These scripts allow you to:
+
 - Run the server in development mode with hot reloading (`npm run dev`)
 - Start the server in production mode (`npm start`)
 - Build the entire project, including installing dependencies and building the client (`npm run build`)
@@ -99,21 +100,21 @@ Here's where the magic happens! In production, we serve everything from a single
 Update your `server/server.js`:
 
 ```javascript title="server/server.js"
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from the server! 👋' });
+app.get("/api/hello", (req, res) => {
+  res.json({ message: "Hello from the server! 👋" });
 });
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/dist')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client", "dist", "index.html"));
   });
 }
 
@@ -165,21 +166,21 @@ setup_env() {
     echo "Let's set up our secret codes! 🕵️‍♀️"
     local env_file=".env"
     local default_vars=("MONGODB_URL" "JWT_SECRET" "NODE_ENV" "PORT")
-    
+
     if [ -f "$env_file" ]; then
         echo "Existing .env file found. Updating values..."
         source "$env_file"
     else
         echo "Creating new .env file..."
     fi
-    
+
     for var in "${default_vars[@]}"; do
         read -p "Enter $var (current: ${!var}): " new_value
         if [ ! -z "$new_value" ]; then
             eval "$var='$new_value'"
         fi
     done
-    
+
     # Prompt for additional variables
     while true; do
         read -p "Add another environment variable? (y/n): " add_more
@@ -190,7 +191,7 @@ setup_env() {
         read -p "Enter variable value: " var_value
         eval "$var_name='$var_value'"
     done
-    
+
     # Write to .env file
     > "$env_file"
     for var in $(compgen -v); do
@@ -198,7 +199,7 @@ setup_env() {
             echo "$var=\"${!var}\"" >> "$env_file"
         fi
     done
-    
+
     echo ".env file updated successfully. 🎉"
 }
 
@@ -214,12 +215,12 @@ npm run build
 setup_nginx() {
     echo "Setting up our traffic signs for $DOMAIN_NAME 🚦"
     local config_path="/etc/nginx/sites-available/$DOMAIN_NAME"
-    
+
     if [ -f "$config_path" ]; then
         echo "Nginx configuration for $DOMAIN_NAME already exists. Updating..."
         sudo rm "$config_path"
     fi
-    
+
     sudo tee "$config_path" > /dev/null <<EOF
 server {
     listen 80;
@@ -235,10 +236,10 @@ server {
     }
 }
 EOF
-    
+
     sudo ln -sf "$config_path" "/etc/nginx/sites-enabled/"
     sudo nginx -t && sudo systemctl reload nginx
-    
+
     echo "Nginx configured for $DOMAIN_NAME 🚦"
 }
 
@@ -262,6 +263,7 @@ echo "🎉 Woohoo! Your app is now live at https://$DOMAIN_NAME 🎉"
 ```
 
 This script does it all:
+
 - Sets up your environment variables 🔐
 - Installs necessary software 🧰
 - Builds your app 🏗️

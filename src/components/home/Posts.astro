@@ -1,32 +1,32 @@
 ---
-import PostCard from "../blog/PostCard.astro"
-import HeadTitle from "../common/HeadTitle.astro"
+import PostCard from "../blog/PostCard.astro";
+import HeadTitle from "../common/HeadTitle.astro";
 
-const { posts } = Astro.props
+const { posts } = Astro.props;
 ---
 
 <section id="posts">
-	<div class="wrapper">
-		<HeadTitle t1="Recent" t2="Posts" url="/blog" />
+  <div class="wrapper">
+    <HeadTitle t1="Recent" t2="Posts" url="/blog" />
 
-		<div class="posts-container">
-			{
-				posts.map((post) => (
-					<PostCard {...post.data} url={post.slug} post={post} />
-				))
-			}
-		</div>
-	</div>
+    <div class="posts-container">
+      {
+        posts.map((post) => (
+          <PostCard {...post.data} url={post.slug} post={post} />
+        ))
+      }
+    </div>
+  </div>
 </section>
 
 <style lang="scss">
-	.posts-container {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 1.5rem;
+  .posts-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
 
-		@media all and (max-width: 768px) {
-			grid-template-columns: repeat(1, minmax(0, 1fr));
-		}
-	}
+    @media all and (max-width: 768px) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+  }
 </style>

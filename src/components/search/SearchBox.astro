@@ -1,35 +1,35 @@
 ---
-import "@styles/search-box.scss"
-import CommandKey from "./CommandKey.astro"
-import Filter from "./Filter.astro"
+import "@/styles/search-box.scss";
+import CommandKey from "./CommandKey.astro";
+import Filter from "./Filter.astro";
 
-import { Search } from "lucide-astro"
+import { Search } from "lucide-astro";
 
-const { tags } = Astro.props
+const { tags } = Astro.props;
 ---
 
 <div class="search-box">
-	<form id="search-form">
-		<div class="search-box__container">
-			<div class="search-icon">
-				<Search slot="prefix" size={12} aria-hidden />
-			</div>
+  <form id="search-form">
+    <div class="search-box__container">
+      <div class="search-icon">
+        <Search slot="prefix" size={12} aria-hidden />
+      </div>
 
-			<input
-				data-post-filter-search
-				type="text"
-				name="search"
-				data-post-filter-search=""
-				spellcheck="false"
-				autocomplete="off"
-				placeholder="Search Posts"
-			/>
+      <input
+        data-post-filter-search
+        type="text"
+        name="search"
+        data-post-filter-search=""
+        spellcheck="false"
+        autocomplete="off"
+        placeholder="Search Posts"
+      />
 
-			<div class="key">
-				<CommandKey />
-			</div>
-		</div>
-	</form>
+      <div class="key">
+        <CommandKey />
+      </div>
+    </div>
+  </form>
 
-	<Filter tags={tags} />
+  <Filter tags={tags} />
 </div>

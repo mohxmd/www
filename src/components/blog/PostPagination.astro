@@ -1,104 +1,104 @@
 ---
-import { ArrowLeft, ArrowRight } from "lucide-astro"
+import { ArrowLeft, ArrowRight } from "lucide-astro";
 
-import { nonDraftPosts, sortByDate } from "@lib/index"
-import { getCollection, type CollectionEntry } from "astro:content"
+import { nonDraftPosts, sortByDate } from "@/lib/index";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 interface Props {
-	post: CollectionEntry<"blog">
+  post: CollectionEntry<"blog">;
 }
 
-const { post } = Astro.props
+const { post } = Astro.props;
 
-const allPosts = await getCollection("blog")
-const sortedPosts = nonDraftPosts(sortByDate(allPosts))
-const currentIndex = sortedPosts.findIndex((p) => p.id === post.id)
+const allPosts = await getCollection("blog");
+const sortedPosts = nonDraftPosts(sortByDate(allPosts));
+const currentIndex = sortedPosts.findIndex((p) => p.id === post.id);
 
-const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null
+const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 const nextPost =
-	currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null
+  currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 ---
 
 <aside class="pagination">
-	{
-		prevPost && (
-			<a
-				href={`/blog/${prevPost.slug}`}
-				class="pagination-link pagination-prev"
-				aria-label={prevPost.data.title}
-			>
-				<p class="pagination-direction">
-					<ArrowLeft size={16} class="shrink-0" /> Previous post
-				</p>
-				<p class="pagination-title">{prevPost.data.title}</p>
-			</a>
-		)
-	}
+  {
+    prevPost && (
+      <a
+        href={`/blog/${prevPost.slug}`}
+        class="pagination-link pagination-prev"
+        aria-label={prevPost.data.title}
+      >
+        <p class="pagination-direction">
+          <ArrowLeft size={16} class="shrink-0" /> Previous post
+        </p>
+        <p class="pagination-title">{prevPost.data.title}</p>
+      </a>
+    )
+  }
 
-	{
-		nextPost && (
-			<a
-				href={`/blog/${nextPost.slug}`}
-				class="pagination-link pagination-next"
-				aria-label={nextPost.data.title}
-			>
-				<p class="pagination-direction">
-					Next post <ArrowRight size={16} class="shrink-0" />
-				</p>
-				<p class="pagination-title">{nextPost.data.title}</p>
-			</a>
-		)
-	}
+  {
+    nextPost && (
+      <a
+        href={`/blog/${nextPost.slug}`}
+        class="pagination-link pagination-next"
+        aria-label={nextPost.data.title}
+      >
+        <p class="pagination-direction">
+          Next post <ArrowRight size={16} class="shrink-0" />
+        </p>
+        <p class="pagination-title">{nextPost.data.title}</p>
+      </a>
+    )
+  }
 </aside>
 
 <style lang="scss">
-	.pagination {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		width: 100%;
-		margin: 2.5rem 0;
-	}
+  .pagination {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    margin: 2.5rem 0;
+  }
 
-	.pagination-link {
-		flex: 1;
-		display: flex;
-		justify-content: center;
-		flex-direction: column;
-		padding: 1rem;
-		border-radius: 0.5rem;
-		border: 1px solid var(--border-color);
-		transition: all 0.3s ease;
-		text-decoration: none;
-	}
+  .pagination-link {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
 
-	.pagination-link:hover {
-		background-color: var(--tertiary);
-		border-color: var(--primary);
-	}
+  .pagination-link:hover {
+    background-color: var(--tertiary);
+    border-color: var(--primary);
+  }
 
-	.pagination-direction {
-		margin-bottom: 0.25rem;
-		color: var(--gray);
+  .pagination-direction {
+    margin-bottom: 0.25rem;
+    color: var(--gray);
 
-		display: flex;
-		align-items: center;
-		gap: 0.123rem;
-	}
+    display: flex;
+    align-items: center;
+    gap: 0.123rem;
+  }
 
-	.pagination-title {
-		font-weight: 600;
-		color: var(--title);
-	}
+  .pagination-title {
+    font-weight: 600;
+    color: var(--title);
+  }
 
-	.pagination-next {
-		text-align: right;
-		align-items: flex-end;
-	}
+  .pagination-next {
+    text-align: right;
+    align-items: flex-end;
+  }
 
-	@media (min-width: 640px) {
-		.pagination {
-			flex-direction: row;
-		}
-	}
+  @media (min-width: 640px) {
+    .pagination {
+      flex-direction: row;
+    }
+  }
 </style>

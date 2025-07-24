@@ -1,348 +1,344 @@
 ---
-import "@styles/fonts.scss"
-import "@styles/tags.scss"
+import "@/styles/fonts.scss";
+import "@/styles/tags.scss";
 
-import SpeedInsights from "@vercel/speed-insights/astro"
-import { ViewTransitions } from "astro:transitions"
+import { ViewTransitions } from "astro:transitions";
 
 // components
-import Header from "@components/common/Header.astro"
-import Newsletter from "@components/common/Newsletter.astro"
-import Footer from "@components/common/Footer.astro"
-import ScrollTop from "@components/common/ScrollTop.astro"
-import ArtPlum from "@components/common/ArtPlum.astro"
-import ChangeDir from "@components/common/ChangeDir.astro"
+import Header from "@/components/common/Header.astro";
+import Newsletter from "@/components/common/Newsletter.astro";
+import Footer from "@/components/common/Footer.astro";
+import ScrollTop from "@/components/common/ScrollTop.astro";
+import ArtPlum from "@/components/common/ArtPlum.astro";
+import ChangeDir from "@/components/common/ChangeDir.astro";
 // util
-import SchemaOrg from "@components/utils/SchemaOrg.astro"
+import SchemaOrg from "@/components/utils/SchemaOrg.astro";
 
 interface Props {
-	title?: string
-	description?: string
-	ogImageUrl?: string | null
-	pageUrl?: string
-	type?: "website" | "blog"
-	publishDate?: string
-	modifiedDate?: string
+  title?: string;
+  description?: string;
+  ogImageUrl?: string | null;
+  pageUrl?: string;
+  type?: "website" | "blog";
+  publishDate?: string;
+  modifiedDate?: string;
 }
 
 const {
-	title = "Mohammed's blog",
-	description = `Welcome to Mohammed's blog! Join me on a journey through the world of programming and technology. Discover coding tips, tutorials, and insights for developers of all levels. Stay updated with the latest trends and explore exciting projects. Let's embark on this tech adventure together! 🚀`,
-	ogImageUrl = null,
-	pageUrl = Astro.url.href,
+  title = "Mohammed's blog",
+  description = `Welcome to Mohammed's blog! Join me on a journey through the world of programming and technology. Discover coding tips, tutorials, and insights for developers of all levels. Stay updated with the latest trends and explore exciting projects. Let's embark on this tech adventure together! 🚀`,
+  ogImageUrl = null,
+  pageUrl = Astro.url.href,
 
-	type = "website",
-	publishDate,
-	modifiedDate,
-} = Astro.props
+  type = "website",
+  publishDate,
+  modifiedDate,
+} = Astro.props;
 
-const siteUrl = Astro.site?.toString().replace(/\/$/, "")
+const siteUrl = Astro.site?.toString().replace(/\/$/, "");
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
-	.toString()
-	.replace(/\/$/, "")
+  .toString()
+  .replace(/\/$/, "");
 
-const fallbackOgImage = `/images/avatar.svg`
-const finalOgImageUrl = `${siteUrl}/${ogImageUrl || fallbackOgImage}`
+const fallbackOgImage = `/images/avatar.svg`;
+const finalOgImageUrl = `${siteUrl}/${ogImageUrl || fallbackOgImage}`;
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<!-- Primary Meta Tags -->
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>{title}</title>
-		<meta name="description" content={description} />
-		<meta name="author" content="Mohammed" />
-		<meta name="generator" content={Astro.generator} />
+  <head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Mohammed" />
+    <meta name="generator" content={Astro.generator} />
 
-		<!-- Open Graph / Facebook -->
-		<meta
-			property="og:type"
-			content={type === "blog" ? "article" : "website"}
-		/>
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content={siteUrl} />
-		<meta property="og:url" content={pageUrl} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:image" content={finalOgImageUrl} />
-		<meta property="og:image:alt" content={title} />
-		<meta property="og:image:width" content="1280" />
-		<meta property="og:image:height" content="675" />
+    <!-- Open Graph / Facebook -->
+    <meta
+      property="og:type"
+      content={type === "blog" ? "article" : "website"}
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteUrl} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={finalOgImageUrl} />
+    <meta property="og:image:alt" content={title} />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="675" />
 
-		<!-- Twitter -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:url" content={pageUrl} />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content={finalOgImageUrl} />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={pageUrl} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={finalOgImageUrl} />
 
-		<!-- Keywords -->
-		<meta
-			name="keywords"
-			content="mohammed's blog, mohammedsh, mohammed shajahan, hello world, mhdzhhan, programming, linux, kde, tech, tips, tutorials, development, web development, app development, ai, ml"
-		/>
+    <!-- Keywords -->
+    <meta
+      name="keywords"
+      content="mohammed's blog, mohammedsh, mohammed shajahan, hello world, mhdzhhan, programming, linux, kde, tech, tips, tutorials, development, web development, app development, ai, ml"
+    />
 
-		<!-- Links -->
-		<link rel="canonical" href={canonicalURL} />
-		<link rel="sitemap" href="/sitemap-index.xml" />
-		<link rel="alternate" hreflang="en" href="https://www.mohammedsh.xyz" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Links -->
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" hreflang="en" href="https://www.mohammedsh.xyz" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-		<!-- JSON-LD Schema -->
-		<SchemaOrg
-			type={type}
-			title={title}
-			description={description}
-			pageUrl={pageUrl}
-			ogImageUrl={finalOgImageUrl}
-			publishDate={publishDate}
-			modifiedDate={modifiedDate}
-		/>
+    <!-- JSON-LD Schema -->
+    <SchemaOrg
+      type={type}
+      title={title}
+      description={description}
+      pageUrl={pageUrl}
+      ogImageUrl={finalOgImageUrl}
+      publishDate={publishDate}
+      modifiedDate={modifiedDate}
+    />
 
-		<script src="../scripts/fun.ts"></script>
+    <script src="../scripts/fun.ts"></script>
 
-		<SpeedInsights />
-		<ViewTransitions />
-	</head>
+    <ViewTransitions />
+  </head>
 
-	<body>
-		<ArtPlum />
-		<Header />
+  <body>
+    <ArtPlum />
+    <Header />
 
-		<slot />
+    <slot />
 
-		{Astro.url.pathname !== "/" && <ChangeDir />}
+    {Astro.url.pathname !== "/" && <ChangeDir />}
 
-		<Newsletter />
-		<Footer />
-		<ScrollTop />
-	</body>
+    <Newsletter />
+    <Footer />
+    <ScrollTop />
+  </body>
 </html>
 
 <script is:inline>
-	const STORAGE_KEY = "theme-preference"
-	const DARK_THEME = "dark"
-	const LIGHT_THEME = "cool"
+  const STORAGE_KEY = "theme-preference";
+  const DARK_THEME = "dark";
+  const LIGHT_THEME = "cool";
 
-	function getTheme() {
-		return (
-			localStorage.getItem(STORAGE_KEY) ||
-			(window.matchMedia("(prefers-color-scheme: dark)").matches
-				? DARK_THEME
-				: LIGHT_THEME)
-		)
-	}
+  function getTheme() {
+    return (
+      localStorage.getItem(STORAGE_KEY) ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? DARK_THEME
+        : LIGHT_THEME)
+    );
+  }
 
-	function setTheme(theme) {
-		localStorage.setItem(STORAGE_KEY, theme)
-		document.documentElement.dataset.theme = theme
-	}
+  function setTheme(theme) {
+    localStorage.setItem(STORAGE_KEY, theme);
+    document.documentElement.dataset.theme = theme;
+  }
 
-	function toggleTheme() {
-		setTheme(getTheme() === DARK_THEME ? LIGHT_THEME : DARK_THEME)
-	}
+  function toggleTheme() {
+    setTheme(getTheme() === DARK_THEME ? LIGHT_THEME : DARK_THEME);
+  }
 
-	function initThemeManager() {
-		setTheme(getTheme())
-		document
-			.getElementById("toggle_theme")
-			?.addEventListener("click", toggleTheme)
-	}
+  function initThemeManager() {
+    setTheme(getTheme());
+    document
+      .getElementById("toggle_theme")
+      ?.addEventListener("click", toggleTheme);
+  }
 
-	initThemeManager()
+  initThemeManager();
 
-	document.addEventListener("astro:after-swap", initThemeManager)
+  document.addEventListener("astro:after-swap", initThemeManager);
 </script>
 
 <style is:global lang="scss">
-	@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap");
 
-	:root {
-		--primary: #df2250;
+  :root {
+    --primary: #df2250;
 
-		--gradient-to: #f42547;
-		--gradient-stops: #b51c61, var(--gradient-to, rgb(14 165 233 / 0));
-		--text-gradient: linear-gradient(
-			to bottom right,
-			var(--gradient-stops)
-		);
+    --gradient-to: #f42547;
+    --gradient-stops: #b51c61, var(--gradient-to, rgb(14 165 233 / 0));
+    --text-gradient: linear-gradient(to bottom right, var(--gradient-stops));
 
-		--shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		--default-transition: color 0.3s ease-in-out,
-			background-color 0.3s ease-in-out, border-color 0.3s ease-in-out,
-			fill 0.3s ease-in-out, transform 0.3s ease-in-out;
-	}
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --default-transition:
+      color 0.3s ease-in-out, background-color 0.3s ease-in-out,
+      border-color 0.3s ease-in-out, fill 0.3s ease-in-out,
+      transform 0.3s ease-in-out;
+  }
 
-	:root[data-theme="dark"] {
-		--code: #fff;
-		--secondary: rgb(23 23 23 /1);
-		--tertiary: rgb(0 0 0 / 1);
-		--selection-bg: hsl(240, 12%, 25%, 0.75);
+  :root[data-theme="dark"] {
+    --code: #fff;
+    --secondary: rgb(23 23 23 /1);
+    --tertiary: rgb(0 0 0 / 1);
+    --selection-bg: hsl(240, 12%, 25%, 0.75);
 
-		--gray: rgb(155, 156, 157);
-		--title: rgb(163 163 163 / 1);
-		--text: rgb(115 115 115 / 1);
+    --gray: rgb(155, 156, 157);
+    --title: rgb(163 163 163 / 1);
+    --text: rgb(115 115 115 / 1);
 
-		--border-color: #262626;
+    --border-color: #262626;
 
-		--sun_icon_visibility: block;
-		--mon_icon_visibility: none;
-		--dl-invert: 0;
+    --sun_icon_visibility: block;
+    --mon_icon_visibility: none;
+    --dl-invert: 0;
 
-		color-scheme: dark;
-	}
+    color-scheme: dark;
+  }
 
-	:root[data-theme="cool"] {
-		--code: #000;
-		--secondary: #f7e6d5;
-		--tertiary: hsl(35deg 100% 92%);
-		--selection-bg: hsl(240, 14%, 80%, 0.75);
+  :root[data-theme="cool"] {
+    --code: #000;
+    --secondary: #f7e6d5;
+    --tertiary: hsl(35deg 100% 92%);
+    --selection-bg: hsl(240, 14%, 80%, 0.75);
 
-		--title: hsl(50deg 100% 0%);
-		--text: hsl(30deg 11% 35%);
-		--gray: rgb(0 0 0 / 1);
+    --title: hsl(50deg 100% 0%);
+    --text: hsl(30deg 11% 35%);
+    --gray: rgb(0 0 0 / 1);
 
-		--border-color: hsl(35deg 70% 75%);
+    --border-color: hsl(35deg 70% 75%);
 
-		--sun_icon_visibility: none;
-		--mon_icon_visibility: block;
-		--dl-invert: 1;
+    --sun_icon_visibility: none;
+    --mon_icon_visibility: block;
+    --dl-invert: 1;
 
-		color-scheme: light;
-	}
+    color-scheme: light;
+  }
 
-	*,
-	*::before,
-	*::after {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-		scrollbar-gutter: stable both;
-	}
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-gutter: stable both;
+  }
 
-	html {
-		scrollbar-gutter: stable;
-		overflow-x: hidden;
+  html {
+    scrollbar-gutter: stable;
+    overflow-x: hidden;
 
-		height: 100%;
+    height: 100%;
 
-		scrollbar-width: thin;
-		scrollbar-color: hsl(0, 0%, 20%) transparent;
-	}
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0, 0%, 20%) transparent;
+  }
 
-	::selection {
-		background-color: var(--selection-bg);
-	}
+  ::selection {
+    background-color: var(--selection-bg);
+  }
 
-	body {
-		color: var(--text);
-		background-color: var(--tertiary);
-		font-family: "Ubuntu", sans-serif;
-		line-height: 1.6;
+  body {
+    color: var(--text);
+    background-color: var(--tertiary);
+    font-family: "Ubuntu", sans-serif;
+    line-height: 1.6;
 
-		height: 100%;
-		&.overflow-hidden {
-			overflow: hidden;
-		}
-	}
-	.no-tap-highlight {
-		-webkit-tap-highlight-color: transparent;
-		-webkit-touch-callout: none;
-		-webkit-user-select: none;
-		-khtml-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
-	}
+    height: 100%;
+    &.overflow-hidden {
+      overflow: hidden;
+    }
+  }
+  .no-tap-highlight {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
-	input,
-	textarea,
-	button {
-		font-family: inherit;
-		font-feature-settings: inherit;
-		font-variation-settings: inherit;
-		font-size: 100%;
-		font-weight: inherit;
-		line-height: inherit;
-		color: inherit;
-		border: 0;
-		outline: 0;
-	}
+  input,
+  textarea,
+  button {
+    font-family: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    border: 0;
+    outline: 0;
+  }
 
-	input:-webkit-autofill {
-		background: var(--tertiary);
-		color: inherit;
-	}
+  input:-webkit-autofill {
+    background: var(--tertiary);
+    color: inherit;
+  }
 
-	ul,
-	ol {
-		list-style: none;
-	}
+  ul,
+  ol {
+    list-style: none;
+  }
 
-	a {
-		text-decoration: none;
-		color: var(--primary);
-	}
+  a {
+    text-decoration: none;
+    color: var(--primary);
+  }
 
-	p {
-		line-height: 1.7;
-	}
+  p {
+    line-height: 1.7;
+  }
 
-	.wrapper {
-		padding: 1.5rem 0.75rem;
+  .wrapper {
+    padding: 1.5rem 0.75rem;
 
-		max-width: 1024px;
-		margin: 0 auto;
-	}
+    max-width: 1024px;
+    margin: 0 auto;
+  }
 
-	.shrink-0 {
-		flex-shrink: 0;
-	}
+  .shrink-0 {
+    flex-shrink: 0;
+  }
 
-	.hidden {
-		display: none;
-	}
+  .hidden {
+    display: none;
+  }
 
-	.hr-line {
-		border: 1px solid var(--border-color);
-	}
+  .hr-line {
+    border: 1px solid var(--border-color);
+  }
 
-	.separator {
-		border-radius: 0.25rem;
-		flex: 1 1 0%;
-		width: 100%;
-		height: 1px;
-		background-color: var(--secondary);
-	}
+  .separator {
+    border-radius: 0.25rem;
+    flex: 1 1 0%;
+    width: 100%;
+    height: 1px;
+    background-color: var(--secondary);
+  }
 
-	.section-title {
-		font-weight: 700;
-		font-size: 1.675rem;
-		line-height: 2.25rem;
-		color: var(--title);
-		font-family: "8-bit_bold";
-		span {
-			background-clip: text;
-			-webkit-background-clip: text;
-			color: transparent;
-			background: var(--text-gradient);
-		}
-	}
+  .section-title {
+    font-weight: 700;
+    font-size: 1.675rem;
+    line-height: 2.25rem;
+    color: var(--title);
+    font-family: "8-bit_bold";
+    span {
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      background: var(--text-gradient);
+    }
+  }
 
-	.section-sub-title {
-		font-weight: 700;
-		font-size: 1.3rem;
-		line-height: 2rem;
-		margin-bottom: 1.5rem;
-		color: var(--title);
-		font-family: "8-bit_bold";
-		span {
-			background-clip: text;
-			-webkit-background-clip: text;
-			color: transparent;
-			background: var(--text-gradient);
-		}
-	}
+  .section-sub-title {
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--title);
+    font-family: "8-bit_bold";
+    span {
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      background: var(--text-gradient);
+    }
+  }
 </style>

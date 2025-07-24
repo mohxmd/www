@@ -19,10 +19,13 @@ I'm using Manjaro with (KDE) and this solution worked for me:
 1. **Install the Meslo Nerd Font:**
 
 - For Manjaro and Arch based distro's:
+
 ```bash title="Konsole"
 sudo pacman -S ttf-meslo-nerd-font-powerlevel10k
 ```
+
 - For Ubuntu and Debian based distro's:
+
 ```bash title="Konsole"
 sudo apt-get install fonts-meslo
 ```
@@ -32,11 +35,10 @@ sudo apt-get install fonts-meslo
 
 2. **Configure Vscode Font Settings:**
    To ensure that Visual Studio Code displays the Zsh icons correctly, follow these steps:
-
-    - Open Visual Studio Code.
-    - Navigate to `Terminal > Integrated: Font Family`.
-    - Set the font family to "MesloLGS NF".
-    ![Screenshot: Configuring Vscode Terminal Font Family](/images/blogs/vscode-terminal-font-changing.png)
+   - Open Visual Studio Code.
+   - Navigate to `Terminal > Integrated: Font Family`.
+   - Set the font family to "MesloLGS NF".
+     ![Screenshot: Configuring Vscode Terminal Font Family](/images/blogs/vscode-terminal-font-changing.png)
 
 3. **Alternatively, Change Font Settings Directly in settings.json:**
    You can also change it directly in the `settings.json` file located in the `.config/Code/User` directory. Look for the property `terminal.integrated.fontFamily`.

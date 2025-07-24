@@ -1,75 +1,75 @@
 ---
-import { getCollection } from "astro:content"
-import type { CollectionEntry } from "astro:content"
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 
 // layouts
-import Layout from "@layouts/Layout.astro"
+import Layout from "@/layouts/Layout.astro";
 
 // utils
-import { nonDraftPosts } from "@lib/index"
+import { nonDraftPosts } from "@/lib/index";
 
-const posts = await getCollection("blog")
-const nonDraftPosts_: CollectionEntry<"blog">[] = nonDraftPosts(posts)
-const tags = [...new Set(nonDraftPosts_.map((post) => post.data.tags).flat())]
+const posts = await getCollection("blog");
+const nonDraftPosts_: CollectionEntry<"blog">[] = nonDraftPosts(posts);
+const tags = [...new Set(nonDraftPosts_.map((post) => post.data.tags).flat())];
 ---
 
 <Layout title="Mohammed's blog | Tags">
-	<section id="tags">
-		<div class="wrapper">
-			<div class="tags-head">
-				<h1 class="blogs-head__title">🗃️ Explore All Available Tags</h1>
-			</div>
+  <section id="tags">
+    <div class="wrapper">
+      <div class="tags-head">
+        <h1 class="blogs-head__title">🗃️ Explore All Available Tags</h1>
+      </div>
 
-			<div class="tags-container">
-				<ul class="tags-container__tags">
-					{
-						tags.map((tag) => (
-							<li class={`tags-container__tags__tag ${tag}`}>
-								<a href={`/tags/${tag}`}>#{tag}</a>
-							</li>
-						))
-					}
-				</ul>
-			</div>
-		</div>
-	</section>
+      <div class="tags-container">
+        <ul class="tags-container__tags">
+          {
+            tags.map((tag) => (
+              <li class={`tags-container__tags__tag ${tag}`}>
+                <a href={`/tags/${tag}`}>#{tag}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <style lang="scss">
-	.tags-head {
-		width: 100%;
-		text-align: center;
-		margin-bottom: 1.5rem;
-		.tags-head__title {
-			font-size: 1.875rem;
-			line-height: 2.25rem;
-			font-weight: 700;
-		}
-	}
+  .tags-head {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    .tags-head__title {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+      font-weight: 700;
+    }
+  }
 
-	.tags-container {
-		.tags-container__tags {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 1rem;
-			margin-left: 0.75rem;
-			.tags-container__tags__tag {
-				padding: 0.3rem 1rem;
-				border-radius: 0.2rem;
-				border: 1px solid var(--border-color);
-				a {
-					display: block;
-					font-weight: 400;
-					font-size: 1rem;
-					line-height: 1rem;
-					text-transform: capitalize;
-					color: inherit;
+  .tags-container {
+    .tags-container__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-left: 0.75rem;
+      .tags-container__tags__tag {
+        padding: 0.3rem 1rem;
+        border-radius: 0.2rem;
+        border: 1px solid var(--border-color);
+        a {
+          display: block;
+          font-weight: 400;
+          font-size: 1rem;
+          line-height: 1rem;
+          text-transform: capitalize;
+          color: inherit;
 
-					&:hover {
-						color: var(--title);
-					}
-				}
-			}
-		}
-	}
+          &:hover {
+            color: var(--title);
+          }
+        }
+      }
+    }
+  }
 </style>

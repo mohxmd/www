@@ -17,6 +17,7 @@ Think of Nginx as the Swiss Army knife of web servers. 🇨🇭🔪 It's fast, r
 ## Let's Get Started: Nginx Installation 101 🛠️
 
 ### 1. Update Your Server's Arsenal
+
 First things first, let's make sure your server is up-to-date:
 
 ```bash
@@ -25,6 +26,7 @@ sudo apt upgrade
 ```
 
 ### 2. Invite Nginx to the Party 🎉
+
 Time to roll out the red carpet for our star guest:
 
 ```bash
@@ -34,6 +36,7 @@ sudo apt install nginx
 Just like that, Nginx is in the house!
 
 ### 3. Start and Enable Nginx
+
 Let's fire up Nginx and make sure it starts automatically on system boot:
 
 **Terminal window**
@@ -46,6 +49,7 @@ sudo systemctl enable nginx
 This is like giving Nginx its own set of keys to your server! 🔑
 
 ### 4. Check Nginx's Pulse
+
 Let's make sure Nginx is up and running:
 
 ```bash
@@ -55,6 +59,7 @@ sudo systemctl status nginx
 Look for "active (running)" - that's Nginx's way of giving you a thumbs up! 👍
 
 ### 5. Open the Doors (Firewall)
+
 Tell your firewall bouncer to let Nginx's friends in:
 
 ```bash
@@ -64,6 +69,7 @@ sudo ufw allow 'Nginx Full'
 This allows both HTTP and HTTPS traffic. Party on! 🎊
 
 ### 6. Verify the Installation
+
 Time for the moment of truth! Open your web browser and navigate to:
 
 ```zsh
@@ -75,6 +81,7 @@ Replace `your_server_ip` with your actual server IP address. You should see the 
 ## Bonus Round: Customize Your Nginx Setup 🎨
 
 ### 7. Give Nginx a New Home Page
+
 Let's replace the default page with something more personal:
 
 ```bash
@@ -84,6 +91,7 @@ echo '<html><body><h1>Hello, World!</h1></body></html>' | sudo tee /var/www/html
 You just gave Nginx its first piece of web bling! ✨
 
 ### 8. Restart for Good Measure
+
 Give Nginx a quick restart:
 
 ```bash
@@ -91,6 +99,7 @@ sudo systemctl restart nginx
 ```
 
 ### 9. Admire Your Handiwork
+
 Refresh your browser and behold your new masterpiece. You're on your way to becoming a web wizard! 🧙‍♂️
 
 ## Congratulations, Web Warrior! 🏆

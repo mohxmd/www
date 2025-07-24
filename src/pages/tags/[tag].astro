@@ -1,71 +1,71 @@
 ---
-import { getCollection } from "astro:content"
+import { getCollection } from "astro:content";
 
 // layout
-import Layout from "@layouts/Layout.astro"
+import Layout from "@/layouts/Layout.astro";
 
-import PostCard from "@components/blog/PostCard.astro"
+import PostCard from "@/components/blog/PostCard.astro";
 
 export async function getStaticPaths() {
-	const allPosts = await getCollection("blog")
+  const allPosts = await getCollection("blog");
 
-	const uniqueTags = [
-		...new Set(allPosts.map((post) => post.data.tags).flat()),
-	]
+  const uniqueTags = [
+    ...new Set(allPosts.map((post) => post.data.tags).flat()),
+  ];
 
-	return uniqueTags.map((tag) => {
-		const filteredPosts = allPosts.filter((post) =>
-			post.data.tags.includes(tag)
-		)
+  return uniqueTags.map((tag) => {
+    const filteredPosts = allPosts.filter((post) =>
+      post.data.tags.includes(tag),
+    );
 
-		return {
-			params: { tag },
-			props: { posts: filteredPosts },
-		}
-	})
+    return {
+      params: { tag },
+      props: { posts: filteredPosts },
+    };
+  });
 }
 
-const { tag } = Astro.params
-const { posts } = Astro.props
+const { tag } = Astro.params;
+const { posts } = Astro.props;
 ---
 
 <Layout title="hello">
-	<section id="posts">
-		<div class="wrapper">
-			<div class="posts-head">
-				<h3 class={`section-title ${tag}`}>
-					Articles on 🏷️ '{tag}'
-				</h3>
-			</div>
+  <section id="posts">
+    <div class="wrapper">
+      <div class="posts-head">
+        <h3 class={`section-title ${tag}`}>
+          Articles on 🏷️ '{tag}'
+        </h3>
+      </div>
 
-			<div class="posts-container">
-				{
-					posts.map((post) => (
-						<PostCard {...post.data} url={post.slug} post={post} />
-					))
-				}
-			</div>
-		</div>
-	</section>
+      <div class="posts-container">
+        {
+          posts.map((post) => (
+            <PostCard {...post.data} url={post.slug} post={post} />
+          ))
+        }
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <style lang="scss">
-	.posts-head {
-		width: 100%;
-		text-align: center;
-		margin-bottom: 2rem;
-		h3 {
-			text-transform: capitalize;
-		}
-	}
+  .posts-head {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2rem;
+    h3 {
+      text-transform: capitalize;
+    }
+  }
 
-	.posts-container {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 1.5rem;
+  .posts-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
 
-		@media all and (max-width: 768px) {
-			grid-template-columns: repeat(1, minmax(0, 1fr));
-		}
-	}
+    @media all and (max-width: 768px) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+  }
 </style>

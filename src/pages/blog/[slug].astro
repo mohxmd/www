@@ -1,198 +1,194 @@
 ---
 // styles
-import "@styles/blog-post.scss"
+import "@/styles/blog-post.scss";
 
-import { getCollection, type CollectionEntry } from "astro:content"
-import { Picture } from "astro:assets"
+import { getCollection, type CollectionEntry } from "astro:content";
+import { Picture } from "astro:assets";
 
-import { Eye, Calendar, Clock4, User } from "lucide-astro"
+import { Eye, Calendar, Clock4, User } from "lucide-astro";
 
 // layouts
-import Layout from "@layouts/Layout.astro"
+import Layout from "@/layouts/Layout.astro";
 
 // components
-import TOC from "@components/blog/TOC.astro"
-import CodeBlock from "@components/blog/CodeBlock.astro"
-import Giscus from "@components/blog/Giscus.astro"
-import BlogFooter from "@components/blog/BlogFooter.astro"
-import PostPagination from "@components/blog/PostPagination.astro"
+import TOC from "@/components/blog/TOC.astro";
+import CodeBlock from "@/components/blog/CodeBlock.astro";
+import Giscus from "@/components/blog/Giscus.astro";
+import BlogFooter from "@/components/blog/BlogFooter.astro";
+import PostPagination from "@/components/blog/PostPagination.astro";
 
 // lib
-import { simplifyDate } from "@lib/index.js"
+import { simplifyDate } from "@/lib/index.js";
 
 export async function getStaticPaths() {
-	const posts = await getCollection("blog")
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: post,
-	}))
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
 }
 
-type Props = CollectionEntry<"blog">
+type Props = CollectionEntry<"blog">;
 
-const { slug } = Astro.params
+const { slug } = Astro.params;
 
-const post = Astro.props
+const post = Astro.props;
 const {
-	remarkPluginFrontmatter: extras,
-	Content,
-	headings,
-} = await post.render()
+  remarkPluginFrontmatter: extras,
+  Content,
+  headings,
+} = await post.render();
 
-const { title, pubDate, image, description } = post.data
+const { title, pubDate, image, description } = post.data;
 
-const publishDate = simplifyDate(pubDate).simplifiedDate
+const publishDate = simplifyDate(pubDate).simplifiedDate;
 ---
 
 <Layout
-	title={`Mohammed's blog | ${title}`}
-	description={description}
-	ogImageUrl={image}
-	publishDate={publishDate}
-	modifiedDate={publishDate}
+  title={`Mohammed's blog | ${title}`}
+  description={description}
+  ogImageUrl={image}
+  publishDate={publishDate}
+  modifiedDate={publishDate}
 >
-	<article itemscope id="blog-post" class="post">
-		<div class="wrapper">
-			<div class="post__head">
-				<h1 itemprop="headline" class="post__title">{title}</h1>
-				<div class="post__meta">
-					<div itemprop="author" class="post__author">
-						<User class="shrink-0" size={14} aria-hidden />
-						<span itemprop="name">Mohammed</span>
-					</div>
+  <article itemscope id="blog-post" class="post">
+    <div class="wrapper">
+      <div class="post__head">
+        <h1 itemprop="headline" class="post__title">{title}</h1>
+        <div class="post__meta">
+          <div itemprop="author" class="post__author">
+            <User class="shrink-0" size={14} aria-hidden />
+            <span itemprop="name">Mohammed</span>
+          </div>
 
-					<div class="post__date">
-						<Calendar class="shrink-0" size={14} aria-hidden />
-						<time
-							datetime={publishDate}
-							itemprop="datePublished"
-							class="post-date">{publishDate}</time
-						>
-						<meta itemprop="dateModified" content={publishDate} />
-					</div>
+          <div class="post__date">
+            <Calendar class="shrink-0" size={14} aria-hidden />
+            <time
+              datetime={publishDate}
+              itemprop="datePublished"
+              class="post-date">{publishDate}</time
+            >
+            <meta itemprop="dateModified" content={publishDate} />
+          </div>
 
-					<div class="post__read">
-						<Clock4 class="shrink-0" size={14} aria-hidden />
-						<span class="post__read"
-							>{extras.readingTime} Min Read</span
-						>
-					</div>
+          <div class="post__read">
+            <Clock4 class="shrink-0" size={14} aria-hidden />
+            <span class="post__read">{extras.readingTime} Min Read</span>
+          </div>
 
-					<div class="post__Views">
-						<Eye class="shrink-0" size={14} aria-hidden />
-						<span data-post-views={slug}>000000</span>
-					</div>
-				</div>
-			</div>
+          <div class="post__Views">
+            <Eye class="shrink-0" size={14} aria-hidden />
+            <span data-post-views={slug}>000000</span>
+          </div>
+        </div>
+      </div>
 
-			<TOC pageHeadings={headings} />
+      <TOC pageHeadings={headings} />
 
-			<div class="post__body">
-				<div class="post__banner">
-					<!-- <img src={image} alt={title} loading="lazy" /> -->
-					<Picture
-						src={image as string}
-						formats={["avif", "webp"]}
-						alt={title}
-						width={100}
-						height={100}
-					/>
-				</div>
+      <div class="post__body">
+        <div class="post__banner">
+          <!-- <img src={image} alt={title} loading="lazy" /> -->
+          <Picture
+            src={image as string}
+            formats={["avif", "webp"]}
+            alt={title}
+            width={100}
+            height={100}
+          />
+        </div>
 
-				<div class="post__content" itemprop="articleBody">
-					<Content components={{ figure: CodeBlock }} />
-				</div>
-			</div>
+        <div class="post__content" itemprop="articleBody">
+          <Content components={{ figure: CodeBlock }} />
+        </div>
+      </div>
 
-			<div class="post__footer">
-				<hr class="hr-line" />
-				<BlogFooter />
-				<PostPagination {post} />
-				<hr class="hr-line" style="margin-bottom: 2.5rem;" />
-				<Giscus />
-			</div>
-		</div>
-	</article>
+      <div class="post__footer">
+        <hr class="hr-line" />
+        <BlogFooter />
+        <PostPagination {post} />
+        <hr class="hr-line" style="margin-bottom: 2.5rem;" />
+        <Giscus />
+      </div>
+    </div>
+  </article>
 </Layout>
 
 <style lang="scss">
-	.post__head {
-		.post__title {
-			// line-height: 2.25rem;
-			font-weight: 700;
-			text-align: center;
-			font-family: "8-bit_bold";
+  .post__head {
+    .post__title {
+      // line-height: 2.25rem;
+      font-weight: 700;
+      text-align: center;
+      font-family: "8-bit_bold";
 
-			font-size: 34px;
-			@media all and (max-width: 768px) {
-				font-size: 24px;
-			}
-		}
-		.post__meta {
-			font-size: 0.875rem;
-			line-height: 1.25rem;
-			color: var(--gray);
-			text-align: center;
-			margin-top: 1rem;
+      font-size: 34px;
+      @media all and (max-width: 768px) {
+        font-size: 24px;
+      }
+    }
+    .post__meta {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      color: var(--gray);
+      text-align: center;
+      margin-top: 1rem;
 
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-wrap: wrap;
-			gap: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
 
-			div {
-				padding: 0 0.5rem;
-				border-radius: 0.25rem;
-				border: 1px solid var(--border-color);
+      div {
+        padding: 0 0.5rem;
+        border-radius: 0.25rem;
+        border: 1px solid var(--border-color);
 
-				display: inline-flex;
-				align-items: center;
-				gap: 0.5rem;
-			}
-		}
-	}
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+  }
 
-	.post__body {
-		margin: 1.25rem auto;
-		.post__banner {
-			margin: 0 auto;
-			border-radius: 0.5rem;
-			img {
-				display: block;
-				object-fit: cover;
-				width: 100%;
-				height: 100%;
-				aspect-ratio: 2 / 1;
+  .post__body {
+    margin: 1.25rem auto;
+    .post__banner {
+      margin: 0 auto;
+      border-radius: 0.5rem;
+      img {
+        display: block;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 2 / 1;
 
-				border: 1px solid var(--border-color);
-				border-radius: 0.5rem;
-			}
-		}
-		.post__content {
-			margin-top: 2rem;
-			color: var(--text);
-		}
-	}
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+      }
+    }
+    .post__content {
+      margin-top: 2rem;
+      color: var(--text);
+    }
+  }
 
-	.post__footer {
-		margin: 1.25rem auto;
-	}
+  .post__footer {
+    margin: 1.25rem auto;
+  }
 </style>
 
 <script define:vars={{ slug }}>
-	document.addEventListener("astro:page-load", () => {
-		fetch("/api/blog/postViews", {
-			method: "PUT",
-			body: JSON.stringify({ slug }),
-		})
-			.then(async (res) => {
-				const el = document.querySelector(`[data-post-views="${slug}"]`)
-				if (el)
-					el.textContent = (await res.text())
-						?.toString()
-						.padStart(6, "0")
-			})
-			.catch((error) => console.log("ERROR", error))
-	})
+  document.addEventListener("astro:page-load", () => {
+    fetch("/api/blog/postViews", {
+      method: "PUT",
+      body: JSON.stringify({ slug }),
+    })
+      .then(async (res) => {
+        const el = document.querySelector(`[data-post-views="${slug}"]`);
+        if (el)
+          el.textContent = (await res.text())?.toString().padStart(6, "0");
+      })
+      .catch((error) => console.log("ERROR", error));
+  });
 </script>

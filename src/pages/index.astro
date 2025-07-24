@@ -1,24 +1,24 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { getCollection, type CollectionEntry } from "astro:content";
 
 // components
-import Layout from '@layouts/Layout.astro'
-import Hero from '@components/home/Hero.astro'
-import Projects from '@components/home/Projects.astro'
-import Posts from '@components/home/Posts.astro'
+import Layout from "@/layouts/Layout.astro";
+import Hero from "@/components/home/Hero.astro";
+import Projects from "@/components/home/Projects.astro";
+import Posts from "@/components/home/Posts.astro";
 
 // utils
-import { sortByDate, nonDraftPosts } from '@lib/index'
+import { sortByDate, nonDraftPosts } from "@/lib/index";
 
 // getting blogs
-const posts = await getCollection('blog')
-const nonDraftPosts_: CollectionEntry<"blog">[] = nonDraftPosts(posts)
-const sortedPosts = sortByDate(nonDraftPosts_)
-const lastThreePosts = sortedPosts.slice(0, 3)
+const posts = await getCollection("blog");
+const nonDraftPosts_: CollectionEntry<"blog">[] = nonDraftPosts(posts);
+const sortedPosts = sortByDate(nonDraftPosts_);
+const lastThreePosts = sortedPosts.slice(0, 3);
 ---
 
 <Layout title="Mohammed's blog">
-	<Hero />
-	<Projects />
-	<Posts posts={lastThreePosts} />
+  <Hero />
+  <Projects />
+  <Posts posts={lastThreePosts} />
 </Layout>

@@ -1,68 +1,68 @@
 ---
-import { ArrowLeft } from "lucide-astro"
-import Layout from "@layouts/Layout.astro"
+import { ArrowLeft } from "lucide-astro";
+import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout title="Mohammed's blog | Page Not Found">
-	<section id="fourNotFour">
-		<div class="wrapper">
-			<div class="fourNotFour__container">
-				<h1>404</h1>
-				<p>Page Not Found</p>
-				<a href="/">
-					<ArrowLeft size={16} aria-hidden />
-					Go Back Home
-				</a>
-			</div>
-		</div>
-	</section>
+  <section id="fourNotFour">
+    <div class="wrapper">
+      <div class="fourNotFour__container">
+        <h1>404</h1>
+        <p>Page Not Found</p>
+        <a href="/">
+          <ArrowLeft size={16} aria-hidden />
+          Go Back Home
+        </a>
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <style lang="scss">
-	.canvas-container {
-		display: none;
-	}
-	#fourNotFour {
-		height: calc(100% - 325.6px);
-	}
-	.wrapper {
-		height: 100%;
-	}
-	.fourNotFour__container {
-		width: 100%;
-		height: 100%;
+  .canvas-container {
+    display: none;
+  }
+  #fourNotFour {
+    height: calc(100% - 325.6px);
+  }
+  .wrapper {
+    height: 100%;
+  }
+  .fourNotFour__container {
+    width: 100%;
+    height: 100%;
 
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-		h1 {
-			font-size: 123px;
-			letter-spacing: 0.1em;
-			line-height: 1;
-			text-align: center;
-			@media all and (max-width: 640px) {
-				font-size: 3rem;
-			}
-		}
+    h1 {
+      font-size: 123px;
+      letter-spacing: 0.1em;
+      line-height: 1;
+      text-align: center;
+      @media all and (max-width: 640px) {
+        font-size: 3rem;
+      }
+    }
 
-		p {
-			font-size: 28px;
-			line-height: 1.2;
-			text-align: center;
-		}
+    p {
+      font-size: 28px;
+      line-height: 1.2;
+      text-align: center;
+    }
 
-		a {
-			display: flex;
-			align-items: center;
-			gap: 0.75rem;
-			margin-top: 20px;
-			color: inherit;
-			text-align: center;
-			&:hover {
-				color: var(--title);
-			}
-		}
-	}
+    a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 20px;
+      color: inherit;
+      text-align: center;
+      &:hover {
+        color: var(--title);
+      }
+    }
+  }
 </style>

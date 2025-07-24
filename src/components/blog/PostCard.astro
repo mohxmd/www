@@ -1,50 +1,50 @@
 ---
-import "@styles/post-card.scss"
-import { Image } from "astro:assets"
-import { Calendar, Clock4 } from "lucide-astro"
+import "@/styles/post-card.scss";
+import { Image } from "astro:assets";
+import { Calendar, Clock4 } from "lucide-astro";
 
 // utils
-import { simplifyDate } from "@lib/index"
+import { simplifyDate } from "@/lib/index";
 
-const { title, description, pubDate, image, url, post } = Astro.props
+const { title, description, pubDate, image, url, post } = Astro.props;
 
-const pubDate_ = simplifyDate(pubDate)
-const { remarkPluginFrontmatter } = await post.render()
+const pubDate_ = simplifyDate(pubDate);
+const { remarkPluginFrontmatter } = await post.render();
 ---
 
 <article class="post-card">
-	<a href={`/blog/${url}`} aria-label={`${title}. ${description}`}>
-		{
-			image && (
-				<div class="post-card__thumbnail-container">
-					{/* <img src={image} alt={title} /> */}
-					<Image src={image} alt={title} width={100} height={100} />
-				</div>
-			)
-		}
+  <a href={`/blog/${url}`} aria-label={`${title}. ${description}`}>
+    {
+      image && (
+        <div class="post-card__thumbnail-container">
+          {/* <img src={image} alt={title} /> */}
+          <Image src={image} alt={title} width={100} height={100} />
+        </div>
+      )
+    }
 
-		<div class="post-card__body">
-			<h2 class="title">{title}</h2>
+    <div class="post-card__body">
+      <h2 class="title">{title}</h2>
 
-			<p class="body-text">
-				{description}
-			</p>
+      <p class="body-text">
+        {description}
+      </p>
 
-			<div class="white-space"></div>
-			
-			<hr class="post-card__border" />
+      <div class="white-space"></div>
 
-			<div class="meta">
-				<div class="date">
-					<Calendar class="shrink-0" size={14} aria-hidden />
-					<time datetime={pubDate}>{pubDate_.simplifiedDate}</time>
-				</div>
+      <hr class="post-card__border" />
 
-				<div class="read">
-					<Clock4 class="shrink-0" size={14} aria-hidden />
-					<span>{remarkPluginFrontmatter.readingTime} Min Read</span>
-				</div>
-			</div>
-		</div>
-	</a>
+      <div class="meta">
+        <div class="date">
+          <Calendar class="shrink-0" size={14} aria-hidden />
+          <time datetime={pubDate}>{pubDate_.simplifiedDate}</time>
+        </div>
+
+        <div class="read">
+          <Clock4 class="shrink-0" size={14} aria-hidden />
+          <span>{remarkPluginFrontmatter.readingTime} Min Read</span>
+        </div>
+      </div>
+    </div>
+  </a>
 </article>

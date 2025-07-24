@@ -8,8 +8,8 @@ image: "/images/blogs/astro-firebase.jpg"
 tags: ["firebase", "auth", "astro", "astro actions"]
 ---
 
-import InPageNav from "@components/widgets/InPageNav.astro"
-import Blockquote from "@components/widgets/Blockquote.astro"
+import InPageNav from "@/components/widgets/InPageNav.astro";
+import Blockquote from "@/components/widgets/Blockquote.astro";
 
 Hey there, web developers! Today, we're diving into integrating Firebase Authentication into your Astro project using the latest feature: Astro Actions. Whether you're building a new app or adding authentication to an existing project, this guide will walk you through the process of setting up Firebase Auth and leveraging Astro Actions to handle server-side logic.
 
@@ -36,14 +36,14 @@ yarn upgrade astro --latest
 To use this feature, add a server build output and enable the experimental.actions option in your Astro config:
 
 ```ts title="astro.config.mjs"
-import { defineConfig } from "astro/config"
+import { defineConfig } from "astro/config";
 
 export default defineConfig({
   output: "hybrid", // or 'server'
   experimental: {
     actions: true,
   },
-})
+});
 ```
 
 ## Integrating Firebase Authenticationc
@@ -52,25 +52,16 @@ Now that Astro Actions are set up, let’s integrate Firebase Authentication int
 
 **Install Firebase:** Add Firebase to your project using your package manager:
 
-<InPageNav
-    routes={["npm", "yarn", "pnpm"]}
->
-```bash
-npm install firebase
-```
-```bash
-yarn add firebase
-```
-```bash
-pnpm add firebase
-```
+<InPageNav routes={["npm", "yarn", "pnpm"]}>
+  ```bash npm install firebase ``` ```bash yarn add firebase ``` ```bash pnpm
+  add firebase ```
 </InPageNav>
 
 **Initialize Firebase:** Configure Firebase in your project. Create a file like `/src/firebase/config.ts`:
 
 ```ts title="config.ts"
-import { initializeApp, getApps, getApp } from "firebase/app"
-import { getAuth } from "firebase/auth"
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.API_KEY,
@@ -80,11 +71,11 @@ const firebaseConfig = {
   messagingSenderId: import.meta.env.MESSAGING_SENDER_ID,
   appId: import.meta.env.APP_ID,
   measurementId: import.meta.env.MEASUREMENT_ID,
-}
+};
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-export const auth = getAuth(app)
+export const auth = getAuth(app);
 ```
 
 **Create Authentication Actions:** Create the authentication actions in `src/actions/auth.ts`:
@@ -92,13 +83,13 @@ export const auth = getAuth(app)
 You can create actions that handle JSON or form requests, with the `handler` function processing your type-safe input. Astro automatically parses form requests into objects based on your [Zod](https://github.com/colinhacks/zod) schema, eliminating the need for manual parsing.
 
 ```ts title="auth.ts"
-import { defineAction, z } from "astro:actions"
+import { defineAction, z } from "astro:actions";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-} from "firebase/auth"
-import { auth } from "@firebase/client"
+} from "firebase/auth";
+import { auth } from "@/firebase/client";
 
 export const createAccount = defineAction({
   accept: "form",
@@ -112,16 +103,16 @@ export const createAccount = defineAction({
     password,
     fullName,
   }: {
-    email: string
-    fullName: string
-    password: string
+    email: string;
+    fullName: string;
+    password: string;
   }) => {
-    const user = await createUserWithEmailAndPassword(auth, email, password)
+    const user = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(user.user, {
       displayName: fullName,
-    })
+    });
   },
-})
+});
 
 export const loginAccount = defineAction({
   accept: "form",
@@ -130,23 +121,23 @@ export const loginAccount = defineAction({
     password: z.string(),
   }),
   handler: async ({ email, password }) => {
-    await signInWithEmailAndPassword(auth, email, password)
+    await signInWithEmailAndPassword(auth, email, password);
   },
-})
+});
 
 export const logoutAccount = defineAction({
   handler: async () => {
-    await auth.signOut()
+    await auth.signOut();
   },
-})
+});
 ```
 
 Export these actions in `src/actions/index.ts`:
 
 ```ts title="index.ts"
-import { createAccount, loginAccount, logoutAccount } from "./auth"
+import { createAccount, loginAccount, logoutAccount } from "./auth";
 
-export const server = { createAccount, loginAccount, logoutAccount }
+export const server = { createAccount, loginAccount, logoutAccount };
 ```
 
 You can call actions from any client component using the `actions` object from `astro:actions`. You can pass a type-safe object when using JSON, or a `FormData` object when using `accept: 'form'`.
@@ -155,22 +146,24 @@ You can call actions from any client component using the `actions` object from `
 
 ```astro title="AuthForm.astro"
 ---
-import InputBox from "../common/InputBox.astro"
+import InputBox from "../common/InputBox.astro";
 
 type Props = {
-  type: "login" | "signup"
-}
+  type: "login" | "signup";
+};
 
-const { type } = Astro.props
+const { type } = Astro.props;
 ---
 
 <form id="authForm">
-  {type === "signup" && (
-    <div>
-      <label for="fullName">Full Name</label>
-      <InputBox type="text" id="fullName" name="fullName" required />
-    </div>
-  )}
+  {
+    type === "signup" && (
+      <div>
+        <label for="fullName">Full Name</label>
+        <InputBox type="text" id="fullName" name="fullName" required />
+      </div>
+    )
+  }
   <!-- Hidden input to differentiate between signup and login forms -->
   <input type="hidden" name="formType" value={type} />
   <div>
@@ -190,42 +183,43 @@ const { type } = Astro.props
 ```
 
 ```ts title="/src/scripts/auth.ts"
-import { actions, isInputError } from "astro:actions"
+import { actions, isInputError } from "astro:actions";
 
 // Get the auth form element
-const authForm = document.querySelector("#authForm") as HTMLFormElement
+const authForm = document.querySelector("#authForm") as HTMLFormElement;
 
 // Handle form submission
 authForm?.addEventListener("submit", async (event) => {
-  event.preventDefault()
-  const formData = new FormData(authForm)
-  const formType = formData.get("formType") as string
+  event.preventDefault();
+  const formData = new FormData(authForm);
+  const formType = formData.get("formType") as string;
 
   if (formType === "signup") {
     // Handle signup
-    const { error, data } = await actions.createAccount.safe(formData)
+    const { error, data } = await actions.createAccount.safe(formData);
     if (error) {
-      console.log(error)
+      console.log(error);
       if (isInputError(error)) {
-        console.log(error.fields)
+        console.log(error.fields);
       }
-      return
+      return;
     }
-    window.location.href = "/"
+    window.location.href = "/";
   } else if (formType === "login") {
     // Handle login
-    const { error, data } = await actions.loginAccount.safe(formData)
+    const { error, data } = await actions.loginAccount.safe(formData);
     if (error) {
-      console.log(error)
+      console.log(error);
       if (isInputError(error)) {
-        console.log(error.fields)
+        console.log(error.fields);
       }
-      return
+      return;
     }
-    window.location.href = "/"
+    window.location.href = "/";
   }
-})
+});
 ```
+
 For more information on Astro actions, visit [the experimental actions docs](https://docs.astro.build/en/reference/configuration-reference/#experimentalactions)
 
 ## Setting Up Middleware for Authentication
@@ -237,7 +231,7 @@ First, create a `src/middleware.ts` file to handle the authentication middleware
 
 ```ts title="src/middleware.ts"
 import { defineMiddleware } from "astro:middleware";
-import { auth } from "@firebase/client";
+import { auth } from "@/firebase/client";
 
 export const onRequest = defineMiddleware((context, next) => {
   const currentUser = auth.currentUser;
@@ -295,25 +289,26 @@ const { user } = Astro.locals as {
 </div>
 
 <script>
-  import { actions, isInputError } from "astro:actions"
+  import { actions, isInputError } from "astro:actions";
   const logoutBtn = document.querySelector("#logoutBtn") as HTMLButtonElement;
   // logout
   logoutBtn?.addEventListener("click", async (event) => {
-  const { error } = await actions.logoutAccount.safe()  
+    const { error } = await actions.logoutAccount.safe();
 
-  if (error) {
-  	// handle error
-    console.log(error)
-  	if (isInputError(error)) {
-  	  console.log(error.fields)
-  	}
-    return
-  }
+    if (error) {
+      // handle error
+      console.log(error);
+      if (isInputError(error)) {
+        console.log(error.fields);
+      }
+      return;
+    }
 
-  window.location.href = "/"
-  })
+    window.location.href = "/";
+  });
 </script>
 ```
+
 > **Note:** Setting `export const prerender = false` ensures that this page is not pre-rendered at build time. This is crucial for accessing dynamic user data fetched from the client side. If your Astro configuration uses `'server'` mode, this setting may not be necessary, but it is essential in `'hybrid'` mode to render the page correctly with client-side data.
 
 > For more detailed information on Astro `middleware` and working with `Astro.locals`, visit the official [Astro Middleware documentation](https://docs.astro.build/en/guides/middleware/)

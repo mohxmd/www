@@ -1,45 +1,45 @@
 ---
-import { ArrowRight, ArrowLeft } from "lucide-astro"
+import { ArrowRight, ArrowLeft } from "lucide-astro";
 
-const { prevUrl, nextUrl } = Astro.props
+const { prevUrl, nextUrl } = Astro.props;
 ---
 
 <div class="pagination-container">
-	{
-		prevUrl && (
-			<a href={prevUrl}>
-				<ArrowLeft class="shrink-0" size={14} aria-hidden /> Newer Posts
-			</a>
-		)
-	}
+  {
+    prevUrl && (
+      <a href={prevUrl}>
+        <ArrowLeft class="shrink-0" size={14} aria-hidden /> Newer Posts
+      </a>
+    )
+  }
 
-	{
-		nextUrl && (
-			<a href={nextUrl}>
-				Older Posts <ArrowRight class="shrink-0" size={14} aria-hidden />
-			</a>
-		)
-	}
+  {
+    nextUrl && (
+      <a href={nextUrl}>
+        Older Posts <ArrowRight class="shrink-0" size={14} aria-hidden />
+      </a>
+    )
+  }
 </div>
 
 <style lang="scss">
-	.pagination-container {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 2rem;
-		a {
-			color: inherit;
-			text-decoration: inherit;
+  .pagination-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    a {
+      color: inherit;
+      text-decoration: inherit;
 
-			display: inline-flex;
-			align-items: center;
-			gap: 0.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
 
-			svg {
-				margin-top: 0.2rem;
-			}
-		}
-	}
+      svg {
+        margin-top: 0.2rem;
+      }
+    }
+  }
 </style>

@@ -1,0 +1,69 @@
+<div class="waves">
+  <svg
+    class="waves-svg"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    viewBox="0 24 150 28"
+    preserveAspectRatio="none"
+    shape-rendering="auto"
+  >
+    <defs>
+      <path
+        id="gentle-wave"
+        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+      ></path>
+    </defs>
+    <g class="parallax">
+      <use
+        xlink:href="#gentle-wave"
+        x="48"
+        y="0"
+        class="opacity-25"
+        style={{ animationDelay: "-2s", animationDuration: "7s" }}></use>
+      <use
+        xlink:href="#gentle-wave"
+        x="48"
+        y="3"
+        class="opacity-50"
+        style={{ animationDelay: "-3s", animationDuration: "10s" }}></use>
+      <use
+        xlink:href="#gentle-wave"
+        x="48"
+        y="5"
+        class="opacity-75"
+        style={{ animationDelay: "-4s", animationDuration: "13s" }}></use>
+      <use
+        xlink:href="#gentle-wave"
+        x="48"
+        y="7"
+        style={{ animationDelay: "-5s", animationDuration: "20s" }}></use>
+    </g>
+  </svg>
+</div>
+
+<style>
+  @reference "@/global.css";
+
+  .waves {
+    @apply absolute -bottom-[1px] h-[10vh] max-h-[150px] min-h-[50px] w-full;
+    @apply md:h-[15vh];
+  }
+
+  .waves-svg {
+    @apply h-full w-full;
+  }
+
+  .waves .parallax use {
+    @apply fill-background;
+    animation: wave 25s cubic-bezier(0.5, 0.5, 0.45, 0.5) infinite;
+  }
+
+  @keyframes wave {
+    0% {
+      transform: translate3d(-90px, 0, 0);
+    }
+    100% {
+      transform: translate3d(85px, 0, 0);
+    }
+  }
+</style>

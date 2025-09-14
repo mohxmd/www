@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+import type { GetSortedPosts } from "@/content/utils";
+
+import Chip from "@/components/ui/chip.astro";
+import Date from "@/components/ui/date.astro";
+import Icon from "@/components/ui/icon.astro";
+import Text from "@/components/ui/text.astro";
+import * as Component from "@/components/ui/card";
+
+type Props = GetSortedPosts[0];
+const { id, data } = Astro.props;
+---
+
+<Component.Root as="a" href={`/v2/blog/${id}`}>
+  <Component.Header>
+    <div class="rounded-border mb-1 h-24 overflow-hidden">
+      <Image
+        src={data.image}
+        alt="Cover"
+        loading="eager"
+        layout="full-width"
+        class="rounded not-dark:hidden"
+      />
+    </div>
+    <Text weight="bold">{data.title}</Text>
+    <div class="flex flex-wrap gap-2">
+      {data?.tags.map(({ text }) => <Chip value={text} variant="soft" />)}
+    </div>
+  </Component.Header>
+
+  <Component.Body>
+    <Text size="2" variant="subtle">{data.description}</Text>
+  </Component.Body>
+
+  <Component.Footer>
+    <div class="flex items-center gap-1">
+      <Icon name="Calendar" variant="subtle" size="sm" />
+      <Date size="1" variant="subtle" value={data.pubDate} />
+    </div>
+    <div class="flex items-center gap-1">
+      <Icon name="Clock" variant="subtle" size="sm" />
+      <Text size="1" variant="subtle">{data.readingTime}</Text>
+    </div>
+  </Component.Footer>
+</Component.Root>

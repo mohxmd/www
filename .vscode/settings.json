@@ -1,15 +1,35 @@
 {
-    "cSpell.enableFiletypes": [
-        "astro"
-    ],
-    "cSpell.words": [
-        "astro",
-        "FOSS",
-        "lucide",
-        "nord",
-        "prerender",
-        "rehype",
-        "Signup",
-        "typeof"
-    ]
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "astro"
+  ],
+  "cSpell.words": [
+    "astro",
+    "astrojs",
+    "FOSS",
+    "lucide",
+    "nord",
+    "pagefind",
+    "prerender",
+    "rehype",
+    "ryugin",
+    "Signup",
+    "typeof",
+    "vitesse"
+  ]
 }

@@ -2,10 +2,10 @@
 // styles
 import "@/styles/blog-post.scss";
 
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import { Picture } from "astro:assets";
 
-import { Eye, Calendar, Clock4, User } from "lucide-astro";
+import { Eye, Calendar, Clock4, User } from "@lucide/astro";
 
 // layouts
 import Layout from "@/layouts/Layout.astro";
@@ -23,7 +23,7 @@ import { simplifyDate } from "@/lib/index.js";
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: post,
   }));
 }
@@ -37,7 +37,7 @@ const {
   remarkPluginFrontmatter: extras,
   Content,
   headings,
-} = await post.render();
+} = await render(post);
 
 const { title, pubDate, image, description } = post.data;
 
@@ -47,7 +47,7 @@ const publishDate = simplifyDate(pubDate).simplifiedDate;
 <Layout
   title={`Mohammed's blog | ${title}`}
   description={description}
-  ogImageUrl={image}
+  ogImageUrl={image.src}
   publishDate={publishDate}
   modifiedDate={publishDate}
 >
@@ -89,7 +89,7 @@ const publishDate = simplifyDate(pubDate).simplifiedDate;
         <div class="post__banner">
           <!-- <img src={image} alt={title} loading="lazy" /> -->
           <Picture
-            src={image as string}
+            src={image}
             formats={["avif", "webp"]}
             alt={title}
             width={100}

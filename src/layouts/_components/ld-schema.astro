@@ -1,0 +1,69 @@
+---
+type Props = {
+  type: "blog" | "website";
+  title: string;
+  description: string;
+  pageUrl: string;
+  ogImageUrl?: string | null;
+  publishDate?: string;
+  modifiedDate?: string;
+};
+
+const {
+  type,
+  title,
+  description,
+  pageUrl,
+  ogImageUrl,
+  publishDate,
+  modifiedDate,
+} = Astro.props;
+
+const baseMetadata = {
+  "@context": "https://schema.org",
+  url: pageUrl,
+  name: title,
+  description,
+  author: {
+    "@type": "Person",
+    name: "Mohammed",
+    url: "https://www.mohammedsh.xyz",
+  },
+  publisher: {
+    "@type": "Person",
+    name: "Mohammed",
+    url: "https://www.mohammedsh.xyz",
+  },
+  ...(ogImageUrl
+    ? {
+        image: {
+          "@type": "ImageObject",
+          url: ogImageUrl,
+          width: 1280,
+          height: 675,
+        },
+      }
+    : {}),
+};
+
+const blogPostingSchema = {
+  ...baseMetadata,
+  "@type": "BlogPosting",
+  headline: title,
+  datePublished: publishDate,
+  dateModified: modifiedDate || publishDate,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": pageUrl,
+  },
+};
+
+const webPageSchema = {
+  ...baseMetadata,
+  "@type": "WebPage",
+};
+
+const structuredData = type === "blog" ? blogPostingSchema : webPageSchema;
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

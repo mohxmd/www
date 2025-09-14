@@ -1,9 +1,9 @@
 ---
 import { Image } from "astro:assets";
-import { SunMoon, MoonStar } from "lucide-astro";
 
 //assets
 import StarBoy from "../../assets/star-boy.svg";
+import Theme from "../ui/theme.astro";
 
 const currentPath = Astro.url.pathname;
 ---
@@ -54,19 +54,9 @@ const currentPath = Astro.url.pathname;
             aria-label="Donate page">Donate</a
           >
         </li>
-        <li>
-          <a
-            class={currentPath === "/🧪" ? "active" : ""}
-            href="/🧪"
-            aria-label="My personal lab page">🧪</a
-          >
-        </li>
       </ul>
 
-      <button id="toggle_theme" class="toggle-theme" aria-label="Toggle theme">
-        <SunMoon size={22} id="sun" aria-hidden />
-        <MoonStar size={22} id="moon" aria-hidden />
-      </button>
+      <Theme />
     </nav>
   </div>
 </header>

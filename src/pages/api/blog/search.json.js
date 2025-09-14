@@ -1,7 +1,7 @@
 import { getCollection } from "astro:content";
 
-import { nonDraftPosts, markdownToPlainText } from "@/lib/index";
-import { calculateReadingTime } from "@/lib/readingTime";
+import { nonDraftPosts } from "@/lib/index";
+// import { readingTime } from "@/lib/utils";
 
 async function getPosts() {
   const blogs = (await getCollection("blog")).sort(
@@ -9,7 +9,8 @@ async function getPosts() {
   );
 
   const posts = nonDraftPosts(blogs).map((post) => {
-    const readingTime = calculateReadingTime(post.body);
+    // const readingTime = readingTime(post.body);
+    const readingTime = 5;
 
     return {
       slug: post.slug,

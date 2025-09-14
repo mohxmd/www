@@ -1,15 +1,16 @@
 ---
 import "@/styles/post-card.scss";
 import { Image } from "astro:assets";
-import { Calendar, Clock4 } from "lucide-astro";
+import { Calendar, Clock4 } from "@lucide/astro";
 
 // utils
 import { simplifyDate } from "@/lib/index";
+import { render } from "astro:content";
 
 const { title, description, pubDate, image, url, post } = Astro.props;
 
 const pubDate_ = simplifyDate(pubDate);
-const { remarkPluginFrontmatter } = await post.render();
+const { remarkPluginFrontmatter } = await render(post);
 ---
 
 <article class="post-card">

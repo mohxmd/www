@@ -1,76 +1,88 @@
-import { defineCollection, z } from "astro:content";
-import { glob, file } from "astro/loaders";
+import { Octokit } from "@octokit/rest";
+import { glob } from "astro/loaders";
+import { defineCollection, z, type ImageFunction } from "astro:content";
+import { GITHUB_TOKEN, USERNAME } from "astro:env/server";
 
-const blogSchema = z
-  .object({
-    title: z.string().min(1, "Title must not be empty"),
-    description: z
-      .string()
-      .min(10, "Description must be at least 10 characters"),
-    image: z
-      .object({
-        src: z.string().url("Image src must be a valid URL"),
-        alt: z.string().default(""),
-      })
-      .optional(),
-    tags: z
-      .array(z.string())
-      .min(1, "At least one tag is required")
-      .refine(
-        (tags) => tags.every((tag) => tag.trim().length > 0),
-        "Tags must not be empty strings",
-      ),
+const octokit = new Octokit({ auth: GITHUB_TOKEN });
+
+const blogSchema = ({ image }: { image: ImageFunction }) =>
+  z.object({
+    title: z.string(),
+    description: z.string(),
+    image: image(),
+    tags: z.array(z.string()).default([]),
     author: z.string().default("Mohammed"),
     draft: z.boolean().default(false),
-    pubDate: z
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    repo: z
       .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, "pubDate must be in YYYY-MM-DD format"),
-    updatedDate: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, "updatedDate must be in YYYY-MM-DD format")
-      .optional(),
-  })
-  .strict();
+      .optional()
+      .transform(async (repo) => {
+        if (!repo) return null;
+        return octokit.repos
+          .get({ owner: USERNAME, repo })
+          .then((response) => ({
+            name: response.data.name,
+            description: response.data.description,
+            language: response.data.language,
+            stargazers: response.data.stargazers_count,
+            forks: response.data.forks_count,
+            watchers: response.data.watchers_count,
+            githubUrl: response.data.homepage,
+            websiteUrl: response.data.html_url,
+          }));
+      }),
+  });
 
-const projectSchema = z
-  .object({
-    title: z.string().min(1, "Project title must not be empty"),
-    description: z
-      .string()
-      .min(10, "Project description must be at least 10 characters"),
-    url: z.string().url("Project URL must be a valid URL").optional(),
-    githubUrl: z.string().url("GitHub URL must be a valid URL").optional(),
-    tags: z.array(z.string()).optional(),
-    technologies: z
-      .array(
-        z.object({
-          id: z.string(),
-          name: z.string(),
-          icon: z.string().optional(),
-        }),
-      )
-      .optional(),
-    featured: z.boolean().default(false),
-  })
-  .strict();
-
-const blog = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "@/content/blog" }),
-  schema: blogSchema.transform((data) => ({
-    ...data,
-    pubDate: new Date(data.pubDate),
-    updatedDate: data.updatedDate ? new Date(data.updatedDate) : undefined,
-  })),
+const projectSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  stars: z.number(),
+  forks: z.number(),
+  watchers: z.number(),
+  topics: z.array(z.string()),
+  githubUrl: z.string().url(),
+  // websiteUrl: z.string().url(),
 });
 
-const project = defineCollection({
-  loader: file("@/content/data/projects.json"),
-  schema: projectSchema,
-});
+const REPO_NAMES = [
+  "breeze-graphql-starter",
+  "www",
+  "pychat-app",
+  "pharma-pos",
+  "tic-tac-toe-react-native",
+] as const;
 
-// Export the collections
-export { blog, project };
+export const collections = {
+  blog: defineCollection({
+    loader: glob({
+      pattern: "**/*.{md,mdx}",
+      base: "./src/content/blog",
+    }),
+    schema: blogSchema,
+  }),
+  projects: defineCollection({
+    loader: async () =>
+      Promise.all(
+        REPO_NAMES.map((repo) =>
+          octokit.repos.get({ owner: USERNAME, repo }).then((response) => ({
+            id: response.data.id.toString(),
+            name: response.data.name,
+            description: response.data.description,
+            stars: response.data.stargazers_count,
+            forks: response.data.forks_count,
+            watchers: response.data.watchers_count,
+            topics: response.data.topics,
+            githubUrl: response.data.html_url,
+            // websiteUrl: response.data.homepage,
+          })),
+        ),
+      ),
+    schema: projectSchema,
+  }),
+};
 
-// Export the inferred types
-export type BlogPost = z.infer<typeof blogSchema>;
-export type Project = z.infer<typeof projectSchema>;
+export type BlogSchema = z.infer<ReturnType<typeof blogSchema>>;
+export type ProjectSchema = z.infer<typeof projectSchema>;

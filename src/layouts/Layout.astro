@@ -1,8 +1,10 @@
 ---
+import "@/global.css";
 import "@/styles/fonts.scss";
-import "@/styles/tags.scss";
+import "@/styles/tags.css";
 
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
+import { ThemeScript } from "astro-theme-toggle";
 
 // components
 import Header from "@/components/common/Header.astro";
@@ -11,8 +13,9 @@ import Footer from "@/components/common/Footer.astro";
 import ScrollTop from "@/components/common/ScrollTop.astro";
 import ArtPlum from "@/components/common/ArtPlum.astro";
 import ChangeDir from "@/components/common/ChangeDir.astro";
+
 // util
-import SchemaOrg from "@/components/utils/SchemaOrg.astro";
+import SchemaOrg from "./_components/ld-schema.astro";
 
 interface Props {
   title?: string;
@@ -100,9 +103,10 @@ const finalOgImageUrl = `${siteUrl}/${ogImageUrl || fallbackOgImage}`;
       modifiedDate={modifiedDate}
     />
 
-    <script src="../scripts/fun.ts"></script>
+    <ThemeScript />
+    <ClientRouter />
 
-    <ViewTransitions />
+    <script src="./_scripts/fun.ts"></script>
   </head>
 
   <body>
@@ -119,7 +123,7 @@ const finalOgImageUrl = `${siteUrl}/${ogImageUrl || fallbackOgImage}`;
   </body>
 </html>
 
-<script is:inline>
+<!-- <script is:inline>
   const STORAGE_KEY = "theme-preference";
   const DARK_THEME = "dark";
   const LIGHT_THEME = "cool";
@@ -152,7 +156,7 @@ const finalOgImageUrl = `${siteUrl}/${ogImageUrl || fallbackOgImage}`;
   initThemeManager();
 
   document.addEventListener("astro:after-swap", initThemeManager);
-</script>
+</script> -->
 
 <style is:global lang="scss">
   @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap");

@@ -1,0 +1,43 @@
+---
+type Props = {
+  class?: string;
+};
+
+const { class: className, ...props } = Astro.props;
+---
+
+<svg
+  {...props}
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={`feather feather-menu md:hidden cursor-pointer ${className || ""}`}
+  @click="isOpen = !isOpen"
+>
+  <line
+    x1="3"
+    y1="6"
+    x2="21"
+    y2="6"
+    :class="isOpen ? 'origin-left transition rotate-45 -translate-y-1' : 'origin-left transition'"
+  ></line>
+  <line
+    x1="3"
+    y1="12"
+    x2="21"
+    y2="12"
+    :class="isOpen ? 'transition opacity-0' : 'transition'"></line>
+  <line
+    x1="3"
+    y1="18"
+    x2="21"
+    y2="18"
+    :class="isOpen ? 'origin-left transition -rotate-45 translate-y-1' : 'origin-left transition'"
+  ></line>
+</svg>

@@ -1,0 +1,131 @@
+---
+import { Image } from "astro:assets";
+import CarouselBg from "./carousel-bg.astro";
+import Waves from "./waves.astro";
+
+export type Props = {
+  title?: string;
+  subtitle?: string;
+  backgroundImage?: string | ImageMetadata;
+  carouselImages: (string | ImageMetadata)[];
+  showWaves?: boolean;
+  class?: string;
+};
+
+const {
+  title = "Mohammed's Blog",
+  subtitle = "Live a life you can be proud of",
+  backgroundImage,
+  carouselImages = [],
+  showWaves = true,
+  class: className,
+  ...props
+} = Astro.props;
+
+const hasCarousel = carouselImages.length > 0 && !backgroundImage;
+---
+
+<div
+  {...props}
+  class:list={["hero-banner onload-animation-fade-in", className]}
+>
+  <div class="transition-main banner-inner size-full">
+    {hasCarousel && <CarouselBg images={carouselImages} />}
+
+    {
+      backgroundImage && (
+        <div class="cover">
+          <Image
+            class="cover-image"
+            src={
+              typeof backgroundImage === "string"
+                ? backgroundImage
+                : backgroundImage?.src
+            }
+            alt="cover image"
+            width={1920}
+            height={1080}
+            format="webp"
+            quality={80}
+          />
+        </div>
+      )
+    }
+
+    <!-- Content -->
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">{title}</h1>
+        <h2 class="hero-subtitle">{subtitle}</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Waves SVG -->
+  {showWaves && <Waves />}
+</div>
+
+<style>
+  @reference "@/global.css";
+
+  .hero-banner {
+    @apply relative h-[calc(55vh*3/4)] lg:h-[55vh] opacity-100;
+  }
+
+  /* Cover Image Styles */
+  .cover {
+    @apply absolute left-0 top-0 z-0 block h-full w-full overflow-hidden bg-gray-100;
+  }
+
+  .cover::before {
+    @apply absolute left-0 top-0 z-10 block h-full w-full bg-black/25 transition-all content-[''];
+  }
+
+  .cover-image {
+    @apply h-full w-full object-cover;
+  }
+
+  /* Content Styles */
+  .hero-content {
+    @apply relative h-[95%] w-full;
+  }
+
+  .hero-text {
+    @apply absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 lg:w-3/4;
+  }
+
+  .hero-title {
+    @apply text-center text-5xl lg:text-4xl font-bold text-white drop-shadow-lg mb-4;
+    font-family: var(--font-heading, system-ui);
+  }
+
+  .hero-subtitle {
+    @apply text-center text-xl lg:text-3xl text-white/90 drop-shadow-md;
+    font-family: var(--font-body, system-ui);
+  }
+
+  /* Animations */
+  .onload-animation-fade-in {
+    opacity: 0;
+    animation: 300ms fade-in ease-in;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* Transition Support */
+  .transition-main {
+    transition: opacity 250ms ease-in-out;
+  }
+
+  html.is-animating .transition-main {
+    opacity: 0;
+  }
+</style>

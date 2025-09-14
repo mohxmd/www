@@ -41,7 +41,7 @@ const { posts } = Astro.props;
       <div class="posts-container">
         {
           posts.map((post) => (
-            <PostCard {...post.data} url={post.slug} post={post} />
+            <PostCard {...post.data} url={post.id} post={post} />
           ))
         }
       </div>

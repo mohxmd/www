@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { buttonVariants, type ButtonVariants } from "../button.astro";
+import Icon from "../icon.astro";
+
+type Props = HTMLAttributes<"a"> &
+  ButtonVariants & { page: PaginatorControlPage; disabled?: boolean };
+
+export type PaginatorControlPage = keyof typeof pages;
+
+const pages = {
+  first: { icon: "ChevronsLeft", label: "First page" },
+  previous: { icon: "ChevronLeft", label: "Previous page" },
+  next: { icon: "ChevronRight", label: "Next page" },
+  last: { icon: "ChevronsRight", label: "Last page" },
+} as const;
+
+const {
+  class: className,
+  variant,
+  size,
+  page,
+  disabled,
+  ...props
+} = Astro.props;
+const Tag = disabled ? "div" : "a";
+---
+
+<li>
+  <Tag
+    {...props}
+    aria-disabled={disabled}
+    aria-label={pages[page].label}
+    class={buttonVariants({
+      variant: variant ?? "ghost",
+      size: size ?? "icon",
+      className: [className, "cursor-default"],
+    })}
+  >
+    <Icon name={pages[page].icon} />
+  </Tag>
+</li>

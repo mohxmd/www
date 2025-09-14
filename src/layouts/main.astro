@@ -1,0 +1,31 @@
+---
+import "@/global.css";
+import type { HTMLAttributes } from "astro/types";
+
+import { banners } from "@/assets/banners";
+import { siteConfig } from "@/configs/site";
+
+import BaseHead, { type Metadata } from "./_components/base-head.astro";
+import Banner from "@/components/banner/banner.astro";
+import Header from "@/components/common/header/header.astro";
+
+type Props = HTMLAttributes<"main"> & {
+  metadata?: Metadata;
+};
+
+const { metadata = {}, class: className, ...props } = Astro.props;
+---
+
+<html>
+  <head>
+    <BaseHead metadata={metadata} />
+  </head>
+
+  <body>
+    <Header navLinks={siteConfig.navLinks} />
+    <Banner carouselImages={banners} />
+    <main {...props} class:list={["flex-1", className]}>
+      <slot />
+    </main>
+  </body>
+</html>

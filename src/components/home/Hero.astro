@@ -1,9 +1,10 @@
 ---
 import { Image } from "astro:assets";
-import { Twitter, Github, Linkedin, Instagram } from "lucide-astro";
+import { Twitter, Github, Linkedin, Instagram } from "@lucide/astro";
 
 // assets
-import AvatarImg from "../../assets/avatar.svg";
+// import AvatarImg from "../../assets/avatar.svg";
+import HeroImg from "../../assets/hero.png";
 ---
 
 <section id="hero">
@@ -61,8 +62,8 @@ import AvatarImg from "../../assets/avatar.svg";
       </div>
 
       <div class="hero__right">
-        <!-- <img src="/images/avatar.svg" alt="avatar" loading="lazy" /> -->
-        <Image src={AvatarImg} alt="avatar" />
+        <!-- <Image src={AvatarImg} alt="avatar" /> -->
+        <Image src={HeroImg} alt="avatar" />
       </div>
     </div>
   </div>
@@ -114,8 +115,12 @@ import AvatarImg from "../../assets/avatar.svg";
       flex-shrink: 0;
       img {
         display: block;
-        width: 16rem;
-        height: 20rem;
+        // width: 16rem;
+        // height: 20rem;
+
+        filter: brightness(2) invert(1); // TODO: light theme handling later
+        width: 100%;
+        transform: scale(0.9);
       }
     }
   }

@@ -1,0 +1,110 @@
+---
+import type { Page } from "astro";
+import {
+  getAllTags,
+  type GetAllTags,
+  type GetSortedPosts,
+} from "@/content/utils";
+import Layout from "@/layouts/v2.astro";
+
+import Chip from "@/components/ui/chip.astro";
+import Date from "@/components/ui/date.astro";
+import Icon from "@/components/ui/icon.astro";
+import * as List from "@/components/ui/list";
+import * as Paginator from "@/components/ui/paginator";
+import Section from "@/components/ui/section.astro";
+import Separator from "@/components/ui/separator.astro";
+import Text from "@/components/ui/text.astro";
+
+import PostsSearch from "./post-search.astro";
+
+type Props = Page<GetSortedPosts[0]> & { topic?: GetAllTags[0]["id"] };
+
+const topics = await getAllTags();
+const {
+  data: paginatedPosts,
+  topic: activeTopic,
+  url,
+  currentPage,
+  lastPage,
+} = Astro.props;
+---
+
+<Layout title="Mohammed's | Blog">
+  <Section class="max-w-4xl">
+    <Text as="h1" size="12" font="serif" weight="bold"
+      >🧑‍🚀 Latest Blog Posts !</Text
+    >
+    <Text as="h2" size="8" font="serif" variant="subtle">
+      Explore the Cosmos of Ideas! Latest Blog Posts
+    </Text>
+  </Section>
+
+  <Section class="flex max-w-4xl flex-col gap-6">
+    <PostsSearch />
+
+    <List.Root orientation="horizontal" class="flex-wrap gap-2">
+      {
+        topics.map(({ id, text }) => (
+          <List.Item>
+            <Chip
+              as="a"
+              variant="soft-outline"
+              href={id === activeTopic ? "/blog" : `/blog/${id}`}
+              icon={id === activeTopic ? "X" : undefined}
+              value={text}
+            />
+          </List.Item>
+        ))
+      }
+    </List.Root>
+
+    <List.Root class="my-4 -ml-2">
+      {
+        paginatedPosts.map((post) => (
+          <Fragment>
+            <List.ItemLink
+              href={`/blog/${post.id}`}
+              class="flex gap-x-4 not-sm:flex-col-reverse not-sm:items-start"
+            >
+              <Text size="2">{post.data.title}</Text>
+              <Separator class="flex-1 not-sm:hidden" />
+              <div class="flex items-center gap-1">
+                <div class="flex items-center gap-1">
+                  <Icon
+                    name="Calendar"
+                    variant="subtle"
+                    size="sm"
+                    class="sm:hidden"
+                  />
+                  <Date size="1" variant="subtle" value={post.data.pubDate} />
+                </div>
+                <Icon name="Dot" variant="subtle" />
+                <div class="flex items-center gap-1">
+                  <Icon
+                    name="Clock"
+                    variant="subtle"
+                    size="sm"
+                    class="sm:hidden"
+                  />
+                  <Text size="1" variant="subtle">
+                    {post.data.readingTime}
+                  </Text>
+                </div>
+              </div>
+            </List.ItemLink>
+            <Separator class="my-4 sm:hidden" />
+          </Fragment>
+        ))
+      }
+    </List.Root>
+
+    <Paginator.Root class="justify-self-end">
+      <Paginator.Control page="first" href={url.first} disabled={!url.first} />
+      <Paginator.Control page="previous" href={url.prev} disabled={!url.prev} />
+      <Paginator.Page current={currentPage} max={lastPage} />
+      <Paginator.Control page="next" href={url.next} disabled={!url.next} />
+      <Paginator.Control page="last" href={url.last} disabled={!url.last} />
+    </Paginator.Root>
+  </Section>
+</Layout>

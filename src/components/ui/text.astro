@@ -7,26 +7,36 @@ type Props<Tag extends HTMLTag = "p"> = Polymorphic<{ as: Tag }> & TextVariants;
 export type TextVariants = VariantProps<typeof textVariants>;
 
 export const textVariants = tv({
-  base: "max-w-prose",
-  defaultVariants: { weight: "normal", size: "3" },
+  base: "",
+  defaultVariants: {
+    size: "default",
+    weight: "normal",
+  },
   variants: {
-    font: { mono: "font-mono", serif: "font-serif" },
-    variant: { subtle: "text-gray-11", accent: "text-accent-11" },
-    weight: { normal: "font-normal", bold: "font-semibold" },
     size: {
-      "1": "text-2xs",
-      "2": "text-xs",
-      "3": "text-sm",
-      "4": "text-base",
-      "5": "text-lg",
-      "6": "text-xl",
-      "7": "text-2xl",
-      "8": "text-3xl",
-      "9": "text-4xl",
-      "10": "text-5xl",
-      "11": "text-6xl",
-      "12": "text-7xl",
-      "13": "text-8xl",
+      xs: "text-xs",
+      sm: "text-sm",
+      default: "text-base",
+      lg: "text-lg",
+      xl: "text-xl",
+      "2xl": "text-2xl",
+      "3xl": "text-3xl",
+      "4xl": "text-4xl",
+    },
+    weight: {
+      normal: "font-normal",
+      medium: "font-medium",
+      semibold: "font-semibold",
+      bold: "font-bold",
+    },
+    variant: {
+      default: "text-foreground",
+      muted: "text-muted-foreground",
+      destructive: "text-destructive",
+      accent: "text-accent-foreground",
+    },
+    font: {
+      sans: "font-sans",
     },
   },
 });
@@ -34,14 +44,17 @@ export const textVariants = tv({
 const {
   as: Tag = "p",
   class: className,
-  font,
-  variant,
   size,
   weight,
+  variant,
+  font,
   ...props
 } = Astro.props;
 ---
 
-<Tag {...props} class={textVariants({ font, variant, size, weight, className })}
-  ><slot /></Tag
+<Tag
+  {...props}
+  class={textVariants({ size, weight, variant, font, className })}
 >
+  <slot />
+</Tag>

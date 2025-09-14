@@ -1,0 +1,12 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { twMerge } from "tailwind-merge";
+
+type Props = HTMLAttributes<"hr"> & {
+  class?: string;
+};
+
+const { class: className, ...props } = Astro.props;
+---
+
+<hr {...props} class={twMerge("-mx-1 my-1 h-px bg-border", className)} />

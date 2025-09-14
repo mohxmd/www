@@ -1,5 +1,15 @@
 ---
 import Layout from "@/layouts/main.astro";
+import PostsCard from "./_components/posts-card.astro";
+import Sidebar from "./_components/sidebar.astro";
+import Header from "./_components/header.astro";
 ---
 
-<Layout />
+<Layout class="mx-auto max-w-[1400px] bg-background flex flex-col gap-6">
+  <Header />
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <PostsCard />
+    <Sidebar />
+  </div>
+</Layout>

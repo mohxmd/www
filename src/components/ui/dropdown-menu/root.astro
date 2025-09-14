@@ -1,0 +1,77 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { twMerge } from "tailwind-merge";
+import Icon, { type LucideIconName } from "@/components/ui/icon.astro";
+import Text from "@/components/ui/text.astro";
+
+export interface Props extends Omit<HTMLAttributes<"div">, "class"> {
+  triggerText: string;
+  triggerIcon?: LucideIconName;
+  class?: string;
+  align?: "left" | "right" | "center";
+  width?: "sm" | "md" | "lg";
+}
+
+const {
+  triggerText,
+  triggerIcon,
+  class: className,
+  align = "left",
+  width = "md",
+  ...props
+} = Astro.props;
+
+const alignmentClasses = {
+  left: "left-0",
+  right: "right-0",
+  center: "left-1/2 -translate-x-1/2",
+};
+
+const widthClasses = {
+  sm: "w-48",
+  md: "w-56",
+  lg: "w-64",
+};
+---
+
+<div
+  {...props}
+  class={twMerge("relative inline-block", className)}
+  x-data="{ open: false }"
+  @click.outside="open = false"
+  @keydown.escape="open = false"
+>
+  <!-- Trigger Button -->
+  <button
+    @click="open = !open"
+    class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
+    :class="{ 'text-foreground bg-accent': open }"
+  >
+    {triggerIcon && <Icon name={triggerIcon} size="sm" />}
+    <Text size="sm" weight="medium">{triggerText}</Text>
+    <Icon
+      name="ChevronDown"
+      size="sm"
+      x-bind:class="{ 'rotate-180': open }"
+      class="transition-transform duration-200"
+    />
+  </button>
+
+  <!-- Dropdown Menu -->
+  <div
+    x-show="open"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 scale-95"
+    x-transition:enter-end="opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-95"
+    class={twMerge(
+      "absolute z-50 mt-2 rounded-md border bg-popover p-1 text-popover-foreground shadow-lg",
+      alignmentClasses[align],
+      widthClasses[width],
+    )}
+  >
+    <slot />
+  </div>
+</div>

@@ -16,6 +16,8 @@ const carouselAnimationTime = `${images.length * 6}s`;
         <Image
           class="carousel-item"
           style={{ animationDelay: `${index * 6}s` }}
+          decoding="async"
+          loading="lazy"
           src={typeof img === "string" ? img : img.src}
           alt={`Carousel image ${index + 1}`}
           width={1920}

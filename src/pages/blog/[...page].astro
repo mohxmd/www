@@ -95,7 +95,7 @@ const totalViews = await getTotalViews(Astro).then((res) => res.text());
       <div class="blog-posts" data-static-posts>
         {
           page.data.map((post) => (
-            <PostCard {...post.data} url={post.slug} post={post} />
+            <PostCard {...post.data} url={post.id} post={post} />
           ))
         }
       </div>

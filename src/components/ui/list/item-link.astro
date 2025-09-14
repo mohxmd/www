@@ -12,6 +12,7 @@ const { class: className, ...props } = Astro.props;
   <Link
     {...props}
     class={twMerge("text-foreground relative min-w-full p-2", className)}
-    ><slot /></Link
   >
+    <slot />
+  </Link>
 </li>

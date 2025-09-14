@@ -37,6 +37,8 @@ const hasCarousel = carouselImages.length > 0 && !backgroundImage;
         <div class="cover">
           <Image
             class="cover-image"
+            decoding="async"
+            loading="lazy"
             src={
               typeof backgroundImage === "string"
                 ? backgroundImage

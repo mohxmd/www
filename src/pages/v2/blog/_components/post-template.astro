@@ -32,10 +32,8 @@ const {
 
 <Layout title="Mohammed's | Blog">
   <Section class="max-w-4xl">
-    <Text as="h1" size="12" font="serif" weight="bold"
-      >🧑‍🚀 Latest Blog Posts !</Text
-    >
-    <Text as="h2" size="8" font="serif" variant="subtle">
+    <Text as="h1" size="lg"> 🧑‍🚀 Latest Blog Posts ! </Text>
+    <Text as="p" font="sans">
       Explore the Cosmos of Ideas! Latest Blog Posts
     </Text>
   </Section>
@@ -50,7 +48,7 @@ const {
             <Chip
               as="a"
               variant="soft-outline"
-              href={id === activeTopic ? "/blog" : `/blog/${id}`}
+              href={id === activeTopic ? "/v2/blog" : `/v2/blog/${id}`}
               icon={id === activeTopic ? "X" : undefined}
               value={text}
             />
@@ -62,39 +60,35 @@ const {
     <List.Root class="my-4 -ml-2">
       {
         paginatedPosts.map((post) => (
-          <Fragment>
+          <>
             <List.ItemLink
-              href={`/blog/${post.id}`}
+              href={`/v2/blog/${post.id}`}
               class="flex gap-x-4 not-sm:flex-col-reverse not-sm:items-start"
             >
-              <Text size="2">{post.data.title}</Text>
+              <Text as="h3" class="truncate max-w-md">
+                {post.data.title}
+              </Text>
+
               <Separator class="flex-1 not-sm:hidden" />
+
               <div class="flex items-center gap-1">
                 <div class="flex items-center gap-1">
-                  <Icon
-                    name="Calendar"
-                    variant="subtle"
-                    size="sm"
-                    class="sm:hidden"
-                  />
-                  <Date size="1" variant="subtle" value={post.data.pubDate} />
+                  <Icon name="Calendar" size="sm" class="sm:hidden" />
+                  <Date size="sm" value={post.data.pubDate} />
                 </div>
-                <Icon name="Dot" variant="subtle" />
+
+                <Icon name="Dot" />
+
                 <div class="flex items-center gap-1">
-                  <Icon
-                    name="Clock"
-                    variant="subtle"
-                    size="sm"
-                    class="sm:hidden"
-                  />
-                  <Text size="1" variant="subtle">
-                    {post.data.readingTime}
-                  </Text>
+                  <Icon name="Clock" size="sm" class="sm:hidden" />
+
+                  <Text size="sm">{post.data.readingTime}</Text>
                 </div>
               </div>
             </List.ItemLink>
+
             <Separator class="my-4 sm:hidden" />
-          </Fragment>
+          </>
         ))
       }
     </List.Root>

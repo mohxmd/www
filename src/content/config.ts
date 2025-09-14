@@ -44,10 +44,14 @@ const projectSchema = z.object({
   watchers: z.number(),
   topics: z.array(z.string()),
   githubUrl: z.string().url(),
+  language: z.string().optional(),
+  createdAt: z.string().optional(),
+  isPrivate: z.boolean().optional(),
   // websiteUrl: z.string().url(),
 });
 
 const REPO_NAMES = [
+  "oryft",
   "breeze-graphql-starter",
   "www",
   "pychat-app",
@@ -76,7 +80,10 @@ export const collections = {
             watchers: response.data.watchers_count,
             topics: response.data.topics,
             githubUrl: response.data.html_url,
-            // websiteUrl: response.data.homepage,
+            language: response.data.language,
+            createdAt: response.data.created_at,
+            isPrivate: response.data.private,
+            // websiteUrl: response.data.created_at,
           })),
         ),
       ),

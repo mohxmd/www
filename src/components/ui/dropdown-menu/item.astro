@@ -1,0 +1,52 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { twMerge } from "tailwind-merge";
+import Icon, { type LucideIconName } from "@/components/ui/icon.astro";
+import Text from "@/components/ui/text.astro";
+
+export type Props = Omit<HTMLAttributes<"a" | "button">, "class"> & {
+  href?: string;
+  icon?: LucideIconName;
+  variant?: "default" | "selected" | "destructive";
+  class?: string;
+};
+
+const {
+  href,
+  icon,
+  variant = "default",
+  class: className,
+  ...props
+} = Astro.props;
+
+const variantClasses = {
+  default: "text-foreground hover:bg-accent hover:text-accent-foreground",
+  selected: "bg-accent text-accent-foreground",
+  destructive:
+    "text-destructive hover:bg-destructive hover:text-destructive-foreground",
+};
+
+const baseClasses = twMerge(
+  "relative flex w-full cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground disabled:pointer-events-none disabled:opacity-50",
+  variantClasses[variant],
+  className,
+);
+---
+
+{
+  href ? (
+    <a {...props} href={href} class={baseClasses}>
+      {icon && <Icon name={icon} size="sm" />}
+      <Text size="sm" weight="medium">
+        <slot />
+      </Text>
+    </a>
+  ) : (
+    <button {...props} type="button" class={baseClasses}>
+      {icon && <Icon name={icon} size="sm" />}
+      <Text size="sm" weight="medium">
+        <slot />
+      </Text>
+    </button>
+  )
+}

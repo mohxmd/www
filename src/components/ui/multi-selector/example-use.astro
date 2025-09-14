@@ -1,0 +1,20 @@
+---
+import * as Component from "@/components/ui/multi-selector";
+---
+
+<>
+  <Component.Root
+    options={["Action", "Adventure", "Comedy", "Drama"]}
+    searchPlaceholder="Search"
+    class="w-80"
+    @change="handleGenreChange"
+  />
+</>
+
+<script>
+  function handleGenreChange(event: any) {
+    console.log("Selected genres:", event.detail.value);
+  }
+
+  document.addEventListener("change", handleGenreChange);
+</script>

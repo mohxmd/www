@@ -10,7 +10,7 @@ export const siteConfig = {
 
   navLinks: [
     { label: "Root", href: "/v2" },
-    { label: "Blog", href: "/v2/blo" },
+    { label: "Blog", href: "/v2/blog" },
     { label: "About", href: "/about" },
     { label: "Donate", href: "/donate" },
   ],

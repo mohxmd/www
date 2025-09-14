@@ -30,17 +30,17 @@ const { id, data } = Astro.props;
   </Component.Header>
 
   <Component.Body>
-    <Text size="2" variant="subtle">{data.description}</Text>
+    <Text>{data.description}</Text>
   </Component.Body>
 
   <Component.Footer>
     <div class="flex items-center gap-1">
-      <Icon name="Calendar" variant="subtle" size="sm" />
-      <Date size="1" variant="subtle" value={data.pubDate} />
+      <Icon name="Calendar" size="sm" />
+      <Date size="sm" value={data.pubDate} />
     </div>
     <div class="flex items-center gap-1">
-      <Icon name="Clock" variant="subtle" size="sm" />
-      <Text size="1" variant="subtle">{data.readingTime}</Text>
+      <Icon name="Clock" size="sm" />
+      <Text size="sm">{data.readingTime}</Text>
     </div>
   </Component.Footer>
 </Component.Root>

@@ -1,0 +1,46 @@
+---
+import { getCollection } from "astro:content";
+import * as Card from "@/components/ui/card";
+import Text from "@/components/ui/text.astro";
+import Icon from "@/components/ui/icon.astro";
+import Link from "@/components/ui/link.astro";
+
+const projects = (await getCollection("projects")).slice(0, 6);
+---
+
+<Card.Root class="lg:col-span-1">
+  <Card.Header
+    class="bg-secondary p-2 flex flex-row items-center justify-between"
+  >
+    <Text as="h1" size="lg" weight="bold">Recent Posts</Text>
+    <Icon name="Github" size="sm" class="text-muted-foreground" />
+  </Card.Header>
+
+  <Card.Body class="max-h-60 overflow-y-auto scrollbar">
+    {
+      projects.map((project, index) => (
+        <Fragment>
+          <a
+            href={project.data.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block p-2"
+          >
+            <Text class="mb-2 line-clamp-1">{project.data.name}</Text>
+            <Text size="sm" class="line-clamp-2 text-muted-foreground mb-3">
+              {project.data.description}
+            </Text>
+          </a>
+
+          {index < projects.length - 1 && <hr class="border-border mx-2" />}
+        </Fragment>
+      ))
+    }
+  </Card.Body>
+
+  <Card.Footer class="border-t bg-secondary/20 px-4 py-3">
+    <Link href="https://github.com/mhdZhHan" target="_blank">
+      <span>View all</span>
+    </Link>
+  </Card.Footer>
+</Card.Root>

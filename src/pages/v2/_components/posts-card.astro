@@ -1,0 +1,57 @@
+---
+import { getSortedPosts } from "@/content/utils";
+
+import * as Card from "@/components/ui/card";
+import * as List from "@/components/ui/list";
+
+import Text from "@/components/ui/text.astro";
+import Date from "@/components/ui/date.astro";
+import Icon from "@/components/ui/icon.astro";
+import Separator from "@/components/ui/separator.astro";
+
+const posts = (await getSortedPosts()).slice(0, 5);
+---
+
+<Card.Root class="lg:col-span-3">
+  <Card.Header class="bg-secondary p-2">
+    <Text as="h1" size="lg" weight="bold">Recent Posts</Text>
+  </Card.Header>
+
+  <Card.Body class="p-0">
+    <List.Root class="my-4 -ml-2">
+      {
+        posts.map((post) => (
+          <>
+            <List.ItemLink
+              href={`/blog/v2/${post.id}`}
+              class="flex gap-x-4 not-sm:flex-col-reverse not-sm:items-start"
+            >
+              <Text as="h3" class={"truncate"}>
+                {post.data.title}
+              </Text>
+
+              <Separator class="flex-1 not-sm:hidden" />
+
+              <div class="flex items-center gap-1">
+                <div class="flex items-center gap-1">
+                  <Icon name="Calendar" size="sm" class="sm:hidden" />
+                  <Date size="sm" value={post.data.pubDate} />
+                </div>
+
+                <Icon name="Dot" />
+
+                <div class="flex items-center gap-1">
+                  <Icon name="Clock" size="sm" class="sm:hidden" />
+
+                  <Text size="sm">{post.data.readingTime}</Text>
+                </div>
+              </div>
+            </List.ItemLink>
+
+            <Separator class="my-4 sm:hidden" />
+          </>
+        ))
+      }
+    </List.Root>
+  </Card.Body>
+</Card.Root>

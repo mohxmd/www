@@ -43,7 +43,6 @@ import * as Dialog from "@/components/ui/dialog";
   <Dialog.Body>
     <div x-cloak>
       <Text
-        size="2"
         class="mx-auto max-w-max"
         x-show="!data.length && $refs.query.value.length">No Results Found</Text
       >
@@ -61,30 +60,20 @@ import * as Dialog from "@/components/ui/dialog";
           >
             <div class="flex items-center gap-4">
               <div class="flex items-center gap-1">
-                <Icon name="Calendar" variant="subtle" size="sm" />
+                <Icon name="Calendar" size="sm" />
                 <Date
                   x-text="post.meta.published"
                   :datetime="post.meta.publishedISO"
-                  size="1"
-                  variant="subtle"
+                  size="sm"
                 />
               </div>
               <div class="flex items-center gap-1">
-                <Icon name="Clock" variant="subtle" size="sm" />
-                <Text
-                  x-text="post.meta.readingTime"
-                  size="1"
-                  variant="subtle"
-                />
+                <Icon name="Clock" size="sm" />
+                <Text x-text="post.meta.readingTime" size="sm" />
               </div>
             </div>
-            <Text x-text="post.meta.title" size="4" weight="bold" />
-            <Text
-              x-html="post.excerpt + ' ...'"
-              size="2"
-              variant="subtle"
-              class="mt-4 max-w-none"
-            />
+            <Text x-text="post.meta.title" size="lg" weight="bold" />
+            <Text x-html="post.excerpt + ' ...'" class="mt-4 max-w-none" />
           </List.ItemLink>
         </template>
       </List.Root>
@@ -94,16 +83,16 @@ import * as Dialog from "@/components/ui/dialog";
   <Dialog.Footer class="not-lg:hidden">
     <div class="flex items-center gap-2">
       <Command icon="CornerDownLeft" aria-label="Enter key" />
-      <Text size="2" variant="subtle">to select</Text>
+      <Text>to select</Text>
     </div>
     <div class="flex items-center gap-1">
       <Command icon="ArrowDown" aria-label="Arrow up key" />
       <Command icon="ArrowUp" aria-label="Arrow down key" />
-      <Text size="2" variant="subtle" class="ml-1">to navigate</Text>
+      <Text class="ml-1">to navigate</Text>
     </div>
     <div class="flex items-center gap-2">
       <Command key="esc" aria-label="Escape key" />
-      <Text size="2" variant="subtle">to close</Text>
+      <Text>to close</Text>
     </div>
   </Dialog.Footer>
 </Dialog.Root>

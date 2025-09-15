@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, ArrowLeft } from "@lucide/astro";
+import Icon from "../ui/icon.astro";
 
 const { prevUrl, nextUrl } = Astro.props;
 ---
@@ -8,7 +8,7 @@ const { prevUrl, nextUrl } = Astro.props;
   {
     prevUrl && (
       <a href={prevUrl}>
-        <ArrowLeft class="shrink-0" size={14} aria-hidden /> Newer Posts
+        <Icon name="arrow-left" size="sm" aria-hidden /> Newer Posts
       </a>
     )
   }
@@ -16,7 +16,7 @@ const { prevUrl, nextUrl } = Astro.props;
   {
     nextUrl && (
       <a href={nextUrl}>
-        Older Posts <ArrowRight class="shrink-0" size={14} aria-hidden />
+        Older Posts <Icon name="arrow-right" size="sm" aria-hidden />
       </a>
     )
   }

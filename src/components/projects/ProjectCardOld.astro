@@ -1,11 +1,12 @@
 ---
-import { Book } from "@lucide/astro";
+import Icon from "@/components/ui/icon.astro";
+
 const { name, description, tags, source_code_link, demo_link } = Astro.props;
 ---
 
 <li class="project-card">
   <h1 class="project-card__title">
-    <Book slot="prefix" size={16} aria-hidden />
+    <Icon name="book" slot="prefix" size="sm" aria-hidden />
     <a href="#" aria-label={`Blog post about ${{ name }}`}>{name}</a>
   </h1>
 

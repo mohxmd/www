@@ -1,12 +1,12 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import { twMerge } from "tailwind-merge";
-import Icon, { type LucideIconName } from "@/components/ui/icon.astro";
+import Icon from "@/components/ui/icon.astro";
 import Text from "@/components/ui/text.astro";
 
 export type Props = Omit<HTMLAttributes<"a" | "button">, "class"> & {
   href?: string;
-  icon?: LucideIconName;
+  icon?: string;
   variant?: "default" | "selected" | "destructive";
   class?: string;
 };

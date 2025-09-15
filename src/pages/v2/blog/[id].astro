@@ -3,7 +3,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { Image } from "astro:assets";
 import { getSortedPosts, type GetSortedPosts } from "@/content/utils";
 
-import Layout from "@/layouts/v2.astro";
+import Layout from "@/layouts/main.astro";
 import Button from "@/components/ui/button.astro";
 import Callout from "@/components/ui/callout.astro";
 import Date from "@/components/ui/date.astro";
@@ -38,9 +38,11 @@ const { id: postId, data, headings, Content, morePosts } = Astro.props;
 ---
 
 <Layout
-  title={data.title}
-  description={data.description}
-  og={`blog/${postId}.png`}
+  metadata={{
+    title: data.title,
+    description: data.description,
+    og: `blog/${postId}.png`,
+  }}
 >
   <article data-pagefind-body data-pagefind-meta={`slug:/blog/${postId}`}>
     <Section data-pagefind-ignore as="div" class="max-w-4xl">
@@ -57,24 +59,19 @@ const { id: postId, data, headings, Content, morePosts } = Astro.props;
       <div class="mb-2 flex items-center gap-2">
         <Date
           value={data.pubDate}
-          size="2"
-          variant="subtle"
+          variant="muted"
           data-pagefind-meta="published, publishedISO[datetime]"
         />
-        <Icon name="Dot" variant="subtle" />
-        <Text size="2" variant="subtle" data-pagefind-meta="readingTime"
+        <Icon name="Dot" variant="secondary" />
+        <Text variant="muted" data-pagefind-meta="readingTime"
           >{data.readingTime}</Text
         >
-        <Icon name="Dot" variant="subtle" />
-        <PostViews server:defer id={postId} size="2" variant="subtle" />
+        <Icon name="Dot" variant="secondary" />
+        <PostViews server:defer id={postId} variant="muted" />
       </div>
 
-      <Text
-        as="h1"
-        size="9"
-        font="serif"
-        weight="bold"
-        class="text-balance uppercase">{data.title}</Text
+      <Text as="h1" font="sans" weight="bold" class="text-balance uppercase"
+        >{data.title}</Text
       >
     </Section>
 
@@ -103,8 +100,8 @@ const { id: postId, data, headings, Content, morePosts } = Astro.props;
   </article>
 
   <Section class="max-w-4xl">
-    <Text as="h2" font="serif" size="5" weight="bold">CONTINUE READING</Text>
-    <Text size="2" variant="subtle"
+    <Text as="h2" weight="bold">CONTINUE READING</Text>
+    <Text variant="muted"
       >Check out some other software-related blog posts I've written.</Text
     >
 
@@ -128,14 +125,14 @@ const { id: postId, data, headings, Content, morePosts } = Astro.props;
       class="w-auto"
     >
       <Icon name="TableOfContents" />
-      <Text size="2">Index</Text>
+      <Text>Index</Text>
       <Icon name="ChevronsUpDown" />
       <Separator
         orientation="vertical"
         class="mx-2 not-supports-[scroll-timeline:none]:hidden"
       />
       <Text
-        size="1"
+        size="sm"
         class="scroll-progress-item text-gray-12 w-[4ch] not-supports-[scroll-timeline:none]:hidden"
       />
     </Button>
@@ -146,7 +143,6 @@ const { id: postId, data, headings, Content, morePosts } = Astro.props;
           headings.map((heading) => (
             <List.ItemLink
               href={`#${heading.slug}`}
-              size="2"
               class="counter-item before:text-2xs p-1"
               x-on:click="$dispatch('close')"
             >

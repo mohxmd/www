@@ -1,5 +1,5 @@
 ---
-import { ArrowLeft, ArrowRight } from "@lucide/astro";
+import Icon from "../ui/icon.astro";
 
 import { nonDraftPosts, sortByDate } from "@/lib/index";
 import { getCollection, type CollectionEntry } from "astro:content";
@@ -28,7 +28,7 @@ const nextPost =
         aria-label={prevPost.data.title}
       >
         <p class="pagination-direction">
-          <ArrowLeft size={16} class="shrink-0" /> Previous post
+          <Icon name="arrow-left" size="sm" /> Previous post
         </p>
         <p class="pagination-title">{prevPost.data.title}</p>
       </a>
@@ -43,7 +43,7 @@ const nextPost =
         aria-label={nextPost.data.title}
       >
         <p class="pagination-direction">
-          Next post <ArrowRight size={16} class="shrink-0" />
+          Next post <Icon name="arrow-right" size="sm" />
         </p>
         <p class="pagination-title">{nextPost.data.title}</p>
       </a>

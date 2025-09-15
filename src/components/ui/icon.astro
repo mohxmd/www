@@ -1,6 +1,11 @@
 ---
-import * as LucideIcons from "@lucide/astro";
+import { Icon as Component } from "astro-icon/components";
+import { type ComponentProps } from "astro/types";
 import { tv, type VariantProps } from "tailwind-variants";
+
+type Props = ComponentProps<typeof Component> & IconVariants;
+
+export type IconVariants = VariantProps<typeof iconVariants>;
 
 const iconVariants = tv({
   base: "shrink-0",
@@ -25,16 +30,29 @@ const iconVariants = tv({
   },
 });
 
-export type LucideIconName = keyof typeof LucideIcons;
-export type IconVariants = VariantProps<typeof iconVariants>;
+function toKebabCase(str: string): string {
+  return str
+    .replace(/([a-z])([A-Z])/g, "$1-$2")
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2")
+    .toLowerCase();
+}
 
-type Props = IconVariants & {
-  name: LucideIconName;
-  class?: string;
-};
+function processIconName(name: string): string {
+  if (name.includes(":")) {
+    return name;
+  }
+  const kebabName = toKebabCase(name);
+  return `lucide:${kebabName}`;
+}
 
-const { name, size, variant, class: className, ...props } = Astro.props;
-const IconComponent = LucideIcons[name] as any;
+const { class: className, name, variant, size, ...props } = Astro.props;
+const processedName = processIconName(name);
 ---
 
-<IconComponent class={iconVariants({ size, variant, className })} {...props} />
+<Component
+  {...props}
+  aria-hidden
+  shape-rendering="crispEdges"
+  name={processedName}
+  class={iconVariants({ variant, size, className })}
+/>

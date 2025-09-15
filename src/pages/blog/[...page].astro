@@ -1,7 +1,7 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
 
-import { Dot } from "@lucide/astro";
+import Icon from "@/components/ui/icon.astro";
 
 // layout
 import Layout from "@/layouts/Layout.astro";
@@ -77,7 +77,7 @@ const totalViews = await getTotalViews(Astro).then((res) => res.text());
 
           <div class="data">
             <span class="views">{totalViews} Views</span>
-            <Dot class="shrink-0" size={14} aria-hidden />
+            <Icon name="dot" class="shrink-0" size="sm" aria-hidden />
             <span>{totalPosts} Posts</span>
           </div>
         </div>

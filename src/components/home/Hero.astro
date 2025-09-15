@@ -1,9 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import { Twitter, Github, Linkedin, Instagram } from "@lucide/astro";
-
-// assets
-// import AvatarImg from "../../assets/avatar.svg";
+import Icon from "../ui/icon.astro";
 import HeroImg from "../../assets/hero.png";
 ---
 
@@ -28,7 +25,7 @@ import HeroImg from "../../assets/hero.png";
               target="_blank"
               aria-label="Follow me on Twitter"
             >
-              <Twitter class="shrink-0" size={30} aria-hidden />
+              <Icon name="twitter" size="xl" aria-hidden />
             </a>
           </li>
           <li>
@@ -37,7 +34,7 @@ import HeroImg from "../../assets/hero.png";
               target="_blank"
               aria-label="Follow me on Linkedin"
             >
-              <Linkedin class="shrink-0" size={30} aria-hidden />
+              <Icon name="linkedin" size="xl" aria-hidden />
             </a>
           </li>
           <li>
@@ -46,7 +43,7 @@ import HeroImg from "../../assets/hero.png";
               target="_blank"
               aria-label="Follow me on Instagram"
             >
-              <Instagram class="shrink-0" size={30} aria-hidden />
+              <Icon name="instagram" size="xl" aria-hidden />
             </a>
           </li>
           <li>
@@ -55,15 +52,18 @@ import HeroImg from "../../assets/hero.png";
               target="_blank"
               aria-label="Follow me on Github"
             >
-              <Github class="shrink-0" size={30} aria-hidden />
+              <Icon name="github" size="xl" aria-hidden />
             </a>
           </li>
         </ul>
       </div>
 
       <div class="hero__right">
-        <!-- <Image src={AvatarImg} alt="avatar" /> -->
-        <Image src={HeroImg} alt="avatar" />
+        <Image
+          src={HeroImg}
+          alt="avatar"
+          class="filter dark:brightness-200 dark:invert"
+        />
       </div>
     </div>
   </div>
@@ -113,15 +113,12 @@ import HeroImg from "../../assets/hero.png";
     }
     .hero__right {
       flex-shrink: 0;
-      img {
-        display: block;
-        // width: 16rem;
-        // height: 20rem;
-
-        filter: brightness(2) invert(1); // TODO: light theme handling later
-        width: 100%;
-        transform: scale(0.9);
-      }
+      // img {
+      //   display: block;
+      //   filter: brightness(2) invert(1);
+      //   width: 100%;
+      //   transform: scale(0.9);
+      // }
     }
   }
 </style>

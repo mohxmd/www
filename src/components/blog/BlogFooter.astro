@@ -1,13 +1,13 @@
 ---
 import Toast from "@/components/common/Toast.astro";
-import { FilePenLine, Share2 } from "@lucide/astro";
+import Icon from "@/components/ui/icon.astro";
 ---
 
 <>
   <ul class="action-buttons">
     <li title="Copy the link of this article">
       <button id="copy" class="action-button" aria-label="Share this article">
-        <Share2 size={16} /> Share this article
+        <Icon name="share-2" size="sm" /> Share this article
       </button>
     </li>
     <li>
@@ -17,13 +17,13 @@ import { FilePenLine, Share2 } from "@lucide/astro";
         target="_blank"
         aria-label="Edit this content on GitHub"
       >
-        Typo? Edit it here <FilePenLine size={16} />
+        Typo? Edit it here <Icon name="file-pen-line" size="sm" />
       </a>
     </li>
   </ul>
 
   <Toast
-    Icon={Share2}
+    Icon="share-2"
     description="Link copied to clipboard."
     idList="toast-share"
   />

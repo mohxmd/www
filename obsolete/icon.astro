@@ -1,0 +1,40 @@
+---
+import * as LucideIcons from "@lucide/astro";
+import { tv, type VariantProps } from "tailwind-variants";
+
+const iconVariants = tv({
+  base: "shrink-0",
+  variants: {
+    size: {
+      sm: "h-4 w-4",
+      md: "h-5 w-5",
+      lg: "h-6 w-6",
+      xl: "h-8 w-8",
+    },
+    variant: {
+      default: "",
+      destructive: "text-destructive",
+      secondary: "text-muted-foreground",
+      ghost: "text-muted-foreground hover:text-foreground",
+      link: "text-primary underline-offset-4 hover:underline",
+    },
+  },
+  defaultVariants: {
+    size: "md",
+    variant: "default",
+  },
+});
+
+export type LucideIconName = keyof typeof LucideIcons;
+export type IconVariants = VariantProps<typeof iconVariants>;
+
+type Props = IconVariants & {
+  name: LucideIconName;
+  class?: string;
+};
+
+const { name, size, variant, class: className, ...props } = Astro.props;
+const IconComponent = LucideIcons[name] as any;
+---
+
+<IconComponent class={iconVariants({ size, variant, className })} {...props} />

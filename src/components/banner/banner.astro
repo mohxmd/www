@@ -4,10 +4,10 @@ import CarouselBg from "./carousel-bg.astro";
 import Waves from "./waves.astro";
 
 export type Props = {
-  title?: string;
+  title?: string | undefined;
   subtitle?: string;
   backgroundImage?: string | ImageMetadata;
-  carouselImages: (string | ImageMetadata)[];
+  carouselImages?: (string | ImageMetadata)[];
   showWaves?: boolean;
   class?: string;
 };

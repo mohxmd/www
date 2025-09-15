@@ -5,7 +5,7 @@ import {
   type GetAllTags,
   type GetSortedPosts,
 } from "@/content/utils";
-import Layout from "@/layouts/v2.astro";
+import Layout from "@/layouts/main.astro";
 
 import Chip from "@/components/ui/chip.astro";
 import Date from "@/components/ui/date.astro";
@@ -30,9 +30,14 @@ const {
 } = Astro.props;
 ---
 
-<Layout title="Mohammed's | Blog">
+<Layout
+  metadata={{
+    title: "🧑‍🚀 Latest Blog Posts !",
+    description: "Explore the Cosmos of Ideas! Latest Blog Posts",
+  }}
+>
   <Section class="max-w-4xl">
-    <Text as="h1" size="lg"> 🧑‍🚀 Latest Blog Posts ! </Text>
+    <Text as="h1" size="lg">🧑‍🚀 Latest Blog Posts !</Text>
     <Text as="p" font="sans">
       Explore the Cosmos of Ideas! Latest Blog Posts
     </Text>

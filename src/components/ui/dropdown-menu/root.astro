@@ -1,12 +1,12 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import { twMerge } from "tailwind-merge";
-import Icon, { type LucideIconName } from "@/components/ui/icon.astro";
+import Icon from "@/components/ui/icon.astro";
 import Text from "@/components/ui/text.astro";
 
 export interface Props extends Omit<HTMLAttributes<"div">, "class"> {
   triggerText: string;
-  triggerIcon?: LucideIconName;
+  triggerIcon?: string;
   class?: string;
   align?: "left" | "right" | "center";
   width?: "sm" | "md" | "lg";

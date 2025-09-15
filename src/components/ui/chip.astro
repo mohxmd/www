@@ -2,10 +2,10 @@
 import type { HTMLTag, Polymorphic } from "astro/types";
 import { tv, type VariantProps } from "tailwind-variants";
 import { buttonVariants } from "./button.astro";
-import Icon, { type LucideIconName } from "./icon.astro";
+import Icon from "./icon.astro";
 
 type Props<Tag extends HTMLTag = "p"> = Polymorphic<{ as: Tag }> &
-  ChipVariants & { value?: string; icon?: LucideIconName | undefined };
+  ChipVariants & { value?: string; icon?: string | undefined };
 
 export type ChipVariants = Omit<VariantProps<typeof chipVariants>, "as">;
 

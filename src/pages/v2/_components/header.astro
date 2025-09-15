@@ -1,6 +1,6 @@
 ---
 import Text from "@/components/ui/text.astro";
-import Icon, { type LucideIconName } from "@/components/ui/icon.astro";
+import Icon from "@/components/ui/icon.astro";
 import Link from "@/components/ui/link.astro";
 
 const navigationItems = [
@@ -48,7 +48,7 @@ const navigationItems = [
                     : "text-muted-foreground"
                 }`}
               >
-                <Icon name={item.icon as LucideIconName} size="sm" />
+                <Icon name={item.icon} size="sm" />
                 <Text size="sm" weight="medium">
                   {item.name}
                 </Text>

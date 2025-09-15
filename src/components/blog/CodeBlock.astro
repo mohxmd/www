@@ -1,41 +1,8 @@
 ---
-import { getFileIcon } from "@/lib/utils/file-icons";
-import { Copy } from "@lucide/astro";
-
-let language: string | undefined = undefined;
-let filename: string | undefined = undefined;
-
-if (Astro.slots.title) {
-  const titleSlot = await Astro.slots.render("title");
-  // language = titleSlot.match(/language="([^"]+)"/)?.[1] ?? "unknown"
-
-  // Use a regular expression to extract the filename from the titleSlot string
-  const match = titleSlot.match(/>([^<]+)<\/div>/);
-  if (match) {
-    filename = match[1].trim(); // Get the captured group and trim whitespace
-  }
-
-  // Extract the extension from the filename
-  language = filename?.split(".").pop()?.toLowerCase();
-}
+import Icon from "../ui/icon.astro";
 ---
 
 <div {...Astro.props} class="breezeWindow">
-  {
-    Astro.slots.title && (
-      <div class="breezeWindow__header">
-        <span class="title">
-          <img
-            src={getFileIcon(language, filename)}
-            alt="lang"
-            class="language-icon"
-          />
-          <slot name="title" />
-        </span>
-      </div>
-    )
-  }
-
   <div class="breezeWindow__body">
     <div class="breezeWindow__content">
       <slot />
@@ -47,7 +14,7 @@ if (Astro.slots.title) {
         title="Copy to clipboard"
         aria-label="Copy to clipboard"
       >
-        <Copy size={20} class="shrink-0" />
+        <Icon name="copy" />
       </button>
       <span class="copy-tooltip">Copied!</span>
     </div>
@@ -59,7 +26,6 @@ if (Astro.slots.title) {
     --code-bg: #121212;
   }
   html[data-theme="cool"] {
-    // --code-bg: #FDF6E3;
     --code-bg: rgba(250, 240, 198, 0.445);
   }
 
@@ -207,7 +173,7 @@ if (Astro.slots.title) {
   }
 </style>
 
-<script>
+<script lang="js">
   document.addEventListener("astro:page-load", (event) => {
     const codeBlocks = document.querySelectorAll(".breezeWindow");
 
@@ -223,7 +189,6 @@ if (Astro.slots.title) {
           const code = codeContent.textContent || "";
           navigator.clipboard
             .writeText(code)
-            // Show tooltip
             .then(() => {
               tooltip.classList.add("show");
               setTimeout(() => {

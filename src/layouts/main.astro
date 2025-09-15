@@ -2,18 +2,24 @@
 import "@/global.css";
 import type { HTMLAttributes } from "astro/types";
 
-import { banners } from "@/assets/banners";
-import { siteConfig } from "@/configs/site";
-
 import BaseHead, { type Metadata } from "./_components/base-head.astro";
 import Banner from "@/components/banner/banner.astro";
-import Header from "@/components/common/header/header.astro";
+import Cd from "@/components/ui/cd.astro";
+import ArtPlum from "@/components/effects/art-plum.astro";
 
 type Props = HTMLAttributes<"main"> & {
   metadata?: Metadata;
+  banners?: (string | ImageMetadata)[];
+  banner?: string | ImageMetadata;
 };
 
-const { metadata = {}, class: className, ...props } = Astro.props;
+const {
+  metadata = {},
+  banner,
+  banners,
+  class: className,
+  ...props
+} = Astro.props;
 ---
 
 <html>
@@ -22,10 +28,24 @@ const { metadata = {}, class: className, ...props } = Astro.props;
   </head>
 
   <body>
-    <Header navLinks={siteConfig.navLinks} />
-    <Banner carouselImages={banners} />
+    {banners && <Banner title={metadata.title} carouselImages={banners} />}
+    {
+      banner && !banners && (
+        <Banner title={metadata.title} backgroundImage={banner} />
+      )
+    }
+
     <main {...props} class:list={["flex-1", className]}>
       <slot />
     </main>
+
+    {
+      Astro.url.pathname !== "/" && (
+        <>
+          <ArtPlum />
+          <Cd />
+        </>
+      )
+    }
   </body>
 </html>

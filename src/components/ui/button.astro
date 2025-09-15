@@ -1,10 +1,9 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import { tv, type VariantProps } from "tailwind-variants";
-import Icon, { type LucideIconName } from "./icon.astro";
+import Icon from "./icon.astro";
 
-type Props = HTMLAttributes<"button"> &
-  ButtonVariants & { icon?: LucideIconName };
+type Props = HTMLAttributes<"button"> & ButtonVariants & { icon?: string };
 
 export type ButtonVariants = VariantProps<typeof buttonVariants>;
 

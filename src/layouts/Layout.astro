@@ -11,11 +11,11 @@ import Header from "@/components/common/Header.astro";
 import Newsletter from "@/components/common/Newsletter.astro";
 import Footer from "@/components/common/Footer.astro";
 import ScrollTop from "@/components/common/ScrollTop.astro";
-import ArtPlum from "@/components/common/ArtPlum.astro";
+import ArtPlum from "@/components/effects/art-plum.astro";
 import ChangeDir from "@/components/common/ChangeDir.astro";
 
 // util
-import SchemaOrg from "./_components/ld-schema.astro";
+// import SchemaOrg from "./_components/ld-schema.astro";
 
 interface Props {
   title?: string;
@@ -34,8 +34,8 @@ const {
   pageUrl = Astro.url.href,
 
   type = "website",
-  publishDate,
-  modifiedDate,
+  // publishDate,
+  // modifiedDate,
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, "");
@@ -93,7 +93,7 @@ const finalOgImageUrl = `${siteUrl}/${ogImageUrl || fallbackOgImage}`;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- JSON-LD Schema -->
-    <SchemaOrg
+    <!-- <SchemaOrg
       type={type}
       title={title}
       description={description}
@@ -101,7 +101,7 @@ const finalOgImageUrl = `${siteUrl}/${ogImageUrl || fallbackOgImage}`;
       ogImageUrl={finalOgImageUrl}
       publishDate={publishDate}
       modifiedDate={modifiedDate}
-    />
+    /> -->
 
     <ThemeScript />
     <ClientRouter />

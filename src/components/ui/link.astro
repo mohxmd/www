@@ -2,11 +2,11 @@
 import type { ComponentProps } from "astro/types";
 import { twMerge } from "tailwind-merge";
 import Arrow from "./arrow.astro";
-import Icon, { type LucideIconName } from "./icon.astro";
+import Icon from "./icon.astro";
 import Text from "./text.astro";
 
 type Props = Omit<ComponentProps<typeof Text<"a">>, "as"> & {
-  icon?: LucideIconName;
+  icon?: string;
 };
 
 const {

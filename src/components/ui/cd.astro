@@ -1,0 +1,21 @@
+---
+import Icon from "@/components/ui/icon.astro";
+---
+
+<div class="cd">
+  <div class="px-3">
+    <button
+      id="changeDir"
+      class="flex items-center gap-1 bg-transparent cursor-pointer transition-all duration-200 ease-in-out hover:text-primary group"
+      aria-label="Go back to previous page"
+      onclick="window.history.back()"
+    >
+      <Icon name="chevron-right" size="sm" class="shrink-0" />
+      <span
+        class="block tracking-[2px] transition-all duration-200 ease-in-out relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:opacity-0 after:bg-primary after:transition-all after:duration-300 after:ease-in-out group-hover:after:opacity-100"
+      >
+        cd ..
+      </span>
+    </button>
+  </div>
+</div>

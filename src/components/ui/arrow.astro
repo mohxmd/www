@@ -1,21 +1,19 @@
 ---
 import { type ComponentProps } from "astro/types";
 import { twMerge } from "tailwind-merge";
-import Icon, { type LucideIconName } from "./icon.astro";
+import Icon from "./icon.astro";
 
 type Props = Omit<ComponentProps<typeof Icon>, "name"> & {
   name: "right" | "up-right";
 };
 
 const { class: className, size, name, ...props } = Astro.props;
-const iconName: LucideIconName =
-  name === "right" ? "ArrowRight" : "ArrowUpRight";
 ---
 
 <span data-arrow class="relative size-5 shrink-0">
   <Icon
     {...props}
-    name={iconName}
+    name={`arrow-${name}`}
     size={size ?? "sm"}
     class={twMerge(
       "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 motion-safe:transition-all",

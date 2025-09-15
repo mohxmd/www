@@ -1,4 +1,8 @@
 window.addEventListener("DOMContentLoaded", () => {
+  if (process.env.NODE_ENV === "production") {
+    console.clear();
+    console.log("Have a great day! 📣🐢");
+  }
   console.log(
     `%c  
 

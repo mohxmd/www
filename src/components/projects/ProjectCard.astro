@@ -1,11 +1,11 @@
 ---
-import { Book, Eye, GitFork, Star, ArrowUpRight } from "@lucide/astro";
+import Icon from "../ui/icon.astro";
 const { name, description, source_code_link, demo_link } = Astro.props;
 ---
 
 <li class="repo-card">
   <div class="repo-header">
-    <Book size={12} class="icon" aria-hidden="true" />
+    <Icon name="book" size="sm" class="icon" aria-hidden="true" />
     <span class="repo-name">{name}</span>
   </div>
 
@@ -17,17 +17,17 @@ const { name, description, source_code_link, demo_link } = Astro.props;
     <div class="repo-stats">
       <div class="stat-group">
         <div class="stat">
-          <Star size={12} class="icon" />
+          <Icon name="star" size="sm" class="icon" />
           <span>8</span>
         </div>
 
         <div class="stat">
-          <GitFork size={12} class="icon" />
+          <Icon name="git-fork" size="sm" class="icon" />
           <span>0</span>
         </div>
 
         <div class="stat">
-          <Eye size={12} class="icon" />
+          <Icon name="eye" size="sm" class="icon" />
           <span>9</span>
         </div>
       </div>
@@ -37,13 +37,25 @@ const { name, description, source_code_link, demo_link } = Astro.props;
           <div class="links">
             {source_code_link && (
               <a href={source_code_link} target="_blank">
-                Code <ArrowUpRight size={12} data-external-icon aria-hidden />
+                Code{" "}
+                <Icon
+                  name="arrow-up-right"
+                  size="sm"
+                  data-external-icon
+                  aria-hidden
+                />
               </a>
             )}
 
             {demo_link && (
               <a href={demo_link}>
-                Live <ArrowUpRight size={12} data-external-icon aria-hidden />
+                Live{" "}
+                <Icon
+                  name="arrow-up-right"
+                  size="sm"
+                  data-external-icon
+                  aria-hidden
+                />
               </a>
             )}
           </div>
@@ -67,14 +79,12 @@ const { name, description, source_code_link, demo_link } = Astro.props;
     align-items: center;
     gap: 0.5rem;
     border-bottom: 1px solid var(--border-color);
-    /* background-color: var(--secondary); */
     padding: 0.25rem 0.5rem;
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
 
     background-color: #var(--tertiary);
     background-image: linear-gradient(95deg, #fff3, #ffffff0d);
-    /* box-shadow: inset 0 0 0 1px #ffffff1a; */
     backdrop-filter: blur(160px);
   }
   .icon {

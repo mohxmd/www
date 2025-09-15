@@ -4,8 +4,7 @@ import "@/styles/blog-post.scss";
 
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import { Picture } from "astro:assets";
-
-import { Eye, Calendar, Clock4, User } from "@lucide/astro";
+import Icon from "@/components/ui/icon.astro";
 
 // layouts
 import Layout from "@/layouts/Layout.astro";
@@ -57,12 +56,12 @@ const publishDate = simplifyDate(pubDate).simplifiedDate;
         <h1 itemprop="headline" class="post__title">{title}</h1>
         <div class="post__meta">
           <div itemprop="author" class="post__author">
-            <User class="shrink-0" size={14} aria-hidden />
+            <Icon name="user" size="sm" aria-hidden />
             <span itemprop="name">Mohammed</span>
           </div>
 
           <div class="post__date">
-            <Calendar class="shrink-0" size={14} aria-hidden />
+            <Icon name="calendar" size="sm" aria-hidden />
             <time
               datetime={publishDate}
               itemprop="datePublished"
@@ -72,12 +71,12 @@ const publishDate = simplifyDate(pubDate).simplifiedDate;
           </div>
 
           <div class="post__read">
-            <Clock4 class="shrink-0" size={14} aria-hidden />
+            <Icon name="clock-4" size="sm" aria-hidden />
             <span class="post__read">{extras.readingTime} Min Read</span>
           </div>
 
           <div class="post__Views">
-            <Eye class="shrink-0" size={14} aria-hidden />
+            <Icon name="eye" size="sm" aria-hidden />
             <span data-post-views={slug}>000000</span>
           </div>
         </div>
@@ -87,7 +86,6 @@ const publishDate = simplifyDate(pubDate).simplifiedDate;
 
       <div class="post__body">
         <div class="post__banner">
-          <!-- <img src={image} alt={title} loading="lazy" /> -->
           <Picture
             src={image}
             formats={["avif", "webp"]}
@@ -116,7 +114,6 @@ const publishDate = simplifyDate(pubDate).simplifiedDate;
 <style lang="scss">
   .post__head {
     .post__title {
-      // line-height: 2.25rem;
       font-weight: 700;
       text-align: center;
       font-family: "8-bit_bold";

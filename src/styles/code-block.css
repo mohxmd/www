@@ -1,4 +1,4 @@
-/* One Dark Pro Monokai Darker Theme Variables */
+/* One Dark Pro Darker Theme Variables */
 
 :root {
   /* Light theme - One Dark Pro Light variant */
@@ -19,7 +19,7 @@
 
 [data-theme="dark"],
 .dark {
-  /* Dark theme - One Dark Pro Monokai Darker */
+  /* Dark theme - One Dark Pro Darker */
   --code-foreground: oklch(85% 0.02 264); /* Light blue-gray text */
   --code-background: oklch(12% 0.02 264); /* Very dark background */
   --code-token-constant: oklch(75% 0.15 320); /* Bright purple constants */

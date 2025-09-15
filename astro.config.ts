@@ -1,13 +1,16 @@
 import { defineConfig, envField, fontProviders } from "astro/config";
 
+import vercel from "@astrojs/vercel";
+// import node from "@astrojs/node";
+
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
-import vercel from "@astrojs/vercel";
 import db from "@astrojs/db";
 import alpine from "@astrojs/alpinejs";
 import robotsTxt from "astro-robots-txt";
 
 import tailwindcss from "@tailwindcss/vite";
+import icon from "astro-icon";
 import pagefind from "astro-pagefind";
 
 import { createCssVariablesTheme } from "shiki";
@@ -34,10 +37,19 @@ const oneDarkProTheme = createCssVariablesTheme({
   },
 });
 
+// const adapter =
+//   process.env.NODE_ENV === "production"
+//     ? vercel({ webAnalytics: { enabled: true }, imageService: true })
+//     : node({ mode: "standalone" });
+
 export default defineConfig({
   site: "https://mohammedsh.xyz",
-  trailingSlash: "never",
   adapter: vercel({ webAnalytics: { enabled: true }, imageService: true }),
+  // server: { port: 4322, host: true },
+  prefetch: true,
+  security: {
+    checkOrigin: true,
+  },
 
   markdown: {
     syntaxHighlight: false,
@@ -83,6 +95,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     db(),
+    icon(),
     pagefind(),
     alpine({ entrypoint: "/alpine.config.ts" }),
     sitemap({ changefreq: "daily", lastmod: new Date() }),

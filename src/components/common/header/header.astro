@@ -1,12 +1,10 @@
 ---
-import { Image } from "astro:assets";
-
 import Link from "@/components/ui/link.astro";
 import Theme from "@/components/ui/theme.astro";
 
-import StarBoy from "@/assets/star-boy.svg";
-import Hamburger from "./ham-burger.astro";
 import { cn } from "@/lib/utils";
+import StarBoy from "./star-boy.astro";
+import Hamburger from "./ham-burger.astro";
 
 type NavLink = {
   label: string;
@@ -26,20 +24,14 @@ const { navLinks, class: className, ...props } = Astro.props;
   class={cn("py-2 fixed w-full top-0 z-50", className)}
   x-data="{ isOpen: false }"
 >
-  <div class="container max-w-5xl">
+  <div class="container max-w-2xl mx-auto">
     <div
       class="border border-white/15 rounded-[27px] md:rounded-full bg-neutral-950/70 backdrop-blur"
     >
       <div
-        class="grid grid-cols-2 md:grid-cols-3 items-center p-2 px-4 md:pr-2"
+        class="grid grid-cols-2 md:grid-cols-3 items-center p-1 px-4 md:pr-2"
       >
-        <Image
-          src={StarBoy}
-          alt="star-boy"
-          width={120}
-          height={36}
-          class="h-9 md:h-auto w-auto"
-        />
+        <Link href="/"><StarBoy /></Link>
 
         <div class="hidden md:flex justify-center items-center">
           <nav class="flex gap-6 font-medium items-center">
@@ -53,8 +45,8 @@ const { navLinks, class: className, ...props } = Astro.props;
           </nav>
         </div>
 
-        <div class="flex justify-end gap-4">
-          <Hamburger />
+        <div class="flex justify-end items-center gap-2">
+          <Hamburger class="text-base" />
           <Theme />
         </div>
       </div>

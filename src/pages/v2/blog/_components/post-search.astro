@@ -14,7 +14,7 @@ import * as Dialog from "@/components/ui/dialog";
   @close.debounce.200ms="data = []; $refs.query.value = ''"
 >
   <Button slot="dialog-trigger" variant="soft-outline">
-    <Icon name="Search" />
+    <Icon name="search" />
     <Text>Search Posts</Text>
     <Command
       key="/"
@@ -28,7 +28,7 @@ import * as Dialog from "@/components/ui/dialog";
       placeholder="Search posts..."
       @keyup="data = await Promise.all((await pagefind.search($event.target.value)).results.map((item) => item.data()))"
     >
-      <Icon slot="prefix" name="Search" />
+      <Icon slot="prefix" name="search" />
       <Button
         slot="suffix"
         size="icon"
@@ -60,7 +60,7 @@ import * as Dialog from "@/components/ui/dialog";
           >
             <div class="flex items-center gap-4">
               <div class="flex items-center gap-1">
-                <Icon name="Calendar" size="sm" />
+                <Icon name="calendar" size="sm" />
                 <Date
                   x-text="post.meta.published"
                   :datetime="post.meta.publishedISO"
@@ -68,7 +68,7 @@ import * as Dialog from "@/components/ui/dialog";
                 />
               </div>
               <div class="flex items-center gap-1">
-                <Icon name="Clock" size="sm" />
+                <Icon name="clock" size="sm" />
                 <Text x-text="post.meta.readingTime" size="sm" />
               </div>
             </div>
@@ -82,12 +82,12 @@ import * as Dialog from "@/components/ui/dialog";
 
   <Dialog.Footer class="not-lg:hidden">
     <div class="flex items-center gap-2">
-      <Command icon="CornerDownLeft" aria-label="Enter key" />
+      <Command icon="corner-down-left" aria-label="Enter key" />
       <Text>to select</Text>
     </div>
     <div class="flex items-center gap-1">
-      <Command icon="ArrowDown" aria-label="Arrow up key" />
-      <Command icon="ArrowUp" aria-label="Arrow down key" />
+      <Command icon="arrow-down" aria-label="Arrow up key" />
+      <Command icon="arrow-up" aria-label="Arrow down key" />
       <Text class="ml-1">to navigate</Text>
     </div>
     <div class="flex items-center gap-2">

@@ -1,6 +1,6 @@
 ---
-import { ArrowLeft } from "@lucide/astro";
 import Layout from "@/layouts/Layout.astro";
+import Icon from "@/components/ui/icon.astro";
 ---
 
 <Layout title="Mohammed's blog | Page Not Found">
@@ -10,7 +10,7 @@ import Layout from "@/layouts/Layout.astro";
         <h1>404</h1>
         <p>Page Not Found</p>
         <a href="/">
-          <ArrowLeft size={16} aria-hidden />
+          <Icon name="arrow-left" size="sm" />
           Go Back Home
         </a>
       </div>

@@ -3,7 +3,7 @@ import "@/styles/search-box.scss";
 import CommandKey from "./CommandKey.astro";
 import Filter from "./Filter.astro";
 
-import { Search } from "@lucide/astro";
+import Icon from "@/components/ui/icon.astro";
 
 const { tags } = Astro.props;
 ---
@@ -12,7 +12,7 @@ const { tags } = Astro.props;
   <form id="search-form">
     <div class="search-box__container">
       <div class="search-icon">
-        <Search slot="prefix" size={12} aria-hidden />
+        <Icon name="search" slot="prefix" size={"sm"} aria-hidden />
       </div>
 
       <input

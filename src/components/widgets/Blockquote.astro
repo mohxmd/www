@@ -1,26 +1,26 @@
 ---
-import { TriangleAlert, Check, Info, Ban, Lightbulb } from "@lucide/astro";
+import Icon from "@/components/ui/icon.astro";
 
-interface Props {
+type Props = {
   title?: string;
-  type?: "warning" | "info" | "success" | "error";
-}
+  type?: "warning" | "info" | "success" | "error" | "normal";
+};
 
 const { title, type = "normal" } = Astro.props;
 
-const IconComponent =
-  {
-    warning: TriangleAlert,
-    info: Info,
-    success: Check,
-    error: Ban,
-  }[type] || Lightbulb;
+const IconComponent = {
+  warning: "triangle-alert",
+  info: "info",
+  success: "check",
+  error: "ban",
+  normal: "lightbulb",
+}[type];
 ---
 
 <div class={`block-quote-container ${type}`}>
   <div class="block-quote">
     <i class="block-quote__icon">
-      <IconComponent size={18} />
+      <Icon name={IconComponent} size="sm" />
     </i>
     {title ? <div class="block-quote__title">{title}</div> : ""}
   </div>
@@ -90,6 +90,12 @@ const IconComponent =
     @media all and (max-width: 640px) {
       margin-left: 2.25rem;
     }
+  }
+
+  .normal {
+    border-color: rgb(107 114 128 / 1);
+    background-color: rgb(249 250 251 / 1);
+    color: rgb(107 114 128 / 1);
   }
 
   .info {

@@ -1,11 +1,11 @@
 ---
 import "@/styles/post-card.scss";
 import { Image } from "astro:assets";
-import { Calendar, Clock4 } from "@lucide/astro";
 
 // utils
 import { simplifyDate } from "@/lib/index";
 import { render } from "astro:content";
+import Icon from "../ui/icon.astro";
 
 const { title, description, pubDate, image, url, post } = Astro.props;
 
@@ -37,12 +37,12 @@ const { remarkPluginFrontmatter } = await render(post);
 
       <div class="meta">
         <div class="date">
-          <Calendar class="shrink-0" size={14} aria-hidden />
+          <Icon name="calendar" class="shrink-0" size="md" aria-hidden />
           <time datetime={pubDate}>{pubDate_.simplifiedDate}</time>
         </div>
 
         <div class="read">
-          <Clock4 class="shrink-0" size={14} aria-hidden />
+          <Icon name="clock" class="shrink-0" size="md" aria-hidden />
           <span>{remarkPluginFrontmatter.readingTime} Min Read</span>
         </div>
       </div>

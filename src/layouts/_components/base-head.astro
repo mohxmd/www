@@ -1,12 +1,12 @@
 ---
-import "@/global.css";
+import "#/styles/global.css";
 
 import * as env from "astro:env/server";
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import { ThemeScript } from "astro-theme-toggle";
 
-import { siteConfig } from "@/configs/site";
+import { siteConfig } from "#/configs/site";
 import LDSchema from "./ld-schema.astro";
 
 export type Metadata = {
@@ -42,10 +42,7 @@ const {
 <meta property="og:type" content="website" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta
-  property="og:site_name"
-  content={String(Astro.site).replace(/\/+$/, "")}
-/>
+<meta property="og:site_name" content={String(Astro.site).replace(/\/+$/, "")} />
 <meta property="og:url" content={new URL(og, Astro.site)} />
 <meta property="og:image" content={new URL(og, Astro.site)} />
 <meta property="og:image:alt" content={title} />
@@ -54,7 +51,7 @@ const {
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:creator" content={`@${env?.USERNAME ?? "mhdZhHan"}`} />
+<meta name="twitter:creator" content={`@${env?.USERNAME ?? "mohxmdsh"}`} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={new URL(og, Astro.site)} />
@@ -63,7 +60,7 @@ const {
 <meta name="keywords" content={keywords.join(", ")} />
 
 <!-- Links -->
-<link rel="icon" type="image/svg+xml" href="/favicon.png" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link
   rel="alternate"
   type="application/rss+xml"
@@ -73,10 +70,7 @@ const {
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <!-- Canonical URL -->
-<link
-  href={String(new URL(Astro.url.pathname, Astro.site)).replace(/\/+$/, "")}
-  rel="canonical"
-/>
+<link href={String(new URL(Astro.url.pathname, Astro.site)).replace(/\/+$/, "")} rel="canonical" />
 
 <!-- JSON-LD Schema -->
 <LDSchema
@@ -95,8 +89,6 @@ const {
 <ClientRouter />
 
 <script is:inline type="module">
-  // Search (Pagefind)
-  window.pagefind = await import("/pagefind/pagefind.js");
   // UI Helpers
   document.documentElement.classList.add("[&_[x-cloak]]:hidden");
 </script>

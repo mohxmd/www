@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "class-variance-authority";
+
+type Props = HTMLAttributes<"caption"> & CaptionVariants;
+
+export type CaptionVariants = VariantProps<typeof variants>;
+
+const variants = cva("text-muted-foreground mt-4 text-sm");
+
+const { class: className, ...props } = Astro.props;
+---
+
+<caption {...props} class={variants({ className })} data-slot="table-caption">
+  <slot />
+</caption>

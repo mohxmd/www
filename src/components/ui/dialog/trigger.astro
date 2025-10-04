@@ -1,0 +1,41 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"button"> & {
+  /**
+   * When true, renders child element instead of button
+   */
+  asChild?: boolean;
+  /**
+   * ID of dialog to trigger (required for external triggers)
+   */
+  for?: string;
+};
+
+const { class: className, asChild = false, for: dialogFor, ...props } = Astro.props;
+const hasChildren = Astro.slots.has("default");
+---
+
+{
+  asChild && hasChildren ? (
+    <div
+      class:list={["dialog-trigger", className]}
+      data-slot="dialog-trigger"
+      data-as-child
+      data-dialog-for={dialogFor}
+    >
+      <slot />
+    </div>
+  ) : (
+    <button
+      type="button"
+      aria-haspopup="dialog"
+      class:list={["dialog-trigger", className]}
+      data-slot="dialog-trigger"
+      data-dialog-for={dialogFor}
+      {...props}
+    >
+      <slot />
+    </button>
+  )
+}

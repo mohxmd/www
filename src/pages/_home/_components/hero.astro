@@ -1,0 +1,26 @@
+---
+import { Image } from "astro:assets";
+
+import Text from "#/components/ui/text.astro";
+import HeroImg from "#/assets/avatar.svg";
+---
+
+<section
+  class="font-8bit text-muted-foreground flex flex-col items-center md:flex-row md:justify-between md:gap-x-24"
+>
+  <div class="flex-1 space-y-4 md:text-left">
+    <Text class="font-8bit leading-tight font-bold" size="3xl" variant={"muted"}>
+      Hi there, I'm <span class="gradient-text">Mohammed</span> 👋
+    </Text>
+
+    <p class="font-8bit-regular mt-6 text-xl leading-9">
+      A 21st-century tech-savvy, Mostly hacks on FOSS enthusiast, GNU/Linux user, blogger, and
+      skilled programmer! Constantly pushing the boundaries of coding, embracing challenges, and
+      contributing to the open-source community.
+    </p>
+  </div>
+
+  <div class="shrink-0">
+    <Image src={HeroImg} alt="avatar" class="h-80 w-64 not-md:hidden" />
+  </div>
+</section>

@@ -1,21 +1,41 @@
 export const siteConfig = {
   site: "https://mohammedsh.xyz",
   title: "Mohammed's blog",
-  description:
-    "Thoughts, code, and a little chaos — Live a life you can be proud of 🚀",
+  description: "Thoughts, code, and a little chaos — Live a life you can be proud of 🚀",
   og: "/images/avatar.svg",
   author: "Mohammed",
   username: "ryugin_001",
   avatarUrl: "https://images7.alphacoders.com/607/607718.png",
 
   navLinks: [
-    { label: "Root", href: "/v2" },
-    { label: "Blog", href: "/v2/blog" },
+    { label: "Root", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: "Projects", href: "/projects" },
     { label: "About", href: "/about" },
     { label: "Donate", href: "/donate" },
   ],
 
-  socialLinks: [],
+  contacts: [
+    { icon: "mail", text: "hi@mohammedsh.com", href: "mailto:hi@mohammedsh.com" },
+    { icon: "send", text: "@mhdZhHan", href: "https://t.me/mhdZhHan" },
+    {
+      icon: "at-sign",
+      text: "@mohxmd@mstdn.social",
+      href: "https://mstdn.social/@mhdZhHan",
+    },
+    { icon: "github", text: "@mohxmd", href: "https://github.com/mohxmd" },
+    {
+      icon: "linkedin",
+      text: "/in/mohammedshajahan",
+      href: "https://linkedin.com/in/mohammedshajahan",
+    },
+    {
+      icon: "instagram",
+      text: "@mohxmd__",
+      href: "https://instagram.com/mohxmd__",
+    },
+    { icon: "twitter", text: "@mohxmdsh", href: "https://x.com/mohxmdsh" },
+  ],
 
   keywords: [
     "mohammed's blog",
@@ -23,6 +43,8 @@ export const siteConfig = {
     "mohammed shajahan",
     "hello world",
     "mhdzhhan",
+    "mohxmd",
+    "mohx",
     "programming",
     "linux",
     "kde",

@@ -1,32 +1,25 @@
 ---
 import { Icon as Component } from "astro-icon/components";
 import { type ComponentProps } from "astro/types";
-import { tv, type VariantProps } from "tailwind-variants";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "#/lib/utils";
 
 type Props = ComponentProps<typeof Component> & IconVariants;
 
 export type IconVariants = VariantProps<typeof iconVariants>;
 
-const iconVariants = tv({
-  base: "shrink-0",
+const iconVariants = cva("shrink-0", {
   variants: {
     size: {
-      sm: "h-4 w-4",
-      md: "h-5 w-5",
-      lg: "h-6 w-6",
-      xl: "h-8 w-8",
-    },
-    variant: {
-      default: "",
-      destructive: "text-destructive",
-      secondary: "text-muted-foreground",
-      ghost: "text-muted-foreground hover:text-foreground",
-      link: "text-primary underline-offset-4 hover:underline",
+      xs: "size-2",
+      sm: "size-4",
+      md: "size-5",
+      lg: "size-6",
+      xl: "size-8",
     },
   },
   defaultVariants: {
     size: "md",
-    variant: "default",
   },
 });
 
@@ -45,14 +38,13 @@ function processIconName(name: string): string {
   return `lucide:${kebabName}`;
 }
 
-const { class: className, name, variant, size, ...props } = Astro.props;
+const { class: className, name, size, ...props } = Astro.props;
 const processedName = processIconName(name);
 ---
 
 <Component
   {...props}
   aria-hidden
-  shape-rendering="crispEdges"
   name={processedName}
-  class={iconVariants({ variant, size, className })}
+  class={cn(iconVariants({ size }), "shrink-0", className)}
 />

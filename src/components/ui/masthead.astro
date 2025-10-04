@@ -1,0 +1,33 @@
+---
+import Text from "#/components/ui/text.astro";
+import { cn } from "#/lib/utils";
+import Date from "./date.astro";
+
+type Props = {
+  icon?: string;
+  title: string;
+  subtitle?: string;
+  class?: string;
+};
+
+const { title, subtitle, class: className } = Astro.props;
+---
+
+<article class="bg-card overflow-hidden">
+  <header class:list={["bg-muted text-muted-foreground px-1"]}>
+    <Text size="default" variant={"default"} class="inline">■&nbsp;{title}</Text
+    >
+
+    {
+      subtitle && (
+        <Date variant="muted" size="sm" class="block pl-4 italic">
+          {subtitle}
+        </Date>
+      )
+    }
+  </header>
+
+  <div class={cn("space-y-3 p-3", className)}>
+    <slot />
+  </div>
+</article>

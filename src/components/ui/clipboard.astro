@@ -1,6 +1,7 @@
 ---
 import type { ComponentProps } from "astro/types";
-import { twMerge } from "tailwind-merge";
+import { cn } from "#/lib/utils";
+
 import Button from "./button.astro";
 import Icon from "./icon.astro";
 
@@ -9,14 +10,7 @@ type Props = ComponentProps<typeof Button> & {
   duration?: number;
 };
 
-const {
-  class: className,
-  variant,
-  size,
-  value,
-  duration,
-  ...props
-} = Astro.props;
+const { class: className, variant, size, value, duration, ...props } = Astro.props;
 ---
 
 <Button
@@ -24,7 +18,7 @@ const {
   x-data
   variant={variant ?? "ghost"}
   size={size ?? "icon"}
-  class={twMerge("group", className)}
+  class={cn("group", className)}
   @click={`
     if ($el.getAttribute('data-checked')) return;
     navigator.clipboard.writeText(${value});
@@ -35,6 +29,7 @@ const {
 >
   <Icon
     name="Clipboard"
+    size="sm"
     class:list={[
       "group-data-checked:hidden motion-safe:transition-all",
       "duration-300 group-data-checked:scale-100 group-data-checked:opacity-100",
@@ -42,9 +37,10 @@ const {
   />
   <Icon
     name="Check"
+    size="sm"
     class:list={[
       "group-not-data-checked:hidden motion-safe:transition-all starting:scale-0 starting:opacity-0",
-      "duration-300 group-not-data-checked:scale-100 group-not-data-checked:opacity-100",
+      "text-primary duration-300 group-not-data-checked:scale-100 group-not-data-checked:opacity-100",
     ]}
   />
 </Button>

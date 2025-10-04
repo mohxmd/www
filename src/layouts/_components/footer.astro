@@ -1,0 +1,35 @@
+---
+import Icon from "#/components/ui/icon.astro";
+import Link from "#/components/ui/link.astro";
+import Text from "#/components/ui/text.astro";
+
+type Props = {
+  class?: string;
+};
+
+const { class: className } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class:list={[className, "border-border border-t pt-5"]}>
+  <div class="space-y-2 font-mono text-sm">
+    <Text variant="muted" class="block">
+      <span class="text-green-600 opacity-70 dark:text-green-400">$</span> echo "©
+      $(date +"%Y") $(whoami)"
+    </Text>
+
+    <div class="flex w-full justify-between">
+      <Text class="-ml-[1px]">
+        © {year} mohammedsh
+      </Text>
+
+      <Link
+        href="/rss.xml"
+        aria-label="RSS feed of the site"
+        class="text-link hover:text-link-hover"
+      >
+        <Icon name="rss" size="sm" />
+      </Link>
+    </div>
+  </div>
+</footer>

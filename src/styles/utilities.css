@@ -1,0 +1,46 @@
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.2);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 4px rgba(59, 130, 246, 0.2);
+  }
+}
+
+@utility gradient-text {
+  @apply bg-gradient-to-br from-[oklch(0.704_0.191_22.216)] via-[oklch(0.586_0.218_15.2)] to-[oklch(0.345_0.101_251.1)] bg-clip-text text-transparent;
+}
+
+@utility focusable {
+  @apply focus-visible:ring-muted-foreground focus-visible:ring focus-visible:outline-none;
+}
+
+@media (max-width: 768px) {
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+}

@@ -1,202 +1,106 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import Layout from "#/layouts/layout.astro";
+import Link from "#/components/ui/link.astro";
+import Text from "#/components/ui/text.astro";
 ---
 
 <Layout title="Mohammed's blog | About">
-  <section id="about">
-    <div class="wrapper">
-      <div class="about-head">
-        <h1 class="about__title">🧑‍🚀 About Me !</h1>
-      </div>
+  <section class="text-muted-foreground flex flex-col gap-4 py-8 text-base">
+    <Text as="h1" size="3xl" class="font-8bit text-center font-bold">🧑‍🚀 About Me !</Text>
 
-      <div class="about-container">
-        <h2>Hey there! 👋 I'm Mohammed,</h2>
-        <p>
-          A tech-savvy teen who loves to create and explore the world of
-          programming. I was born on 21st March 2003, making me a 21st-century
-          kid! 🎉
-        </p>
-        <p>
-          I started my programming journey at the age of 15 back in 2018, and
-          since then, I've been passionately tinkering with code and building
-          exciting projects.
-        </p>
-        <p>
-          I'm a full-stack developer and open-source enthusiast, embracing the
-          collaborative nature of programming and the freedom to hack software
-          to fit our needs. I support Free Software, Open Knowledge & Sharing.
-        </p>
-        <p>
-          I'm currently based in Kerala, India, and I speak both Malayalam
-          (മലയാളം) and English. Though I might not be a beginner anymore, I'm
-          constantly exploring and learning new technologies to further improve
-          my skills.
-        </p>
-      </div>
+    <!-- About Content -->
+    <div class="font-syne-mono space-y-6">
+      <Text as="h2" class="mt-3 mb-7 font-bold" size="lg">Hey there! 👋 I'm Mohammed, </Text>
 
-      <div class="contact-container" id="contact">
-        <h1 class="contact-container__title">📭 Contact Me !</h1>
+      <p>
+        A tech-savvy teen who loves to create and explore the world of programming. I was born on
+        21st March 2003, making me a 21st-century kid! 🎉
+      </p>
+      <p>
+        I started my programming journey at the age of 15 back in 2018, and since then, I've been
+        passionately tinkering with code and building exciting projects.
+      </p>
+      <p>
+        I'm a full-stack developer and open-source enthusiast, embracing the collaborative nature of
+        programming and the freedom to hack software to fit our needs. I support Free Software, Open
+        Knowledge & Sharing.
+      </p>
+      <p>
+        I'm currently based in Kerala, India, and I speak both Malayalam (മലയാളം) and English.
+        Though I might not be a beginner anymore, I'm constantly exploring and learning new
+        technologies to further improve my skills.
+      </p>
+    </div>
 
-        <form>
-          <div class="input-container">
-            <label for="username">Your Name</label>
+    <!-- Contact Section -->
+    <div class="font-syne-mono space-y-6">
+      <Text as="h2" size="2xl" class="font-8bit mb-8 leading-9 font-bold">📭 Contact Me !</Text>
 
-            <input
-              type="text"
-              autocomplete="off"
-              placeholder="What's your good name ?"
-              required
-            />
-          </div>
+      <form class="max-w-lg space-y-6">
+        <!-- Name -->
+        <div class="space-y-2">
+          <label for="username" class="block font-medium">Your Name</label>
+          <input
+            type="text"
+            autocomplete="off"
+            placeholder="What's your good name ?"
+            required
+            class="border-border bg-secondary text-foreground placeholder:text-gray focus:border-primary w-full rounded-md border-2 px-4 py-3 font-medium outline-none"
+          />
+        </div>
 
-          <div class="input-container">
-            <label for="username">Your Email</label>
+        <!-- Email -->
+        <div class="space-y-2">
+          <label for="email" class="block font-medium">Your Email</label>
+          <input
+            type="email"
+            autocomplete="off"
+            placeholder="What's your web address ?"
+            required
+            class="border-border bg-secondary text-foreground placeholder:text-gray focus:border-primary w-full rounded-md border-2 px-4 py-3 font-medium outline-none"
+          />
+        </div>
 
-            <input
-              type="text"
-              autocomplete="off"
-              placeholder="What's your web address ?"
-              required
-            />
-          </div>
+        <!-- Message -->
+        <div class="space-y-2">
+          <label for="message" class="block font-medium">Your Message</label>
+          <textarea
+            rows="7"
+            name="message"
+            placeholder="What do you want to say ?"
+            class="border-border bg-secondary text-foreground placeholder:text-gray focus:border-primary w-full rounded-md border-2 px-4 py-3 font-medium outline-none"
+          ></textarea>
+        </div>
 
-          <div class="input-container">
-            <label for="username">Your Message</label>
+        <!-- Submit -->
+        <button
+          type="submit"
+          aria-label="Submit contact form"
+          class="border-border bg-secondary text-foreground hover:border-primary hover:text-primary rounded-lg border-2 px-6 py-3 font-bold transition-colors"
+        >
+          Send
+        </button>
+      </form>
 
-            <textarea
-              rows="7"
-              name="message"
-              placeholder="What do you want to say ?"></textarea>
-          </div>
+      <!-- Telegram -->
+      <p class="via-telegram my-4">
+        For the quickest response, reach me on Telegram
+        <Link
+          href="https://t.me/mohxmd"
+          class="text-link hover:text-link-hover"
+          target="_blank"
+          aria-label="Contact via telegram"
+        >
+          @mohxmd
+        </Link>
+      </p>
 
-          <button type="submit" aria-label="Submit contact form">Send</button>
-        </form>
+      <p>
+        Thanks for stopping by, and feel free to explore my projects and share your tech journey
+        with me!
+      </p>
 
-        <p class="via-telegram">
-          For the quickest response, reach me on Telegram
-          <a
-            href="https://t.me/mhdZhHan"
-            target="_blank"
-            aria-label="Contact via telegram">@mhdZhHan</a
-          >
-        </p>
-
-        <p>
-          Thanks for stopping by, and feel free to explore my projects and share
-          your tech journey with me!
-        </p>
-
-        <p>Happy coding! 🚀</p>
-      </div>
+      <p>Happy coding! 🚀</p>
     </div>
   </section>
 </Layout>
-
-<style lang="scss">
-  .about-head {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    .about__title {
-      font-size: 1.875rem;
-      line-height: 2.25rem;
-      font-weight: 700;
-      font-family: "8-bit_bold";
-    }
-  }
-
-  .about-container {
-    font-family: "syne-mono";
-    h2 {
-      margin-top: 0.75rem;
-      margin-bottom: 1.7rem;
-      font-size: 1.17em;
-      // font-size: 1.5rem;
-      color: var(--title);
-    }
-
-    p {
-      margin-bottom: 1.5rem;
-      // font-size: 1.25rem;
-    }
-  }
-
-  .contact-container {
-    margin-top: 2rem;
-    font-family: "syne-mono";
-    .contact-container__title {
-      // font-size: 1.5rem;
-      line-height: 2.25rem;
-      font-weight: 700;
-      // color: var(--title);
-      margin-bottom: 2rem;
-      font-family: "8-bit_bold";
-    }
-    .via-telegram {
-      margin: 1rem 0;
-    }
-    .input-container {
-      width: 25rem;
-
-      @media all and (max-width: 480px) {
-        width: 100%;
-      }
-
-      label {
-        display: block;
-        font-weight: 500;
-        font-size: 100%;
-        margin-bottom: 0.8rem;
-        // font-size: 1.25rem;
-      }
-
-      input,
-      textarea {
-        outline: none;
-        width: 100%;
-        font-size: 100%;
-        border: 2px solid var(--border-color);
-        background: var(--secondary);
-        padding: 1rem 1.5rem;
-        font-weight: 500;
-        border-radius: 0.5rem;
-        margin-bottom: 0.8rem;
-        // font-size: 1.25rem;
-        font-family: inherit;
-        color: var(--text);
-        &:focus {
-          border-color: var(--primary);
-        }
-        &::placeholder {
-          color: var(--gray);
-        }
-      }
-    }
-
-    button {
-      outline: none;
-      border: none;
-      border-radius: 0.75rem;
-      background: var(--secondary);
-      border: 2px solid var(--border-color);
-      font-weight: 700;
-      color: var(--text);
-      // font-size: 1.25rem;
-
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
-      padding-left: 2rem;
-      padding-right: 2rem;
-
-      width: fit-content;
-      cursor: pointer;
-
-      transition: all 0.2s ease-in;
-
-      &:hover {
-        border-color: var(--primary);
-        color: var(--primary);
-      }
-    }
-  }
-</style>

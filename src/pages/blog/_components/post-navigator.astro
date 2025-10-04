@@ -1,0 +1,51 @@
+---
+import type { GetSortedPosts } from "#/content/utils";
+
+import Icon from "#/components/ui/icon.astro";
+import Link from "#/components/ui/link.astro";
+import Text from "#/components/ui/text.astro";
+
+type Post = GetSortedPosts[0] | undefined;
+
+type Props = {
+  prevPost?: Post;
+  nextPost?: Post;
+};
+
+const { prevPost, nextPost } = Astro.props;
+---
+
+<div class="flex w-full flex-col gap-4 sm:flex-row">
+  {
+    prevPost && (
+      <Link
+        href={`/blog/${prevPost.id}`}
+        aria-label={prevPost.data.title}
+        class="hover:border-primary hover:bg-card/50 flex flex-1 flex-col items-start justify-center rounded-lg border p-4 transition-all duration-300"
+      >
+        <Text class="text-muted-foreground mb-1 flex items-center justify-start gap-1">
+          <Icon name="arrow-left" size="sm" />
+          Previous post
+        </Text>
+
+        <Text class="font-semibold">{prevPost.data.title}</Text>
+      </Link>
+    )
+  }
+
+  {
+    nextPost && (
+      <Link
+        href={`/blog/${nextPost.id}`}
+        aria-label={nextPost.data.title}
+        class="hover:border-primary hover:bg-card/50 flex flex-1 flex-col items-end justify-center rounded-lg border p-4 text-right transition-all duration-300"
+      >
+        <Text class="text-muted-foreground mb-1 flex items-center justify-end gap-1">
+          Next post
+          <Icon name="arrow-right" size="sm" />
+        </Text>
+        <Text class="font-semibold">{nextPost.data.title}</Text>
+      </Link>
+    )
+  }
+</div>

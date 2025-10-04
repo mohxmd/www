@@ -34,3 +34,22 @@ export const getAllTags = async () =>
       id: tags.toLowerCase().replace(/\s/g, "-"),
       text: tags,
     }));
+
+export const getPopularTags = async (minCount = 2) => {
+  const posts = await getCollection("blog");
+
+  const counts = new Map<string, number>();
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      counts.set(tag, (counts.get(tag) || 0) + 1);
+    }
+  }
+
+  return [...counts.entries()]
+    .filter(([_, count]) => count >= minCount)
+    .sort((a, b) => b[1] - a[1])
+    .map(([tag]) => ({
+      id: tag.toLowerCase().replace(/\s/g, "-"),
+      text: tag,
+    }));
+};

@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "class-variance-authority";
+
+type Props = HTMLAttributes<"thead"> & HeaderVariants;
+
+export type HeaderVariants = VariantProps<typeof variants>;
+
+const variants = cva("[&_tr]:border-b");
+
+const { class: className, ...props } = Astro.props;
+---
+
+<thead {...props} class={variants({ className })} data-slot="table-header">
+  <slot />
+</thead>

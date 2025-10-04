@@ -1,0 +1,62 @@
+---
+import { Image } from "astro:assets";
+import { getSortedPosts } from "#/content/utils";
+
+import Icon from "#/components/ui/icon.astro";
+import Link from "#/components/ui/link.astro";
+import Text from "#/components/ui/text.astro";
+
+type Props = {
+  class?: string;
+};
+
+const { class: className } = Astro.props;
+const posts = (await getSortedPosts()).slice(0, 6);
+---
+
+<section class:list={[className, "print:hidden"]}>
+  <Text as="h1" size="2xl" class="font-8bit mb-3">Recent posts</Text>
+
+  <div class="no-scrollbar flex gap-3 overflow-x-auto pb-2">
+    {
+      posts.map((post, index) => (
+        <Link
+          href={`/blog/${post.id}`}
+          class="bg-card group relative block w-52 flex-none rounded-none border"
+        >
+          <Image
+            src={post.data.image}
+            alt={post.data.title}
+            decoding="async"
+            loading="lazy"
+            class="h-32 w-full object-cover"
+          />
+
+          <div class="h-20 p-3">
+            <div class="text-muted-foreground mb-2 flex items-center gap-2 font-mono text-xs">
+              <span class="text-yellow-600 dark:text-yellow-400">*</span>
+              <span>[{String(index + 1).padStart(2, "0")}]</span>
+            </div>
+
+            <Text class="line-clamp-2 font-mono leading-tight font-bold" size="sm">
+              {post.data.title}
+            </Text>
+          </div>
+        </Link>
+      ))
+    }
+
+    <!-- View all link -->
+    <Link
+      href="/blog"
+      class="bg-card text-link hover:text-link-hover relative flex w-52 flex-none items-center justify-center border font-mono text-sm"
+    >
+      <div class="text-center">
+        <div class="mb-2">
+          <Icon name="arrow-right" class="mx-auto h-5 w-5" />
+        </div>
+        <div>view all</div>
+      </div>
+    </Link>
+  </div>
+</section>

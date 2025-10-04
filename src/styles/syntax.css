@@ -1,0 +1,32 @@
+/* Code annotations */
+[data-highlighted-chars] {
+  @apply rounded bg-zinc-600/50;
+}
+
+[data-chars-id] {
+  @apply border-b-2 px-1 font-semibold;
+}
+
+[data-chars-id="v"] {
+  @apply border-pink-600 bg-pink-900/60;
+}
+
+[data-chars-id="v"] span {
+  @apply !text-pink-300;
+}
+
+[data-chars-id="s"] {
+  @apply border-yellow-600 bg-yellow-900/50;
+}
+
+[data-chars-id="s"] span {
+  @apply !text-yellow-300;
+}
+
+[data-chars-id="i"] {
+  @apply border-purple-600 bg-purple-900/50 font-bold;
+}
+
+[data-chars-id="i"] span {
+  @apply !text-purple-200;
+}

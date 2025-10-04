@@ -1,31 +1,224 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import { twMerge } from "tailwind-merge";
 
-type Props = HTMLAttributes<"dialog">;
+type Props = HTMLAttributes<"div">;
 
 const { class: className, ...props } = Astro.props;
 ---
 
-<dialog
-  {...props}
-  x-data="{ open: false }"
-  x-init="$el.nextElementSibling?.addEventListener('click', () => ($el.showModal(), open = true))"
-  @click="$event.target === $el && ($el.close(), open = false)"
-  @keydown.escape="open = false"
-  @keydown.up.prevent.stop="$focus.wrap().prev()"
-  @keydown.down.prevent.stop="$focus.wrap().next()"
-  class={twMerge(
-    "bg-background text-foreground rounded-border overflow-hidden outline-none",
-    "mx-auto mt-7 max-h-[95dvh] w-full lg:mt-32 lg:max-h-[70dvh] lg:max-w-3xl",
-    "scale-90 opacity-0 transition-discrete open:scale-100 open:opacity-100",
-    "motion-safe:transition-all starting:open:scale-90 starting:open:opacity-0",
-    "backdrop:bg-background/80 backdrop:opacity-100 backdrop:backdrop-blur-sm",
-    "backdrop:motion-safe:transition-all backdrop:starting:opacity-0",
-    className,
-  )}
->
-  <div class="size-full rounded"><slot /></div>
-</dialog>
+<div class:list={["dialog-root", className]} data-slot="dialog" {...props}>
+  <slot />
+</div>
 
-<slot name="dialog-trigger" />
+<script>
+  class DialogHandler {
+    private triggers: HTMLButtonElement[] = [];
+    private dialog: HTMLDialogElement | null = null;
+    private closeButtons: HTMLButtonElement[] = [];
+    private backdrop: HTMLElement | null = null;
+    private dialogId: string;
+    private animationDuration: number;
+
+    constructor(dialogWrapper: HTMLElement, dialogNumber: number) {
+      this.dialog = dialogWrapper.querySelector("dialog");
+      this.backdrop = dialogWrapper.querySelector(".dialog-backdrop");
+      if (!this.dialog || !this.backdrop) {
+        throw new Error("Dialog: dialog or backdrop not found");
+      }
+
+      if (dialogWrapper.id) {
+        this.dialogId = dialogWrapper.id;
+      } else {
+        this.dialogId = `dialog-${dialogNumber}`;
+        dialogWrapper.id = this.dialogId;
+      }
+
+      const animationDurationString = this.dialog.style.animationDuration;
+      if (animationDurationString.endsWith("ms")) {
+        this.animationDuration = parseFloat(animationDurationString);
+      } else if (animationDurationString.endsWith("s")) {
+        this.animationDuration = parseFloat(animationDurationString) * 1000;
+      } else {
+        this.animationDuration = this.dialog.dataset.closeDuration
+          ? parseFloat(this.dialog.dataset.closeDuration)
+          : 200;
+      }
+
+      const internalTriggers = dialogWrapper.querySelectorAll(".dialog-trigger");
+      internalTriggers.forEach((triggerElement) => {
+        const tempTrigger = triggerElement as HTMLElement;
+        let trigger: HTMLButtonElement;
+
+        if (tempTrigger?.hasAttribute("data-as-child")) {
+          trigger = tempTrigger.firstElementChild as HTMLButtonElement;
+        } else {
+          trigger = tempTrigger as HTMLButtonElement;
+        }
+
+        if (trigger) {
+          this.triggers.push(trigger);
+        }
+      });
+
+      this.findExternalTriggers();
+
+      const tempCloseButtons = dialogWrapper.querySelectorAll(
+        ".dialog-close"
+      ) as NodeListOf<HTMLElement>;
+      tempCloseButtons.forEach((button: HTMLElement) => {
+        if (button.hasAttribute("data-as-child")) {
+          const childElement = button.firstElementChild;
+          if (childElement) {
+            childElement.classList.add("dialog-close");
+            button.parentNode?.replaceChild(childElement, button);
+          }
+        }
+        return button;
+      });
+
+      this.closeButtons = Array.from(
+        dialogWrapper.querySelectorAll(".dialog-close")
+      ) as HTMLButtonElement[];
+
+      if (!this.dialog || !this.backdrop) return;
+
+      this.setupAccessibility(dialogNumber);
+      this.setupEvents();
+    }
+
+    private setupAccessibility(dialogNumber: number): void {
+      const firstHeading = this.dialog?.querySelector("h1, h2, h3, h4, h5, h6");
+      if (firstHeading) {
+        firstHeading.id = `dialog-${dialogNumber}-heading`;
+        this.dialog?.setAttribute("aria-labelledby", firstHeading.id);
+      }
+    }
+
+    private findExternalTriggers(): void {
+      const externalTriggers = document.querySelectorAll(
+        `.dialog-trigger[data-dialog-for="${this.dialogId}"]`
+      );
+
+      externalTriggers.forEach((triggerElement) => {
+        const dialogWrapper = triggerElement.closest(".dialog-root");
+        if (dialogWrapper && dialogWrapper.id === this.dialogId) {
+          return;
+        }
+
+        let trigger: HTMLButtonElement;
+        if (triggerElement.hasAttribute("data-as-child")) {
+          trigger = triggerElement.firstElementChild as HTMLButtonElement;
+        } else {
+          trigger = triggerElement as HTMLButtonElement;
+        }
+
+        if (trigger && !this.triggers.includes(trigger)) {
+          this.triggers.push(trigger);
+        }
+      });
+    }
+
+    private setupEvents(): void {
+      if (!this.dialog) return;
+
+      this.triggers.forEach((trigger) => {
+        trigger.addEventListener("click", () => {
+          this.open();
+        });
+      });
+
+      this.closeButtons?.forEach((button) => {
+        button.addEventListener("click", () => {
+          const openDialogs = document.querySelectorAll("dialog[open]");
+          if (openDialogs.length > 0 && openDialogs[openDialogs.length - 1] === this.dialog) {
+            this.close();
+          }
+        });
+      });
+
+      this.dialog.addEventListener("click", (e) => {
+        if (!this.dialog) return;
+        const dialogDimensions = this.dialog.getBoundingClientRect();
+        const clickedInDialog =
+          e.clientX >= dialogDimensions.left &&
+          e.clientX <= dialogDimensions.right &&
+          e.clientY >= dialogDimensions.top &&
+          e.clientY <= dialogDimensions.bottom;
+
+        if (!clickedInDialog) {
+          const openDialogs = document.querySelectorAll("dialog[open]");
+          if (openDialogs.length > 0 && openDialogs[openDialogs.length - 1] === this.dialog) {
+            this.close();
+          }
+        }
+      });
+
+      this.dialog.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          const openDialogs = document.querySelectorAll("dialog[open]");
+          if (openDialogs.length > 0 && openDialogs[openDialogs.length - 1] === this.dialog) {
+            this.close();
+          }
+        }
+      });
+
+      const forms = this.dialog.querySelectorAll("form");
+      forms.forEach((form) => {
+        form.addEventListener("submit", (e) => {
+          if (form.method === "dialog") {
+            e.preventDefault();
+            const openDialogs = document.querySelectorAll("dialog[open]");
+            if (openDialogs.length > 0 && openDialogs[openDialogs.length - 1] === this.dialog) {
+              this.close();
+            }
+          }
+        });
+      });
+    }
+
+    private open(): void {
+      if (!this.dialog || !this.backdrop) return;
+      this.dialog.showModal();
+      document.body.classList.add("overflow-hidden");
+      this.backdrop.classList.remove("hidden");
+      this.backdrop.dataset.state = "open";
+      this.dialog.dataset.state = "open";
+    }
+
+    private close(): void {
+      if (!this.dialog || !this.backdrop) return;
+      this.dialog.dataset.state = "closed";
+      this.backdrop.dataset.state = "closed";
+
+      setTimeout(() => {
+        this.backdrop?.classList.add("hidden");
+        this.dialog?.close();
+        const stillOpen = document.querySelectorAll("dialog[open]").length;
+        if (stillOpen === 0) {
+          document.body.classList.remove("overflow-hidden");
+        }
+      }, this.animationDuration);
+    }
+  }
+
+  const dialogInstances = new WeakMap<HTMLElement, DialogHandler>();
+
+  const setupDialogs = () => {
+    document.querySelectorAll(".dialog-root").forEach((dialogWrapper, idx) => {
+      const wrapper = dialogWrapper as HTMLElement;
+      if (!dialogInstances.has(wrapper)) {
+        dialogInstances.set(wrapper, new DialogHandler(wrapper, idx));
+      }
+    });
+  };
+
+  setupDialogs();
+  document.addEventListener("astro:after-swap", setupDialogs);
+</script>
+
+<style>
+  .overflow-hidden {
+    overflow: hidden;
+  }
+</style>

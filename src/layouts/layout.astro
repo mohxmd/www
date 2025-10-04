@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import * as Toast from "#/components/ui/toast";
+import ArtPlum from "#/components/arts/art-plum.astro";
+import Cd from "#/components/ui/cd.astro";
+
+import BaseHead, { type Metadata } from "./_components/base-head.astro";
+import Header from "./_components/header.astro";
+import Footer from "./_components/footer.astro";
+
+type Props = HTMLAttributes<"main"> & {
+  metadata?: Metadata;
+};
+
+const { metadata = {}, class: className, ...props } = Astro.props;
+---
+
+<html>
+  <head>
+    <BaseHead metadata={metadata} />
+  </head>
+  <body class="antialiased">
+    <div class="mx-auto flex min-h-screen max-w-5xl flex-col p-6 text-sm md:p-4">
+      <Header />
+      <main {...props} class:list={[className]}>
+        <slot />
+      </main>
+      {Astro.url.pathname !== "/" && <Cd />}
+      <Footer />
+      {Astro.url.pathname !== "/blog/*" && <ArtPlum />}
+      <Toast.Root client:load position="bottom-right" />
+    </div>
+  </body>
+</html>

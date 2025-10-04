@@ -1,25 +1,25 @@
 ---
-import type { HTMLAttributes } from "astro/types";
-import { twMerge } from "tailwind-merge";
-import Icon from "./icon.astro";
+import Icon from "#/components/ui/icon.astro";
+import Text from "#/components/ui/text.astro";
+import { cn } from "#/lib/utils/cn";
 
-type Props = HTMLAttributes<"aside">;
+type Props = {
+  icon: string;
+  title: string;
+  class?: string;
+  contentClass?: string;
+};
 
-const { class: className, id, ...props } = Astro.props;
-const idFallback = crypto.randomUUID();
+const { icon, title, class: className, contentClass } = Astro.props;
 ---
 
-<aside
-  {...props}
-  aria-labelledby={id ?? idFallback}
-  class={twMerge(
-    "bg-accent text-accent-foreground rounded-border flex items-start gap-2 px-4 py-2.5",
-    "border-accent border-l-8 **:text-xs",
-    className,
-  )}
->
-  <p id={id ?? idFallback} aria-label="Note">
-    <Icon name="info" class="translate-y-0.5" />
-  </p>
-  <section><slot /></section>
-</aside>
+<div class={cn("bg-secondary", className)}>
+  <div class="bg-muted flex items-center gap-2 p-0.5">
+    <Icon name={icon} size="sm" class="text-foreground" />
+    <Text class="font-medium" size="sm">{title}</Text>
+  </div>
+
+  <div class={cn(contentClass)}>
+    <slot />
+  </div>
+</div>

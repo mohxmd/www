@@ -8,7 +8,7 @@ image: "./images/3d-film-reel.jpg"
 tags: []
 ---
 
-import InPageNav from "@/components/widgets/InPageNav.astro";
+import InPageNav from "#/components/widgets/InPageNav.astro";
 
 FFmpeg is a powerful command-line tool for handling multimedia files. In this blog post, I’ll walk you through the basics of using FFMPEG on a Linux system, covering installation, common commands, and practical examples.
 
@@ -22,8 +22,8 @@ First, let's install FFmpeg. On most Linux distributions, you can use the packag
 For Ubuntu/Debian:
 
 <InPageNav routes={["Ubuntu/Debian", "Fedora", "Arch"]}>
-  ```bash sudo apt update sudo apt install ffmpeg ``` ```bash sudo dnf install
-  ffmpeg ``` ```bash sudo pacman -S ffmpeg ```
+  ```bash sudo apt update sudo apt install ffmpeg ``` ```bash sudo dnf install ffmpeg ``` ```bash
+  sudo pacman -S ffmpeg ```
 </InPageNav>
 
 Once installed, you can verify the installation by running:

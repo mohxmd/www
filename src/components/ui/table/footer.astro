@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "class-variance-authority";
+
+type Props = HTMLAttributes<"tfoot"> & FooterVariants;
+
+export type FooterVariants = VariantProps<typeof variants>;
+
+const variants = cva("bg-muted/50 border-t font-medium [&>tr]:last:border-b-0");
+
+const { class: className, ...props } = Astro.props;
+---
+
+<tfoot {...props} class={variants({ className })} data-slot="table-footer">
+  <slot />
+</tfoot>

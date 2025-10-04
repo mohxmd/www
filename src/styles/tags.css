@@ -1,101 +1,128 @@
-.astro,
-.Astro {
-  background: #da62c4 !important;
-  color: #12181a !important;
+.lang-astro {
+  @apply bg-[#ff5d01] text-[#12181a];
 }
 
-.python,
-.py,
-.Python {
-  background-color: #306998 !important;
-  color: #fff !important;
+.lang-python,
+.lang-py {
+  @apply bg-[#3776ab] text-white;
 }
 
-.html,
-.HTML {
-  background-color: #e34c26 !important;
-  color: #12181a !important;
+.lang-html {
+  @apply bg-[#e34f26] text-white;
 }
 
-.css,
-.CSS {
-  background-color: #2965f1 !important;
-  color: #fff !important;
+.lang-css {
+  @apply bg-[#1572b6] text-white;
 }
 
-.scss,
-.SCSS,
-.sass,
-.SASS {
-  background-color: #c69 !important;
-  color: #12181a !important;
+.lang-scss,
+.lang-sass {
+  @apply bg-[#cc6699] text-white;
 }
 
-.node,
-.nodejs,
-.Nodejs,
-.NodeJs {
-  background-color: #3c873a !important;
-  color: #fff !important;
+.lang-node,
+.lang-nodejs {
+  @apply bg-[#339933] text-white;
 }
 
-.django,
-.Django {
-  color: #fff !important;
-  background: #092e20 !important;
+.lang-django {
+  @apply bg-[#092e20] text-white;
 }
 
-.postgresql,
-.postgres,
-.Postgres,
-.Postgresql {
-  color: #fff !important;
-  background: #31648c !important;
+.lang-postgresql,
+.lang-postgres {
+  @apply bg-[#336791] text-white;
 }
 
-.blogger,
-.Blogger,
-.blog,
-.Blog {
-  color: #092e20 !important;
-  background: tomato !important;
+.lang-blog,
+.lang-blogger {
+  @apply bg-[#ff5722] text-white;
 }
 
-.js,
-.javascript,
-.JavaScript {
-  background: #ffcb2b !important;
-  color: #12181a !important;
+.lang-js,
+.lang-javascript {
+  @apply bg-[#f7df1e] text-[#12181a];
 }
 
-.react,
-.React {
-  color: #00d8ff !important;
+.lang-react {
+  @apply bg-[#20232a] text-[#61dafb];
 }
 
-.go,
-.Go {
-  background: #00add8 !important;
-  color: #fff !important;
+.lang-go,
+.lang-golang {
+  @apply bg-[#00add8] text-white;
 }
 
-.java,
-.JAVA,
-.Java {
-  background: #b07219 !important;
-  color: #fff !important;
+.lang-java {
+  @apply bg-[#007396] text-white;
 }
 
-.c,
-.C {
-  background: #f34b7d !important;
-  color: #fff !important;
+.lang-c {
+  @apply bg-[#a8b9cc] text-[#12181a];
 }
 
-.python,
-.Python,
-.py,
-.Py {
-  background: #3572a5 !important;
-  color: #313244 !important;
+.lang-typescript,
+.lang-ts {
+  @apply bg-[#3178c6] text-white;
+}
+
+.lang-tsx,
+.lang-jsx {
+  @apply bg-[#61dafb] text-[#12181a];
+}
+
+.lang-json {
+  @apply bg-[#292929] text-[#ffca28];
+}
+
+.lang-markdown,
+.lang-md,
+.lang-mdx {
+  @apply bg-[#083fa1] text-white;
+}
+
+.lang-bash,
+.lang-sh,
+.lang-shell {
+  @apply bg-[#293137] text-[#4eaa25];
+}
+
+.lang-rust,
+.lang-rs {
+  @apply bg-[#000000] text-[#f74c00];
+}
+
+.lang-php {
+  @apply bg-[#777bb4] text-white;
+}
+
+.lang-ruby,
+.lang-rb {
+  @apply bg-[#cc342d] text-white;
+}
+
+.lang-sql {
+  @apply bg-[#f29111] text-white;
+}
+
+.lang-yaml,
+.lang-yml {
+  @apply bg-[#cb171e] text-white;
+}
+
+.lang-toml {
+  @apply bg-[#9c4221] text-white;
+}
+
+.lang-docker,
+.lang-dockerfile {
+  @apply bg-[#2496ed] text-white;
+}
+
+.lang-vue {
+  @apply bg-[#42b883] text-white;
+}
+
+.lang-svelte {
+  @apply bg-[#ff3e00] text-white;
 }

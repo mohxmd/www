@@ -1,7 +1,0 @@
-unist-util-visit
-rehype-slug
-rehype-autolink-headings
-mdast-util-to-string
-dompurify
-lucide-astro
-reading-time

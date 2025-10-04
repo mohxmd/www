@@ -1,38 +1,20 @@
 ---
-import type { HTMLTag, Polymorphic } from "astro/types";
-import { tv, type VariantProps } from "tailwind-variants";
-import { buttonVariants } from "./button.astro";
-import Icon from "./icon.astro";
+import Icon from "#/components/ui/icon.astro";
 
-type Props<Tag extends HTMLTag = "p"> = Polymorphic<{ as: Tag }> &
-  ChipVariants & { value?: string; icon?: string | undefined };
+type Props = {
+  icon?: string;
+  class?: string;
+};
 
-export type ChipVariants = Omit<VariantProps<typeof chipVariants>, "as">;
-
-export const chipVariants = tv({
-  base: [
-    "inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-full",
-    "inset-shadow-sm inset-shadow-accent-9/20 text-2xs/none font-semibold h-6 px-2",
-    "select-none cursor-default focusable",
-  ],
-  defaultVariants: { as: "p", variant: "solid" },
-  variants: {
-    variant: buttonVariants.variants.variant,
-    as: { p: "pointer-events-none" },
-  },
-});
-
-const {
-  as: Tag = "p",
-  class: className,
-  variant,
-  value,
-  icon,
-  ...props
-} = Astro.props;
+const { icon, class: className } = Astro.props;
 ---
 
-<Tag {...props} class={chipVariants({ variant, as: Tag, className })}>
-  {value}
-  {icon && <Icon name={icon} size="sm" />}
-</Tag>
+<span
+  class:list={[
+    className,
+    "focus:ring-ring bg-muted text-muted-foreground box-border flex items-center gap-2 rounded border px-2 py-1 text-xs leading-none font-semibold transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none",
+  ]}
+>
+  {icon ? <Icon name={icon} size="sm" /> : null}
+  <slot />
+</span>

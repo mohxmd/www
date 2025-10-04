@@ -1,0 +1,49 @@
+---
+import Chip from "#/components/ui/chip.astro";
+import Input from "#/components/ui/input.astro";
+import Link from "#/components/ui/link.astro";
+import Icon from "#/components/ui/icon.astro";
+
+type Props = {
+  tags: string[];
+};
+
+const { tags } = Astro.props;
+---
+
+<div class="mt-3 space-y-4 rounded border p-4">
+  <form id="search-form">
+    <Input
+      class="focus:border-primary border leading-none"
+      data-post-filter-search
+      placeholder="Filter posts"
+    >
+      <Icon slot="prefix" name="search" size="sm" aria-hidden />
+      <kbd
+        slot="suffix"
+        class="text-muted-foreground flex items-center justify-center border px-1 py-0.5 text-xs font-semibold"
+        >/</kbd
+      >
+    </Input>
+  </form>
+
+  <div data-post-filter-tags class="flex flex-wrap gap-2">
+    {tags.map((tag) => <Chip>{tag}</Chip>)}
+    <Link href="/tags"><Chip> Explore All Tags</Chip></Link>
+  </div>
+</div>
+
+<script is:inline data-astro-exec="/">
+  (function () {
+    const key = "/";
+    const target = document.querySelector("[data-post-filter-search]");
+    if (target) {
+      document.addEventListener("keydown", (event) => {
+        if (event.key === key) {
+          event.preventDefault();
+          target.focus();
+        }
+      });
+    }
+  })();
+</script>

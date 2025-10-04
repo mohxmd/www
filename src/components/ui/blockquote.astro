@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "#/lib/utils";
+
+import Icon from "./icon.astro";
+
+type Props = HTMLAttributes<"aside">;
+
+const { class: className, id, ...props } = Astro.props;
+const idFallback = crypto.randomUUID();
+---
+
+<aside
+  {...props}
+  aria-labelledby={id ?? idFallback}
+  class={cn(
+    "bg-accent text-accent-foreground flex items-start gap-2 rounded px-4 py-2.5",
+    "border-accent border-l-8 **:text-xs",
+    className
+  )}
+>
+  <p id={id ?? idFallback} aria-label="Note">
+    <Icon name="info" class="translate-y-0.5" />
+  </p>
+  <section><slot /></section>
+</aside>

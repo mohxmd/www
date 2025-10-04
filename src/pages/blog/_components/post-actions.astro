@@ -1,0 +1,57 @@
+---
+import Link from "#/components/ui/link.astro";
+---
+
+<div class="flex flex-wrap items-center justify-between gap-3">
+  <Link
+    id="share-article"
+    icon="share-2"
+    iconPosition="left"
+    aria-label="Share this article"
+    title="Copy the link of this article"
+    class="text-foreground hover:text-link-hover cursor-pointer transition-all"
+  >
+    Share this article
+  </Link>
+
+  <Link
+    href={`https://github.com/mohxmd/www/tree/main/src/content${Astro.url.pathname}.mdx`}
+    icon="file-pen-line"
+    iconPosition="right"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Edit this content on GitHub"
+    class="text-primary hover:text-link-hover transition-all"
+  >
+    Typo? Edit it here
+  </Link>
+</div>
+
+<script is:inline>
+  document.addEventListener("astro:page-load", setupShareButton);
+  document.addEventListener("astro:after-swap", setupShareButton);
+
+  function setupShareButton() {
+    const shareBtn = document.getElementById("share-article");
+    if (!shareBtn) return;
+
+    shareBtn.addEventListener("click", async () => {
+      const url = window.location.href;
+      const title = document.title;
+
+      try {
+        if (navigator.share) {
+          await navigator.share({ title, url });
+          window.toast?.success("Shared successfully!", { duration: 2500 });
+        } else {
+          await navigator.clipboard.writeText(url);
+          window.toast?.success("Link copied to clipboard!", { duration: 2500 });
+        }
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        await navigator.clipboard.writeText(url);
+        window.toast?.success("Link copied to clipboard!", { duration: 2500 });
+      }
+    });
+  }
+</script>

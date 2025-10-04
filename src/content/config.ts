@@ -20,18 +20,16 @@ const blogSchema = ({ image }: { image: ImageFunction }) =>
       .optional()
       .transform(async (repo) => {
         if (!repo) return null;
-        return octokit.repos
-          .get({ owner: USERNAME, repo })
-          .then((response) => ({
-            name: response.data.name,
-            description: response.data.description,
-            language: response.data.language,
-            stargazers: response.data.stargazers_count,
-            forks: response.data.forks_count,
-            watchers: response.data.watchers_count,
-            githubUrl: response.data.homepage,
-            websiteUrl: response.data.html_url,
-          }));
+        return octokit.repos.get({ owner: USERNAME, repo }).then((response) => ({
+          name: response.data.name,
+          description: response.data.description,
+          language: response.data.language,
+          stargazers: response.data.stargazers_count,
+          forks: response.data.forks_count,
+          watchers: response.data.watchers_count,
+          githubUrl: response.data.homepage,
+          websiteUrl: response.data.html_url,
+        }));
       }),
   });
 
@@ -53,9 +51,9 @@ const projectSchema = z.object({
 const REPO_NAMES = [
   "oryft",
   "breeze-graphql-starter",
-  "www",
+  "sass-kit",
+  "honobox",
   "pychat-app",
-  "pharma-pos",
   "tic-tac-toe-react-native",
 ] as const;
 
@@ -84,8 +82,8 @@ export const collections = {
             createdAt: response.data.created_at,
             isPrivate: response.data.private,
             // websiteUrl: response.data.created_at,
-          })),
-        ),
+          }))
+        )
       ),
     schema: projectSchema,
   }),

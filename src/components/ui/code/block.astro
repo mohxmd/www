@@ -1,6 +1,6 @@
 ---
+import { cn } from "#/lib/utils";
 import type { HTMLAttributes } from "astro/types";
-import { twMerge } from "tailwind-merge";
 
 type Props = HTMLAttributes<"code">;
 
@@ -9,12 +9,11 @@ const { class: className, ...props } = Astro.props;
 
 <code
   {...props}
-  class={twMerge(
-    "text-xs leading-6 tracking-tight [counter-reset:code]",
-    "not-data-language:text-code-foreground not-data-language:bg-code-background",
-    "not-data-language:rounded-border not-data-language:inline-flex not-data-language:px-1",
+  class={cn(
+    "text-base tracking-tight [counter-reset:code]",
+    "not-data-language:inline-flex not-data-language:px-1",
     "not-data-language:decoration-clone not-data-language:leading-tight",
-    className,
+    className
   )}
 >
   <slot />

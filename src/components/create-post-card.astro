@@ -1,0 +1,48 @@
+---
+import PostCard from "./post-card.astro";
+
+// Render one hidden PostCard as a template
+const templatePost = {
+  slug: "template",
+  title: "TEMPLATE_TITLE",
+  description: "TEMPLATE_DESCRIPTION",
+  pubDate: "TEMPLATE_DATE",
+  readingTime: 0,
+  image: "TEMPLATE_IMAGE",
+  tags: [],
+};
+---
+
+<div data-searched-posts></div>
+
+<!-- Hidden template post that JS will clone and modify -->
+<div id="post-card-template" style="display: none;">
+  <PostCard slug={templatePost.slug} post={templatePost} />
+</div>
+
+<script>
+  function createPostCard(post) {
+    const template = document.getElementById("post-card-template");
+    const clone = template.cloneNode(true) as HTMLElement;
+    clone.style.display = "";
+    clone.id = "";
+
+    // Replace template placeholders with actual data
+    const html = clone.innerHTML
+      .replace(/template/g, post.slug)
+      .replace(/TEMPLATE_TITLE/g, post.title)
+      .replace(/TEMPLATE_DESCRIPTION/g, post.description)
+      .replace(/TEMPLATE_DATE/g, formatDate(post.pubDate))
+      .replace(/TEMPLATE_IMAGE/g, post.image || "");
+
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = html;
+    return wrapper.firstElementChild;
+  }
+
+  // Use in search
+  payload.forEach((post) => {
+    const card = createPostCard(post);
+    searchedPosts.appendChild(card);
+  });
+</script>

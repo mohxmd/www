@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "class-variance-authority";
+
+type Props = HTMLAttributes<"p"> & DescriptionVariants;
+
+export type DescriptionVariants = VariantProps<typeof variants>;
+
+const variants = cva("text-muted-foreground");
+
+const { class: className, ...props } = Astro.props;
+---
+
+<p {...props} class={variants({ className })} data-slot="dialog-description">
+  <slot />
+</p>

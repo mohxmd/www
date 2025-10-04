@@ -1,191 +1,136 @@
 ---
-// styles
-import "@/styles/blog-post.scss";
-
-import { getCollection, render, type CollectionEntry } from "astro:content";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { Picture } from "astro:assets";
-import Icon from "@/components/ui/icon.astro";
 
-// layouts
-import Layout from "@/layouts/Layout.astro";
+import Layout from "#/layouts/layout.astro";
+import { getSortedPosts, type GetSortedPosts } from "#/content/utils";
 
-// components
-import TOC from "@/components/blog/TOC.astro";
-import CodeBlock from "@/components/blog/CodeBlock.astro";
-import Giscus from "@/components/blog/Giscus.astro";
-import BlogFooter from "@/components/blog/BlogFooter.astro";
-import PostPagination from "@/components/blog/PostPagination.astro";
+import LinkHeader from "#/components/ui/link-header.astro";
+import Link from "#/components/ui/link.astro";
+import Text from "#/components/ui/text.astro";
+import Date from "#/components/ui/date.astro";
+import StarSeparator from "#/components/ui/star-separator.astro";
+import Chip from "#/components/ui/chip.astro";
+import Blockquote from "#/components/ui/blockquote.astro";
+import Separator from "#/components/ui/separator.astro";
+import * as Code from "#/components/ui/code";
 
-// lib
-import { simplifyDate } from "@/lib/index.js";
+import PostComments from "./_components/post-comments.astro";
+import PostViews from "./_components/post-views.astro";
+import PostNavigator from "./_components/post-navigator.astro";
+import PostActions from "./_components/post-actions.astro";
+import PostToc from "./_components/post-toc.astro";
 
-export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: post,
-  }));
-}
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-type Props = CollectionEntry<"blog">;
+export const getStaticPaths = (async () =>
+  (await getSortedPosts()).map((post, index, posts) => {
+    const prevPost = (posts[index + 1] ?? posts[0]) as GetSortedPosts[0];
+    const nextPost = (posts[index - 1] ?? posts[posts.length - 1]) as GetSortedPosts[0];
+    return {
+      params: { slug: post.id },
+      props: { ...post, morePosts: [prevPost, nextPost] },
+    };
+  })) satisfies GetStaticPaths;
 
-const { slug } = Astro.params;
+const { id: postId, data, headings, Content, morePosts } = Astro.props;
+const { title, pubDate, image, description } = data;
+const [prevPost, nextPost] = morePosts;
 
-const post = Astro.props;
-const {
-  remarkPluginFrontmatter: extras,
-  Content,
-  headings,
-} = await render(post);
-
-const { title, pubDate, image, description } = post.data;
-
-const publishDate = simplifyDate(pubDate).simplifiedDate;
+const publishDate = pubDate.toLocaleString();
 ---
 
 <Layout
-  title={`Mohammed's blog | ${title}`}
-  description={description}
-  ogImageUrl={image.src}
-  publishDate={publishDate}
-  modifiedDate={publishDate}
+  metadata={{
+    title: `Mohammed's blog | ${title}`,
+    description: description,
+  }}
 >
-  <article itemscope id="blog-post" class="post">
-    <div class="wrapper">
-      <div class="post__head">
-        <h1 itemprop="headline" class="post__title">{title}</h1>
-        <div class="post__meta">
-          <div itemprop="author" class="post__author">
-            <Icon name="user" size="sm" aria-hidden />
-            <span itemprop="name">Mohammed</span>
-          </div>
+  <article itemscope class="py-6">
+    <header class="mb-8 space-y-4">
+      <Text as="h1" size="3xl" class="font-8bit text-center font-bold">
+        {title}
+      </Text>
 
-          <div class="post__date">
-            <Icon name="calendar" size="sm" aria-hidden />
-            <time
-              datetime={publishDate}
-              itemprop="datePublished"
-              class="post-date">{publishDate}</time
-            >
-            <meta itemprop="dateModified" content={publishDate} />
-          </div>
+      <div class="text-muted-foreground flex flex-wrap items-center justify-center gap-2 text-sm">
+        <Chip icon="user">Mohammed</Chip>
 
-          <div class="post__read">
-            <Icon name="clock-4" size="sm" aria-hidden />
-            <span class="post__read">{extras.readingTime} Min Read</span>
-          </div>
-
-          <div class="post__Views">
-            <Icon name="eye" size="sm" aria-hidden />
-            <span data-post-views={slug}>000000</span>
-          </div>
-        </div>
-      </div>
-
-      <TOC pageHeadings={headings} />
-
-      <div class="post__body">
-        <div class="post__banner">
-          <Picture
-            src={image}
-            formats={["avif", "webp"]}
-            alt={title}
-            width={100}
-            height={100}
+        <Chip icon="calendar">
+          <Date
+            value={data.pubDate}
+            variant="muted"
+            size="xs"
+            datetime={publishDate}
+            itemprop="datePublished"
           />
-        </div>
+        </Chip>
 
-        <div class="post__content" itemprop="articleBody">
-          <Content components={{ figure: CodeBlock }} />
-        </div>
-      </div>
+        <Chip icon="clock-4">{data.readingTime}</Chip>
 
-      <div class="post__footer">
-        <hr class="hr-line" />
-        <BlogFooter />
-        <PostPagination {post} />
-        <hr class="hr-line" style="margin-bottom: 2.5rem;" />
-        <Giscus />
+        <Chip icon="eye">
+          <PostViews data-post-views={postId} server:defer id={postId} variant="muted" size="xs" />
+        </Chip>
       </div>
+    </header>
+
+    <PostToc headings={headings} />
+
+    <div class="my-5">
+      <Picture
+        src={image}
+        formats={["avif", "webp"]}
+        alt={title}
+        width={800}
+        height={400}
+        class="border-border aspect-[2/1] w-full rounded-lg border object-cover"
+      />
     </div>
+
+    <div
+      class:list={[
+        "w-full space-y-4 font-sans text-lg text-current/80",
+        // Heading styles
+        "[&_h1]:mt-0 [&_h1]:mb-6 [&_h1]:text-4xl [&_h1]:font-bold",
+        "[&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:text-3xl [&_h2]:font-bold",
+        "[&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-2xl [&_h3]:font-bold",
+        "[&_h4]:mt-4 [&_h4]:mb-2 [&_h4]:text-xl [&_h4]:font-bold",
+        "[&_h5]:mt-3 [&_h5]:mb-2 [&_h5]:text-lg [&_h5]:font-bold",
+        "[&_h6]:mt-2 [&_h6]:mb-2 [&_h6]:text-base [&_h6]:font-bold",
+        // List styles
+        "[&_:where(ol,ul)]:list-inside [&_:where(ol,ul)]:space-y-2",
+        "[&_ol]:list-decimal [&_ul]:list-disc",
+        // Fix p tags in list items - make them inline
+        "[&_li>p]:m-0 [&_li>p]:inline",
+        "[&_li>p+p]:mt-4 [&_li>p+p]:block",
+        // Inline code
+        "[&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:relative [&_:not(pre)>code]:rounded",
+        "[&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-0.5",
+        "[&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-sm [&_:not(pre)>code]:font-normal",
+        // Dark mode inline code
+        "dark:[&_:not(pre)>code]:bg-muted/50",
+      ]}
+      itemprop="articleBody"
+    >
+      <Content
+        components={{
+          h2: LinkHeader,
+          a: Link,
+          hr: StarSeparator,
+          blockquote: Blockquote,
+          figure: Code.Root,
+          figcaption: Code.Header,
+          pre: Code.Content,
+          code: Code.Block,
+        }}
+      />
+    </div>
+
+    <footer class="mt-10 space-y-6">
+      <Separator />
+      <PostActions />
+      <PostNavigator prevPost={prevPost} nextPost={nextPost} />
+      <Separator />
+      <PostComments />
+    </footer>
   </article>
 </Layout>
-
-<style lang="scss">
-  .post__head {
-    .post__title {
-      font-weight: 700;
-      text-align: center;
-      font-family: "8-bit_bold";
-
-      font-size: 34px;
-      @media all and (max-width: 768px) {
-        font-size: 24px;
-      }
-    }
-    .post__meta {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
-      color: var(--gray);
-      text-align: center;
-      margin-top: 1rem;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-
-      div {
-        padding: 0 0.5rem;
-        border-radius: 0.25rem;
-        border: 1px solid var(--border-color);
-
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-    }
-  }
-
-  .post__body {
-    margin: 1.25rem auto;
-    .post__banner {
-      margin: 0 auto;
-      border-radius: 0.5rem;
-      img {
-        display: block;
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-        aspect-ratio: 2 / 1;
-
-        border: 1px solid var(--border-color);
-        border-radius: 0.5rem;
-      }
-    }
-    .post__content {
-      margin-top: 2rem;
-      color: var(--text);
-    }
-  }
-
-  .post__footer {
-    margin: 1.25rem auto;
-  }
-</style>
-
-<script define:vars={{ slug }}>
-  document.addEventListener("astro:page-load", () => {
-    fetch("/api/blog/postViews", {
-      method: "PUT",
-      body: JSON.stringify({ slug }),
-    })
-      .then(async (res) => {
-        const el = document.querySelector(`[data-post-views="${slug}"]`);
-        if (el)
-          el.textContent = (await res.text())?.toString().padStart(6, "0");
-      })
-      .catch((error) => console.log("ERROR", error));
-  });
-</script>

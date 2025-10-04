@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "class-variance-authority";
+
+type Props = Omit<HTMLAttributes<"button">, "type" | "id" | "role"> &
+  TriggerVariants & {
+    /**
+     * Value that identifies this tab
+     */
+    value: string;
+  };
+
+export type TriggerVariants = VariantProps<typeof variants>;
+
+const variants = cva([
+  "inline-flex grow items-center justify-center rounded-sm px-3 py-1.5 font-medium whitespace-nowrap",
+  "transition-colors",
+  "data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+  "focus-visible:outline-outline focus-visible:outline-2 focus-visible:outline-offset-2",
+  "disabled:pointer-events-none disabled:opacity-50",
+]);
+
+const { value, class: className, ...props } = Astro.props;
+---
+
+<button
+  {...props}
+  class={variants({ className })}
+  data-slot="tabs-trigger"
+  data-tabs-trigger
+  data-value={value}
+  data-state="inactive"
+  role="tab"
+  aria-selected="false"
+  type="button"
+>
+  <slot />
+</button>

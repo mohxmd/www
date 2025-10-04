@@ -1,12 +1,13 @@
 ---
 import type { ComponentProps } from "astro/types";
-import { twMerge } from "tailwind-merge";
-import Arrow from "./arrow.astro";
-import Icon from "./icon.astro";
+import Icon, { type IconVariants } from "./icon.astro";
 import Text from "./text.astro";
+import { cn } from "#/lib/utils";
 
 type Props = Omit<ComponentProps<typeof Text<"a">>, "as"> & {
   icon?: string;
+  iconSize?: NonNullable<IconVariants["size"]>;
+  iconPosition?: "left" | "right";
 };
 
 const {
@@ -16,8 +17,11 @@ const {
   rel,
   variant,
   icon,
+  iconSize = "sm",
+  iconPosition = "left",
   ...props
 } = Astro.props;
+
 const external = href?.toString().startsWith("https://");
 ---
 
@@ -25,11 +29,17 @@ const external = href?.toString().startsWith("https://");
   {...props}
   {href}
   as="a"
-  variant={variant ?? "accent"}
+  variant={variant ?? "default"}
   target={external ? "_blank" : target}
   rel={external ? "noopener noreferrer" : rel}
-  class={twMerge("group focusable inline-flex items-center rounded", className)}
+  class={cn(
+    "group inline-flex items-center rounded transition-all",
+    (icon || external) && "gap-1",
+    className
+  )}
 >
-  {icon ? <Icon name={icon} /> : <slot />}
-  {external && !icon && <Arrow name="up-right" />}
+  {icon && iconPosition === "left" ? <Icon name={icon} size={iconSize} /> : null}
+  <slot />
+  {icon && iconPosition === "right" ? <Icon name={icon} size={iconSize} /> : null}
+  {!icon && external ? <Icon name="arrow-up-right" size={iconSize} /> : null}
 </Text>

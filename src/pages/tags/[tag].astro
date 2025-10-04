@@ -1,23 +1,19 @@
 ---
-import { getCollection } from "astro:content";
+import { getSortedPosts } from "#/content/utils";
 
-// layout
-import Layout from "@/layouts/Layout.astro";
+import Layout from "#/layouts/layout.astro";
+import Text from "#/components/ui/text.astro";
 
-import PostCard from "@/components/blog/PostCard.astro";
+import PostCard from "../blog/_components/post-card.astro";
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection("blog");
+  const allPosts = await getSortedPosts();
 
-  const uniqueTags = [
-    ...new Set(allPosts.map((post) => post.data.tags).flat()),
-  ];
+  // Collect unique tag IDs
+  const uniqueTags = [...new Set(allPosts.map((post) => post.data.tags.map((t) => t.id)).flat())];
 
   return uniqueTags.map((tag) => {
-    const filteredPosts = allPosts.filter((post) =>
-      post.data.tags.includes(tag),
-    );
-
+    const filteredPosts = allPosts.filter((post) => post.data.tags.some((t) => t.id === tag));
     return {
       params: { tag },
       props: { posts: filteredPosts },
@@ -29,43 +25,14 @@ const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
 
-<Layout title="hello">
-  <section id="posts">
-    <div class="wrapper">
-      <div class="posts-head">
-        <h3 class={`section-title ${tag}`}>
-          Articles on 🏷️ '{tag}'
-        </h3>
-      </div>
+<Layout title={`Articles tagged #${tag}`}>
+  <section class="space-y-6 py-6">
+    <Text size="2xl" class="font-8bit text-center font-bold capitalize">
+      Articles on 🏷️ '{tag}'
+    </Text>
 
-      <div class="posts-container">
-        {
-          posts.map((post) => (
-            <PostCard {...post.data} url={post.id} post={post} />
-          ))
-        }
-      </div>
+    <div class="grid gap-6 md:grid-cols-3">
+      {posts.map((post) => <PostCard slug={post.id} post={post.data} />)}
     </div>
   </section>
 </Layout>
-
-<style lang="scss">
-  .posts-head {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 2rem;
-    h3 {
-      text-transform: capitalize;
-    }
-  }
-
-  .posts-container {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.5rem;
-
-    @media all and (max-width: 768px) {
-      grid-template-columns: repeat(1, minmax(0, 1fr));
-    }
-  }
-</style>

@@ -5,23 +5,28 @@ type Heading = {
   subheadings?: Heading[];
 };
 
+/**
+ * Builds a nested Table of Contents (TOC) from a flat list of headings.
+ * Groups child headings (H3–H6) under their nearest parent heading (H2).
+ */
 export function buildToc(headings: Heading[]): Heading[] {
+  if (!headings.length) return [];
+
   const toc: Heading[] = [];
-  const parentHeadings: Map<number, Heading> = new Map();
+  const parents = new Map<number, Heading>();
 
-  headings.forEach((h) => {
-    const heading: Heading = { ...h, subheadings: [] };
-    parentHeadings.set(heading.depth, heading);
+  for (const h of headings) {
+    const current: Heading = { ...h, subheadings: [] };
+    parents.set(current.depth, current);
 
-    if (heading.depth === 2) {
-      toc.push(heading);
-    } else {
-      const parentHeading = parentHeadings.get(heading.depth - 1);
-      if (parentHeading && parentHeading.subheadings) {
-        parentHeading.subheadings.push(heading);
-      }
+    if (current.depth === 2) {
+      toc.push(current);
+      continue;
     }
-  });
+
+    const parent = parents.get(current.depth - 1);
+    if (parent) parent.subheadings!.push(current);
+  }
 
   return toc;
 }

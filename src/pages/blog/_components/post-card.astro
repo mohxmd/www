@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import type { GetSortedPosts } from "#/content/utils";
+
+import Separator from "#/components/ui/separator.astro";
+import Link from "#/components/ui/link.astro";
+import { formatDate, truncateSafe } from "#/lib/utils/string";
+
+type Props = {
+  slug: string;
+  post: GetSortedPosts[0]["data"];
+  class?: string;
+};
+
+const { slug, post, class: className } = Astro.props;
+const { description, pubDate, title, readingTime, image } = post;
+---
+
+<article class:list={["bg-card flex h-full flex-col overflow-hidden rounded-lg border", className]}>
+  <Link href={`/blog/${slug}`} aria-label={title} class="relative aspect-[3/2]">
+    <Image
+      src={image}
+      alt={title}
+      decoding="async"
+      loading="lazy"
+      class="absolute inset-0 size-full object-cover"
+    />
+  </Link>
+
+  <div class="flex flex-1 flex-col gap-2.5 border-t p-3">
+    <h3 class="text-lg leading-snug font-semibold text-pretty">
+      <Link href={`/blog/${slug}`} class="hover:text-link-hover">
+        {truncateSafe(title, 60)}
+      </Link>
+    </h3>
+
+    <p class="text-muted-foreground flex-1 text-sm">
+      {truncateSafe(description, 80)}
+    </p>
+
+    <Separator class="my-1.5" />
+
+    <div class="text-muted-foreground flex items-center justify-between text-xs">
+      <div class="flex items-center gap-2">
+        <span role="img" aria-label="calendar"> 📅 </span>
+        <span>{formatDate(pubDate)}</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span role="img" aria-label="timer"> ⏱ </span>
+        <span>{readingTime}</span>
+      </div>
+    </div>
+  </div>
+</article>

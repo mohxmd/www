@@ -1,0 +1,58 @@
+---
+import type { Page } from "astro";
+import { getPopularTags, type GetAllTags, type GetSortedPosts } from "#/content/utils";
+
+import Layout from "#/layouts/layout.astro";
+import Icon from "#/components/ui/icon.astro";
+import Text from "#/components/ui/text.astro";
+import Separator from "#/components/ui/separator.astro";
+
+import PostCard from "./post-card.astro";
+import SearchBox from "./search-box.astro";
+
+const totalViews = 200;
+const totalPosts = 200;
+
+type Props = Page<GetSortedPosts[0]> & { tag?: GetAllTags[0]["id"] };
+
+const tags = (await getPopularTags()).map((tag) => tag.text);
+const { data: paginatedPosts } = Astro.props;
+---
+
+<Layout
+  metadata={{
+    title: "🧑‍🚀 Latest Blog Posts !",
+    description: "Explore the Cosmos of Ideas! Latest Blog Posts",
+  }}
+>
+  <section class="text-muted-foreground space-y-4 py-6 font-sans">
+    <div class="w-full space-y-3 text-center">
+      <Text as="h1" class="font-8bit font-bold" size="3xl" variant="muted"
+        >🧑‍🚀 Latest Blog Posts !</Text
+      >
+      <p>Explore the Cosmos of Ideas! Latest Blog Posts</p>
+
+      <div class="mt-6 flex items-center gap-4">
+        <Text as="h1" size="default" class="uppercase">ALL Posts</Text>
+
+        <Separator class="flex-1" />
+
+        <div class="flex items-center text-sm">
+          <span class="views">{totalViews} Views</span>
+          <Icon name="dot" class="shrink-0" size="sm" aria-hidden />
+          <span>{totalPosts} Posts</span>
+        </div>
+      </div>
+
+      <SearchBox tags={tags} />
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" data-static-posts>
+      {
+        paginatedPosts.map((post) => (
+          <PostCard class="mb-4 break-inside-avoid" slug={post.id} post={post.data} />
+        ))
+      }
+    </div>
+  </section>
+</Layout>

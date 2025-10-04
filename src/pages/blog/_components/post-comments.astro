@@ -1,0 +1,35 @@
+<div class="mt-8" id="comments">
+  <script
+    src="https://giscus.app/client.js"
+    data-repo="mhdZhHan/personal-blog"
+    data-repo-id="R_kgDOJ85Niw"
+    data-category="Blog Comments"
+    data-category-id="DIC_kwDOJ85Ni84CYA_s"
+    data-mapping="url"
+    data-reactions-enabled="1"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    crossorigin="anonymous"
+    async></script>
+</div>
+
+<script is:inline>
+  document.addEventListener("astro:page-load", () => {
+    const theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+
+    function setGiscusTheme(theme) {
+      const iframe = document.querySelector("iframe.giscus-frame");
+      if (!iframe) return;
+      iframe.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, "https://giscus.app");
+    }
+
+    // initial load
+    setTimeout(() => setGiscusTheme(theme), 1000);
+
+    // listen for theme toggle
+    window.addEventListener("theme-change", (e) => {
+      setGiscusTheme(e.detail === "dark" ? "dark" : "light");
+    });
+  });
+</script>

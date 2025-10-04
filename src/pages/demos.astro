@@ -1,0 +1,481 @@
+---
+import Layout from "#/layouts/layout.astro";
+
+import * as List from "#/components/ui/list";
+import * as Tooltip from "#/components/ui/tooltip";
+import * as Tabs from "#/components/ui/tabs";
+import * as Table from "#/components/ui/table";
+import * as Dialog from "#/components/ui/dialog";
+---
+
+<Layout title="Mohammed's blog | Demos">
+  <div class="container mx-auto space-y-16 px-4 py-12">
+    <!-- Page Header -->
+    <div class="mb-12 text-center">
+      <h1 class="mb-4 text-4xl font-bold">Component Demos</h1>
+      <p class="text-muted-foreground text-lg">
+        Explore all the available components with live examples
+      </p>
+    </div>
+
+    <!-- List Component Demo -->
+    <section class="space-y-6">
+      <div>
+        <h2 class="mb-2 text-3xl font-bold">List Component</h2>
+        <p class="text-muted-foreground">
+          Simple and flexible list components for organizing content
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <!-- Vertical List -->
+        <div class="rounded-lg border p-6">
+          <h3 class="mb-4 text-xl font-semibold">Vertical List</h3>
+          <List.Root>
+            <List.Item>First item in the list</List.Item>
+            <List.Item>Second item in the list</List.Item>
+            <List.Item>Third item in the list</List.Item>
+            <List.Item>Fourth item in the list</List.Item>
+          </List.Root>
+        </div>
+
+        <!-- Horizontal List -->
+        <div class="rounded-lg border p-6">
+          <h3 class="mb-4 text-xl font-semibold">Horizontal List</h3>
+          <List.Root orientation="horizontal" class="gap-4">
+            <List.Item>Home</List.Item>
+            <List.Item>About</List.Item>
+            <List.Item>Contact</List.Item>
+            <List.Item>Blog</List.Item>
+          </List.Root>
+        </div>
+
+        <!-- Link List -->
+        <div class="rounded-lg border p-6">
+          <h3 class="mb-4 text-xl font-semibold">Link List</h3>
+          <List.Root>
+            <List.ItemLink href="#home">Home Page</List.ItemLink>
+            <List.ItemLink href="#about">About Us</List.ItemLink>
+            <List.ItemLink href="#services">Our Services</List.ItemLink>
+            <List.ItemLink href="#contact">Contact</List.ItemLink>
+          </List.Root>
+        </div>
+
+        <!-- Ordered List -->
+        <div class="rounded-lg border p-6">
+          <h3 class="mb-4 text-xl font-semibold">Ordered List</h3>
+          <List.Root as="ol" class="list-inside list-decimal">
+            <List.Item>First step</List.Item>
+            <List.Item>Second step</List.Item>
+            <List.Item>Third step</List.Item>
+            <List.Item>Final step</List.Item>
+          </List.Root>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tooltip Component Demo -->
+    <section class="space-y-6">
+      <div>
+        <h2 class="mb-2 text-3xl font-bold">Tooltip Component</h2>
+        <p class="text-muted-foreground">Accessible tooltips with positioning and animations</p>
+      </div>
+
+      <div class="rounded-lg border p-8">
+        <div class="flex flex-wrap items-center justify-center gap-8">
+          <!-- Top Tooltip -->
+          <Tooltip.Root>
+            <Tooltip.Trigger>
+              <button class="bg-primary text-primary-foreground rounded-md px-4 py-2">
+                Hover me (Top)
+              </button>
+            </Tooltip.Trigger>
+            <Tooltip.Content side="top"> This is a top tooltip! </Tooltip.Content>
+          </Tooltip.Root>
+
+          <!-- Right Tooltip -->
+          <Tooltip.Root>
+            <Tooltip.Trigger>
+              <button class="bg-primary text-primary-foreground rounded-md px-4 py-2">
+                Hover me (Right)
+              </button>
+            </Tooltip.Trigger>
+            <Tooltip.Content side="right"> This is a right tooltip! </Tooltip.Content>
+          </Tooltip.Root>
+
+          <!-- Bottom Tooltip -->
+          <Tooltip.Root>
+            <Tooltip.Trigger>
+              <button class="bg-primary text-primary-foreground rounded-md px-4 py-2">
+                Hover me (Bottom)
+              </button>
+            </Tooltip.Trigger>
+            <Tooltip.Content side="bottom"> This is a bottom tooltip! </Tooltip.Content>
+          </Tooltip.Root>
+
+          <!-- Left Tooltip -->
+          <Tooltip.Root>
+            <Tooltip.Trigger>
+              <button class="bg-primary text-primary-foreground rounded-md px-4 py-2">
+                Hover me (Left)
+              </button>
+            </Tooltip.Trigger>
+            <Tooltip.Content side="left"> This is a left tooltip! </Tooltip.Content>
+          </Tooltip.Root>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs Component Demo -->
+    <section class="space-y-6">
+      <div>
+        <h2 class="mb-2 text-3xl font-bold">Tabs Component</h2>
+        <p class="text-muted-foreground">Keyboard-navigable tabs with sync support</p>
+      </div>
+
+      <div class="space-y-8">
+        <!-- Basic Tabs -->
+        <div class="rounded-lg border p-6">
+          <h3 class="mb-4 text-xl font-semibold">Basic Tabs</h3>
+          <Tabs.Root defaultValue="account">
+            <Tabs.List>
+              <Tabs.Trigger value="account">Account</Tabs.Trigger>
+              <Tabs.Trigger value="password">Password</Tabs.Trigger>
+              <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+            </Tabs.List>
+
+            <Tabs.Content value="account">
+              <div class="p-4">
+                <h4 class="mb-2 font-semibold">Account Settings</h4>
+                <p class="text-muted-foreground">
+                  Manage your account settings and preferences here.
+                </p>
+              </div>
+            </Tabs.Content>
+
+            <Tabs.Content value="password">
+              <div class="p-4">
+                <h4 class="mb-2 font-semibold">Password Management</h4>
+                <p class="text-muted-foreground">Change your password and security settings.</p>
+              </div>
+            </Tabs.Content>
+
+            <Tabs.Content value="settings">
+              <div class="p-4">
+                <h4 class="mb-2 font-semibold">General Settings</h4>
+                <p class="text-muted-foreground">Configure your general preferences.</p>
+              </div>
+            </Tabs.Content>
+          </Tabs.Root>
+        </div>
+
+        <!-- Synced Tabs Demo -->
+        <div class="rounded-lg border p-6">
+          <h3 class="mb-4 text-xl font-semibold">Synced Tabs (Try switching both)</h3>
+          <div class="grid gap-6 md:grid-cols-2">
+            <Tabs.Root defaultValue="preview" syncKey="demo">
+              <Tabs.List>
+                <Tabs.Trigger value="preview">Preview</Tabs.Trigger>
+                <Tabs.Trigger value="code">Code</Tabs.Trigger>
+              </Tabs.List>
+
+              <Tabs.Content value="preview">
+                <div class="bg-muted mt-2 rounded-md p-4">
+                  <p>Preview content appears here</p>
+                </div>
+              </Tabs.Content>
+
+              <Tabs.Content value="code">
+                <div class="bg-muted mt-2 rounded-md p-4 font-mono text-sm">
+                  <code>console.log('Hello World');</code>
+                </div>
+              </Tabs.Content>
+            </Tabs.Root>
+
+            <Tabs.Root defaultValue="preview" syncKey="demo">
+              <Tabs.List>
+                <Tabs.Trigger value="preview">Preview</Tabs.Trigger>
+                <Tabs.Trigger value="code">Code</Tabs.Trigger>
+              </Tabs.List>
+
+              <Tabs.Content value="preview">
+                <div class="bg-muted mt-2 rounded-md p-4">
+                  <p>Both tabs are synced!</p>
+                </div>
+              </Tabs.Content>
+
+              <Tabs.Content value="code">
+                <div class="bg-muted mt-2 rounded-md p-4 font-mono text-sm">
+                  <code>They stay in sync automatically</code>
+                </div>
+              </Tabs.Content>
+            </Tabs.Root>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Table Component Demo -->
+    <section class="space-y-6">
+      <div>
+        <h2 class="mb-2 text-3xl font-bold">Table Component</h2>
+        <p class="text-muted-foreground">Responsive and accessible data tables</p>
+      </div>
+
+      <div class="space-y-8">
+        <!-- Basic Table -->
+        <div class="rounded-lg border p-6">
+          <h3 class="mb-4 text-xl font-semibold">Invoice Table</h3>
+          <Table.Root>
+            <Table.Caption>A list of your recent invoices.</Table.Caption>
+            <Table.Header>
+              <Table.Row>
+                <Table.Head>Invoice</Table.Head>
+                <Table.Head>Status</Table.Head>
+                <Table.Head>Method</Table.Head>
+                <Table.Head class="text-right">Amount</Table.Head>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell class="font-medium">INV001</Table.Cell>
+                <Table.Cell>Paid</Table.Cell>
+                <Table.Cell>Credit Card</Table.Cell>
+                <Table.Cell class="text-right">$250.00</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell class="font-medium">INV002</Table.Cell>
+                <Table.Cell>Pending</Table.Cell>
+                <Table.Cell>PayPal</Table.Cell>
+                <Table.Cell class="text-right">$150.00</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell class="font-medium">INV003</Table.Cell>
+                <Table.Cell>Unpaid</Table.Cell>
+                <Table.Cell>Bank Transfer</Table.Cell>
+                <Table.Cell class="text-right">$350.00</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell class="font-medium">INV004</Table.Cell>
+                <Table.Cell>Paid</Table.Cell>
+                <Table.Cell>Credit Card</Table.Cell>
+                <Table.Cell class="text-right">$450.00</Table.Cell>
+              </Table.Row>
+            </Table.Body>
+            <Table.Footer>
+              <Table.Row>
+                <Table.Cell colspan={3}>Total</Table.Cell>
+                <Table.Cell class="text-right font-semibold">$1,200.00</Table.Cell>
+              </Table.Row>
+            </Table.Footer>
+          </Table.Root>
+        </div>
+
+        <!-- Users Table -->
+        <div class="rounded-lg border p-6">
+          <h3 class="mb-4 text-xl font-semibold">Users Table with Selection</h3>
+          <Table.Root>
+            <Table.Header>
+              <Table.Row>
+                <Table.Head>Name</Table.Head>
+                <Table.Head>Email</Table.Head>
+                <Table.Head>Role</Table.Head>
+                <Table.Head>Status</Table.Head>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row data-state="selected">
+                <Table.Cell class="font-medium">John Doe</Table.Cell>
+                <Table.Cell>john@example.com</Table.Cell>
+                <Table.Cell>Admin</Table.Cell>
+                <Table.Cell
+                  ><span class="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800"
+                    >Active</span
+                  ></Table.Cell
+                >
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell class="font-medium">Jane Smith</Table.Cell>
+                <Table.Cell>jane@example.com</Table.Cell>
+                <Table.Cell>Editor</Table.Cell>
+                <Table.Cell
+                  ><span class="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800"
+                    >Active</span
+                  ></Table.Cell
+                >
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell class="font-medium">Bob Johnson</Table.Cell>
+                <Table.Cell>bob@example.com</Table.Cell>
+                <Table.Cell>User</Table.Cell>
+                <Table.Cell
+                  ><span class="rounded-full bg-yellow-100 px-2 py-1 text-xs text-yellow-800"
+                    >Pending</span
+                  ></Table.Cell
+                >
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell class="font-medium">Alice Williams</Table.Cell>
+                <Table.Cell>alice@example.com</Table.Cell>
+                <Table.Cell>User</Table.Cell>
+                <Table.Cell
+                  ><span class="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800"
+                    >Active</span
+                  ></Table.Cell
+                >
+              </Table.Row>
+            </Table.Body>
+          </Table.Root>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toast Component Demo -->
+    <section class="space-y-6">
+      <h1 class="text-3xl font-bold">Toast Demo</h1>
+
+      <div class="flex flex-wrap gap-4">
+        <button onclick="window.toast('This is a default toast')" class="rounded px-4 py-2">
+          Default Toast
+        </button>
+
+        <button
+          onclick="window.toast.success('Success! Everything worked perfectly.')"
+          class="rounded bg-green-500 px-4 py-2 text-white"
+        >
+          Success Toast
+        </button>
+
+        <button
+          onclick="window.toast.error('Error! Something went wrong.')"
+          class="rounded bg-red-500 px-4 py-2 text-white"
+        >
+          Error Toast
+        </button>
+
+        <button
+          onclick="window.toast.warning('Warning! Please be careful.')"
+          class="rounded bg-yellow-500 px-4 py-2 text-white"
+        >
+          Warning Toast
+        </button>
+
+        <button
+          onclick="window.toast.info('Info! Here is some information.')"
+          class="rounded bg-blue-500 px-4 py-2 text-white"
+        >
+          Info Toast
+        </button>
+
+        <button
+          onclick="window.toast.success('Check your inbox', { title: 'Email Sent', description: 'Your message has been delivered successfully.' })"
+          class="rounded bg-purple-500 px-4 py-2 text-white"
+        >
+          With Title & Description
+        </button>
+
+        <button
+          onclick="window.toast.info('You have a new notification', { action: { label: 'View', onClick: () => alert('Action clicked!') } })"
+          class="rounded bg-indigo-500 px-4 py-2 text-white"
+        >
+          With Action
+        </button>
+      </div>
+    </section>
+
+    <!-- Dialog Component Demo -->
+    <section class="space-y-6">
+      <h1 class="text-3xl font-bold">Dialog Demo</h1>
+
+      <Dialog.Root>
+        <Dialog.Trigger>Open Dialog</Dialog.Trigger>
+
+        <Dialog.Content>
+          <Dialog.Header>
+            <Dialog.Title>Are you sure?</Dialog.Title>
+            <Dialog.Description>
+              This action cannot be undone. This will permanently delete your account.
+            </Dialog.Description>
+          </Dialog.Header>
+
+          <Dialog.Footer>
+            <Dialog.Close>Cancel</Dialog.Close>
+            <button class="rounded bg-red-500 px-4 py-2 text-white">Delete</button>
+          </Dialog.Footer>
+        </Dialog.Content>
+      </Dialog.Root>
+
+      <!-- With Custom Animation Duration -->
+      <Dialog.Root>
+        <Dialog.Trigger>Open Slow Dialog</Dialog.Trigger>
+        <Dialog.Content animationDuration={500}>
+          <Dialog.Header>
+            <Dialog.Title>Slow Animation</Dialog.Title>
+          </Dialog.Header>
+        </Dialog.Content>
+      </Dialog.Root>
+
+      <!-- External Trigger -->
+      <Dialog.Trigger for="my-dialog">Open from outside</Dialog.Trigger>
+
+      <Dialog.Root id="my-dialog">
+        <Dialog.Content>
+          <Dialog.Header>
+            <Dialog.Title>External Trigger</Dialog.Title>
+          </Dialog.Header>
+        </Dialog.Content>
+      </Dialog.Root>
+
+      <!-- With Form -->
+      <Dialog.Root>
+        <Dialog.Trigger>Open Form</Dialog.Trigger>
+        <Dialog.Content>
+          <form method="dialog">
+            <Dialog.Header>
+              <Dialog.Title>Submit Form</Dialog.Title>
+              <Dialog.Description>Fill out the form below</Dialog.Description>
+            </Dialog.Header>
+
+            <div class="space-y-4 py-4">
+              <input type="text" placeholder="Name" class="w-full rounded border p-2" />
+              <input type="email" placeholder="Email" class="w-full rounded border p-2" />
+            </div>
+
+            <Dialog.Footer>
+              <Dialog.Close>Cancel</Dialog.Close>
+              <button type="submit" class="rounded bg-blue-500 px-4 py-2 text-white">
+                Submit
+              </button>
+            </Dialog.Footer>
+          </form>
+        </Dialog.Content>
+      </Dialog.Root>
+
+      <!-- AsChild Pattern -->
+      <Dialog.Root>
+        <Dialog.Trigger asChild>
+          <a href="#" class="custom-link">Custom Trigger</a>
+        </Dialog.Trigger>
+
+        <Dialog.Content>
+          <Dialog.Header>
+            <Dialog.Title>Custom Trigger</Dialog.Title>
+          </Dialog.Header>
+
+          <Dialog.Footer>
+            <Dialog.Close asChild>
+              <a href="#" class="custom-button">Custom Close</a>
+            </Dialog.Close>
+          </Dialog.Footer>
+        </Dialog.Content>
+      </Dialog.Root>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t pt-12 text-center">
+      <p class="text-muted-foreground">
+        All components are built with Astro and styled with Tailwind CSS
+      </p>
+    </footer>
+  </div>
+</Layout>

@@ -1,16 +1,21 @@
 ---
 import type { HTMLTag, Polymorphic } from "astro/types";
-import { tv, type VariantProps } from "tailwind-variants";
+import { cva, type VariantProps } from "class-variance-authority";
 
-type Props<Tag extends HTMLTag = "ul" | "ol"> = Polymorphic<{ as: Tag }> &
-  ListVariants;
+type Props<Tag extends HTMLTag = "ul" | "ol"> = Polymorphic<{ as: Tag }> & ListVariants;
 
 export type ListVariants = VariantProps<typeof variants>;
 
-const variants = tv({
-  base: "flex flex-col list-none",
-  defaultVariants: { orientation: "vertical" },
-  variants: { orientation: { horizontal: "flex-row", vertical: "flex-col" } },
+const variants = cva("flex flex-col list-none", {
+  variants: {
+    orientation: {
+      horizontal: "flex-row",
+      vertical: "flex-col",
+    },
+  },
+  defaultVariants: {
+    orientation: "vertical",
+  },
 });
 
 const { as: Tag = "ul", class: className, orientation, ...props } = Astro.props;

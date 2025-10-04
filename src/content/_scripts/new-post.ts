@@ -1,7 +1,7 @@
 import { writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 
-import { type BlogSchema } from "@/content/config";
+import { type BlogSchema } from "#/content/config";
 
 // Utility to sanitize the title into a slug
 function createSlug(title: string): string {

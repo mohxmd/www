@@ -1,18 +1,16 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import { twMerge } from "tailwind-merge";
+import { cva, type VariantProps } from "class-variance-authority";
 
-type Props = HTMLAttributes<"div">;
+type Props = HTMLAttributes<"div"> & FooterVariants;
+
+export type FooterVariants = VariantProps<typeof variants>;
+
+const variants = cva("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end");
 
 const { class: className, ...props } = Astro.props;
 ---
 
-<div
-  {...props}
-  class={twMerge(
-    "bg-muted border-border flex h-14 items-center gap-4 rounded-b border-t px-6",
-    className,
-  )}
->
+<div {...props} class={variants({ className })} data-slot="dialog-footer">
   <slot />
 </div>

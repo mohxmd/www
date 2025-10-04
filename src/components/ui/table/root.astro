@@ -1,0 +1,18 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "class-variance-authority";
+
+type Props = HTMLAttributes<"table"> & TableVariants;
+
+export type TableVariants = VariantProps<typeof variants>;
+
+const variants = cva("w-full caption-bottom text-sm");
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div data-slot="table-container" class="relative w-full overflow-x-auto">
+  <table {...props} class={variants({ className })} data-slot="table" role="table">
+    <slot />
+  </table>
+</div>

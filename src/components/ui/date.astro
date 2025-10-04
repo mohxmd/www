@@ -2,12 +2,15 @@
 import type { ComponentProps } from "astro/types";
 import Text from "./text.astro";
 
-type Props = Omit<ComponentProps<typeof Text<"time">>, "as"> & { value?: Date };
+type Props = Omit<ComponentProps<typeof Text<"time">>, "as"> & {
+  value?: Date;
+  itemprop?: string;
+};
 
-const { value, ...props } = Astro.props;
+const { value, itemprop, ...props } = Astro.props;
 ---
 
-<Text {...props} as="time" datetime={value?.toISOString()}>
+<Text {...props} as="time" datetime={value?.toISOString()} itemprop={itemprop}>
   {
     value &&
       value.toLocaleDateString("en-US", {
@@ -18,4 +21,5 @@ const { value, ...props } = Astro.props;
       })
   }
   <slot />
+  {itemprop && value && <meta itemprop={itemprop} content={value.toISOString()} />}
 </Text>

@@ -59,6 +59,6 @@ export default [
   },
 
   {
-    ignores: ["dist/**"],
+    ignores: ["dist/**", "**/*.d.ts", ".github/", ".vercel/", ".astro/"],
   },
 ];

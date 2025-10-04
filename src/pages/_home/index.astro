@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import Layout from "#/layouts/layout.astro";
+import Callout from "#/components/ui/callout.astro";
+import Masthead from "#/components/ui/masthead.astro";
+
+import RecentPosts from "./_components/recent-posts.astro";
+import RecentProjects from "./_components/recent-projects.astro";
+import Hero from "./_components/hero.astro";
+import Contact from "./_components/contact.astro";
+
+// assets
+import NotFun from "#/assets/not-fun.png";
+import Armin from "#/assets/armin.gif";
+---
+
+<Layout title="Mohammed's blog">
+  <Hero />
+  <RecentProjects />
+  <RecentPosts />
+
+  <section class="grid grid-cols-1 gap-2 py-6 md:grid-cols-2">
+    <Callout title="When Promises Meet Deadlines" icon="bug" class="max-h-64" contentClass="h-full">
+      <Image src={NotFun} alt="Never said" class="h-full w-full object-cover" />
+    </Callout>
+
+    <Callout title="Get in touch" icon="handshake" contentClass="flex flex-col p-2">
+      <Contact />
+    </Callout>
+  </section>
+
+  <section class="py-6">
+    <Masthead
+      title="Beyond the Walls"
+      subtitle="Shiganshina District — Year 850"
+      class="font-syne-mono"
+    >
+      <Image src={Armin} alt="Armin Arlert under the sky" class="rounded-xs md:max-w-[500px]" />
+
+      <p>
+        “People who can’t throw something important away can never hope to change anything.” — Armin
+        Arlert
+      </p>
+      <p>
+        Sometimes coding feels the same way: you can’t build new systems unless you’re brave enough
+        to refactor, to leave behind what no longer works, and trust in the vision of something
+        better.
+      </p>
+      <p>
+        Like Armin staring at the ocean, every project is a reminder that beyond the walls of our
+        comfort zone, there’s always a world of possibility.
+      </p>
+    </Masthead>
+  </section>
+</Layout>

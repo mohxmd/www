@@ -11,26 +11,45 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "astro"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "astro"],
   "cSpell.words": [
+    "Arlert",
+    "Armin",
     "astro",
     "astrojs",
+    "bitoperatorplus",
     "FOSS",
     "Frontmatter",
+    "Giscus",
+    "honobox",
+    "iconify",
     "lucide",
+    "mohammedsh",
+    "mohxmdsh",
     "nord",
+    "oklch",
+    "overscroll",
+    "pacman",
     "pagefind",
     "prerender",
+    "pychat",
     "rehype",
+    "rgba",
     "ryugin",
+    "Shiganshina",
     "Signup",
+    "synemono",
     "typeof",
     "vitesse"
-  ]
+  ],
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+  // theme
+  // "window.autoDetectColorScheme": true,
+  // "workbench.preferredLightColorTheme": "Vitesse Light",
+  // "workbench.preferredDarkColorTheme": "Vitesse Black"
 }

@@ -1,0 +1,30 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"button"> & {
+  /**
+   * When true, renders child element instead of button
+   */
+  asChild?: boolean;
+};
+
+const { class: className, asChild = false, ...props } = Astro.props;
+const hasChildren = Astro.slots.has("default");
+---
+
+{
+  asChild && hasChildren ? (
+    <div class="dialog-close" data-slot="dialog-close" data-as-child>
+      <slot />
+    </div>
+  ) : (
+    <button
+      type="button"
+      class:list={["dialog-close", className]}
+      data-slot="dialog-close"
+      {...props}
+    >
+      <slot />
+    </button>
+  )
+}

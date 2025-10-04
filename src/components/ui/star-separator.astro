@@ -1,0 +1,48 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "class-variance-authority";
+
+const separatorVariants = cva(
+  [
+    "flex items-center justify-center",
+    "h-auto border-0 bg-transparent",
+    "text-center relative",
+    "font-mono text-[0.875em] tracking-[0.25em]",
+    "text-slate-500 dark:text-slate-400",
+  ],
+  {
+    variants: {
+      variant: {
+        stars: "before:content-['***']",
+        dots: "before:content-['•••']",
+        dashes: "before:content-['---']",
+        asterisks: "before:content-['*_*_*'] before:tracking-[1em]",
+      },
+    },
+    defaultVariants: {
+      variant: "stars",
+    },
+  }
+);
+
+export type StarSeparatorVariants = VariantProps<typeof separatorVariants>;
+
+type Props = HTMLAttributes<"div"> & StarSeparatorVariants;
+
+const { class: className, variant, ...props } = Astro.props;
+---
+
+<div {...props} role="separator" class={separatorVariants({ variant, className })}></div>
+
+<style>
+  div[role="separator"] {
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    --text-tertiary: rgb(107 114 128);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    div[role="separator"] {
+      --text-tertiary: rgb(156 163 175);
+    }
+  }
+</style>

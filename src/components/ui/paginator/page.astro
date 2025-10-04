@@ -1,7 +1,7 @@
 ---
 import type { ComponentProps } from "astro/types";
-import { twMerge } from "tailwind-merge";
 import Text from "../text.astro";
+import { cn } from "#/lib/utils";
 
 type Props = Omit<ComponentProps<typeof Text<"li">>, "as"> & {
   current: number;
@@ -14,11 +14,8 @@ const { class: className, current, max, size, ...props } = Astro.props;
 <Text
   {...props}
   as="li"
-  size={size ?? "2"}
-  class={twMerge(
-    "flex w-14 items-center justify-center select-none",
-    className,
-  )}
+  size={size ?? "sm"}
+  class={cn("flex w-14 items-center justify-center select-none", className)}
 >
   {current} of {max}
 </Text>

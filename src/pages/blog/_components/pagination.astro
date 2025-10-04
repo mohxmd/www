@@ -1,0 +1,45 @@
+---
+import Icon from "#/components/ui/icon.astro";
+
+const { prevUrl, nextUrl } = Astro.props;
+---
+
+<div class="pagination-container">
+  {
+    prevUrl && (
+      <a href={prevUrl}>
+        <Icon name="arrow-left" size="sm" aria-hidden /> Newer Posts
+      </a>
+    )
+  }
+
+  {
+    nextUrl && (
+      <a href={nextUrl}>
+        Older Posts <Icon name="arrow-right" size="sm" aria-hidden />
+      </a>
+    )
+  }
+</div>
+
+<style lang="scss">
+  .pagination-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    a {
+      color: inherit;
+      text-decoration: inherit;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+
+      svg {
+        margin-top: 0.2rem;
+      }
+    }
+  }
+</style>

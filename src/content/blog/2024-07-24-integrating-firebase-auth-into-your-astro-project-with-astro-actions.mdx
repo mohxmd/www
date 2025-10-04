@@ -5,11 +5,10 @@ pubDate: 2024-07-24
 description: "Discover how to seamlessly integrate Firebase Authentication into your Astro project using Astro Actions. This guide walks you through setting up and managing user authentication efficiently."
 author: "Mohammed"
 image: "./images/astro-firebase.jpg"
-tags: ["firebase", "auth", "astro", "astro actions"]
+tags: ["firebase", "auth", "astro"]
 ---
 
-import InPageNav from "@/components/widgets/InPageNav.astro";
-import Blockquote from "@/components/widgets/Blockquote.astro";
+import InPageNav from "#/components/widgets/InPageNav.astro";
 
 Hey there, web developers! Today, we're diving into integrating Firebase Authentication into your Astro project using the latest feature: Astro Actions. Whether you're building a new app or adding authentication to an existing project, this guide will walk you through the process of setting up Firebase Auth and leveraging Astro Actions to handle server-side logic.
 
@@ -53,8 +52,7 @@ Now that Astro Actions are set up, let’s integrate Firebase Authentication int
 **Install Firebase:** Add Firebase to your project using your package manager:
 
 <InPageNav routes={["npm", "yarn", "pnpm"]}>
-  ```bash npm install firebase ``` ```bash yarn add firebase ``` ```bash pnpm
-  add firebase ```
+  ```bash npm install firebase ``` ```bash yarn add firebase ``` ```bash pnpm add firebase ```
 </InPageNav>
 
 **Initialize Firebase:** Configure Firebase in your project. Create a file like `/src/firebase/config.ts`:
@@ -238,11 +236,7 @@ export const onRequest = defineMiddleware((context, next) => {
   const { pathname } = context.url;
 
   // Redirect unauthenticated users from /auth/user to /auth/login
-  if (
-    !currentUser &&
-    pathname === "/auth/user" &&
-    context.request.method === "GET"
-  ) {
+  if (!currentUser && pathname === "/auth/user" && context.request.method === "GET") {
     return context.redirect("/auth/login");
   }
 
@@ -255,10 +249,7 @@ export const onRequest = defineMiddleware((context, next) => {
   }
 
   // Redirect authenticated users from /auth/login and /auth/signup to home (/)
-  if (
-    currentUser &&
-    (pathname === "/auth/login" || pathname === "/auth/signup")
-  ) {
+  if (currentUser && (pathname === "/auth/login" || pathname === "/auth/signup")) {
     return context.redirect("/");
   }
 

@@ -1,75 +1,35 @@
 ---
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
+import { getAllTags } from "#/content/utils";
+import { cn } from "#/lib/utils";
 
-// layouts
-import Layout from "@/layouts/Layout.astro";
+import Layout from "#/layouts/layout.astro";
+import Link from "#/components/ui/link.astro";
+import Text from "#/components/ui/text.astro";
+import * as List from "#/components/ui/list";
 
-// utils
-import { nonDraftPosts } from "@/lib/index";
-
-const posts = await getCollection("blog");
-const nonDraftPosts_: CollectionEntry<"blog">[] = nonDraftPosts(posts);
-const tags = [...new Set(nonDraftPosts_.map((post) => post.data.tags).flat())];
+const tags = await getAllTags();
 ---
 
 <Layout title="Mohammed's blog | Tags">
-  <section id="tags">
-    <div class="wrapper">
-      <div class="tags-head">
-        <h1 class="blogs-head__title">🗃️ Explore All Available Tags</h1>
-      </div>
+  <section class="space-y-6 py-6">
+    <Text size="3xl" class="font-8bit text-center font-bold">🗃️ Explore All Available Tags</Text>
 
-      <div class="tags-container">
-        <ul class="tags-container__tags">
-          {
-            tags.map((tag) => (
-              <li class={`tags-container__tags__tag ${tag}`}>
-                <a href={`/tags/${tag}`}>#{tag}</a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
+    <List.Root class="flex flex-row flex-wrap gap-3">
+      {
+        tags.map((tag) => (
+          <List.Item>
+            <Link
+              href={`/tags/${tag.id}`}
+              class={cn(
+                "text-muted-foreground hover:text-foreground rounded border px-4 py-1 text-sm capitalize transition-colors",
+                `lang-${tag.text.toLocaleLowerCase()}`
+              )}
+            >
+              #{tag.text}
+            </Link>
+          </List.Item>
+        ))
+      }
+    </List.Root>
   </section>
 </Layout>
-
-<style lang="scss">
-  .tags-head {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    .tags-head__title {
-      font-size: 1.875rem;
-      line-height: 2.25rem;
-      font-weight: 700;
-    }
-  }
-
-  .tags-container {
-    .tags-container__tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-left: 0.75rem;
-      .tags-container__tags__tag {
-        padding: 0.3rem 1rem;
-        border-radius: 0.2rem;
-        border: 1px solid var(--border-color);
-        a {
-          display: block;
-          font-weight: 400;
-          font-size: 1rem;
-          line-height: 1rem;
-          text-transform: capitalize;
-          color: inherit;
-
-          &:hover {
-            color: var(--title);
-          }
-        }
-      }
-    }
-  }
-</style>

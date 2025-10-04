@@ -10,7 +10,7 @@ tags: ["kde", "linux", "zsh", "vscode", "manjaro"]
 
 Hey folks! So, I've been tinkering around with my Manjaro system running KDE Plasma, and I noticed something strange when I fired up Visual Studio Code for coding. You see, Manjaro comes with Zsh as the default terminal, and I'm a big fan of its features. But when I started using Zsh in Visual Studio Code, I ran into a problem – the cool icons that usually appear in the terminal were missing! It turns out, this isn't just a problem on my Manjaro setup; it's something that can happen on other systems too. But don't worry, I've done some sleuthing and found a fix. Let me show you how to get those Zsh icons back in Visual Studio Code.
 
-![Screenshot: Vscode Terminal (zsh) Icon Missing](/images/blogs/vscode-zsh-missing-icon.png)
+![Screenshot: Vscode Terminal (zsh) Icon Missing](./images/vscode-zsh-missing-icon.png)
 
 ## Solution
 
@@ -38,7 +38,7 @@ sudo apt-get install fonts-meslo
    - Open Visual Studio Code.
    - Navigate to `Terminal > Integrated: Font Family`.
    - Set the font family to "MesloLGS NF".
-     ![Screenshot: Configuring Vscode Terminal Font Family](/images/blogs/vscode-terminal-font-changing.png)
+     ![Screenshot: Configuring Vscode Terminal Font Family](./images/vscode-terminal-font-changing.png)
 
 3. **Alternatively, Change Font Settings Directly in settings.json:**
    You can also change it directly in the `settings.json` file located in the `.config/Code/User` directory. Look for the property `terminal.integrated.fontFamily`.
@@ -52,7 +52,7 @@ sudo apt-get install fonts-meslo
 
 5. **Enjoy Your Enhanced Terminal Experience:**
    Your terminal font should now correctly display the Zsh icons!
-   ![Screenshot: Enhanced Terminal Experience](/images/blogs/vscode-zsh-missing-icon-fixed.png)
+   ![Screenshot: Enhanced Terminal Experience](./images/vscode-zsh-missing-icon-fixed.png)
 
 Moreover, this method will also work for macOS users, although the font installation process might differ slightly.
 

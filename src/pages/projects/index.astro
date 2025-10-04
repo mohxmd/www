@@ -1,0 +1,47 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "#/layouts/layout.astro";
+import Text from "#/components/ui/text.astro";
+import Link from "#/components/ui/link.astro";
+
+import ProjectCard from "./_components/project-card.astro";
+
+const projects = await getCollection("projects");
+---
+
+<Layout
+  metadata={{
+    title: "Mohammed's Blog | Projects",
+    description: "Showcase of my selected projects over the years.",
+  }}
+>
+  <section class="font-syne-mono space-y-6 py-6">
+    <Text as="h1" size="3xl" class="font-8bit mb-2 text-center font-bold"> 🛠️ Projects ! </Text>
+    <Text variant="muted" class="text-center font-sans">
+      Showcase of my selected projects over the years.
+    </Text>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((project) => <ProjectCard project={project.data} />)}
+    </div>
+
+    <div class="font-syne-mono text-muted-foreground space-y-3">
+      <p>
+        These are just a few examples of the projects I've enjoyed working on. Each one has taught
+        me something valuable and contributed to my growth as a developer.
+      </p>
+      <p>
+        Feel free to explore them on
+        <Link href="https://github.com/mhdZhHan" class="text-link hover:text-link-hover">
+          Github
+        </Link>
+        and
+        <Link href="https://gitlab.com/mhdZhHan" class="text-link hover:text-link-hover">
+          Gitlab
+        </Link>, and if you have any questions or feedback, I'd love to hear from you!
+        <br />
+        Happy coding! 🚀💻
+      </p>
+    </div>
+  </section>
+</Layout>

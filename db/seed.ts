@@ -1,4 +1,4 @@
-import { db, PostView } from "astro:db";
+import { db, post_view } from "astro:db";
 
 export default async function () {
   // Note: This is real data from my previous Astro Studio database
@@ -6,7 +6,7 @@ export default async function () {
   // This is an open source project, so no sensitive data concerns
 
   // Seed PostView data
-  await db.insert(PostView).values([
+  await db.insert(post_view).values([
     {
       id: 1,
       post: "2024-04-05-how-to-fix-kde-plasma-global-menu-not-working",

@@ -1,0 +1,54 @@
+---
+export const prerender = false;
+
+import { db, desc, guestbook } from "astro:db";
+import { actions } from "astro:actions";
+import Layout from "#/layouts/layout.astro";
+import { formatDate } from "#/lib/utils";
+
+import Text from "#/components/ui/text.astro";
+import Input from "#/components/ui/input.astro";
+import Button from "#/components/ui/button.astro";
+import * as List from "#/components/ui/list";
+
+const result = Astro.getActionResult(actions.addEntry);
+if (result?.error) console.error(result.error);
+
+const entries = await db.select().from(guestbook).orderBy(desc(guestbook.published));
+---
+
+<Layout title="Mohammed's blog | Guestbook">
+  <section class="space-y-4 py-8 text-base">
+    <Text as="h1" size="2xl" class="font-8bit font-bold">Guestbook 🖋️</Text>
+
+    <!-- Form -->
+
+    <form id="🚁" method="POST" action={actions.addEntry} class="inline-flex gap-3">
+      <Input type="text" name="name" placeholder="Your name" required />
+      <Input type="text" name="message" placeholder="Write something nice..." required />
+      <Button type="submit" class="rounded-sm" variant="secondary">Sign</Button>
+    </form>
+
+    <List.Root class="flex flex-col gap-2">
+      {
+        entries.length > 0 ? (
+          entries.map((entry) => (
+            <List.Item class="flex items-center justify-between">
+              <div class="flex gap-2">
+                <Text class="font-medium capitalize">{entry.name}:</Text>
+                <Text class="text-muted-foreground">{entry.message}</Text>
+              </div>
+              <Text class="text-muted-foreground text-sm whitespace-nowrap">
+                {formatDate(entry.published!)}
+              </Text>
+            </List.Item>
+          ))
+        ) : (
+          <List.Item class="text-center italic">
+            No messages yet — be the first to sign the guestbook ✍️
+          </List.Item>
+        )
+      }
+    </List.Root>
+  </section>
+</Layout>

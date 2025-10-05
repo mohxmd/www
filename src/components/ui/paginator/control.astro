@@ -15,26 +15,22 @@ const pages = {
   last: { icon: "ChevronsRight", label: "Last page" },
 } as const;
 
-const {
-  class: className,
-  variant,
-  size,
-  page,
-  disabled,
-  ...props
-} = Astro.props;
+const { class: className, variant, size, page, disabled, ...props } = Astro.props;
 const Tag = disabled ? "div" : "a";
 ---
 
 <li>
   <Tag
     {...props}
-    aria-disabled={disabled}
+    aria-disabled={disabled ? "true" : "false"}
     aria-label={pages[page].label}
     class={buttonVariants({
       variant: variant ?? "ghost",
       size: size ?? "icon",
-      className: [className, "cursor-default"],
+      className: [
+        className,
+        "cursor-default text-foreground aria-disabled:text-muted aria-disabled:pointer-events-none",
+      ],
     })}
   >
     <Icon name={pages[page].icon} />

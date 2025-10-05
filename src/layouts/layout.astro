@@ -29,7 +29,7 @@ const { metadata = {}, class: className, ...props } = Astro.props;
       {Astro.url.pathname !== "/" && <Cd />}
       <Footer />
       {Astro.url.pathname !== "/blog/*" && <ArtPlum />}
-      <Toast.Root client:load position="bottom-right" />
+      <Toast.Root position="bottom-right" />
     </div>
   </body>
 </html>

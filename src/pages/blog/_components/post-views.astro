@@ -3,7 +3,7 @@ export const prerender = false;
 
 import type { ComponentProps } from "astro/types";
 import type { CollectionEntry } from "astro:content";
-import { db, eq, PostView, sql } from "astro:db";
+import { db, eq, post_view, sql } from "astro:db";
 
 import Number from "#/components/ui/number.astro";
 
@@ -11,10 +11,10 @@ type Props = Omit<ComponentProps<typeof Number>, "value"> & Pick<CollectionEntry
 
 const { id, ...props } = Astro.props;
 const views = await db
-  .update(PostView)
-  .set({ views: sql`${PostView.views} + 1` })
-  .where(eq(PostView.post, id))
-  .returning({ views: PostView.views })
+  .update(post_view)
+  .set({ views: sql`${post_view.views} + 1` })
+  .where(eq(post_view.post, id))
+  .returning({ views: post_view.views })
   .get()
   .then((res) => res.views ?? 0)
   .catch(() => 0);

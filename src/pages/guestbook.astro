@@ -21,8 +21,6 @@ const entries = await db.select().from(guestbook).orderBy(desc(guestbook.publish
   <section class="space-y-4 py-8 text-base">
     <Text as="h1" size="2xl" class="font-8bit font-bold">Guestbook 🖋️</Text>
 
-    <!-- Form -->
-
     <form id="🚁" method="POST" action={actions.addEntry} class="inline-flex gap-3">
       <Input type="text" name="name" placeholder="Your name" required />
       <Input type="text" name="message" placeholder="Write something nice..." required />

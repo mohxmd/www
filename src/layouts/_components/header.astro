@@ -17,36 +17,28 @@ const currentPath = Astro.url.pathname;
     <span class="gradient-text">Mohammed's Blog</span>
   </Link>
 
-  <nav
-    class="flex flex-wrap items-center justify-center gap-3 font-mono print:hidden"
-  >
-    <div class="flex items-center gap-1 text-xs">
-      <span class="text-green-600 dark:text-green-400">></span>
+  <nav class="flex items-center font-mono print:hidden">
+    <div class="flex items-center justify-center gap-3">
+      <span class="text-xs text-green-600 dark:text-green-400">></span>
+
+      <List.Root class="flex flex-row flex-wrap items-center gap-2">
+        {
+          siteConfig.navLinks.map((link, i) => (
+            <>
+              <List.ItemLink
+                href={link.href}
+                class={currentPath === link.href ? "text-link" : "text-link hover:text-link-hover"}
+              >
+                {link.label}
+              </List.ItemLink>
+
+              {i < siteConfig.navLinks.length - 1 && <span class="text-foreground">|</span>}
+            </>
+          ))
+        }
+      </List.Root>
+
+      <Theme />
     </div>
-
-    <List.Root class="flex flex-row items-center gap-2">
-      {
-        siteConfig.navLinks.map((link, i) => (
-          <>
-            <List.ItemLink
-              href={link.href}
-              class={
-                currentPath === link.href
-                  ? "text-link"
-                  : "text-link hover:text-link-hover"
-              }
-            >
-              {link.label}
-            </List.ItemLink>
-
-            {i < siteConfig.navLinks.length - 1 && (
-              <span class="text-foreground">|</span>
-            )}
-          </>
-        ))
-      }
-    </List.Root>
-
-    <Theme />
   </nav>
 </header>

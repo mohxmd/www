@@ -13,6 +13,7 @@ export const siteConfig = {
     { label: "Projects", href: "/projects" },
     { label: "About", href: "/about" },
     { label: "Donate", href: "/donate" },
+    // { label: "Guestbook", href: "/guestbook" },
   ],
 
   contacts: [

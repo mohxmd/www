@@ -8,6 +8,7 @@ import Cd from "#/components/ui/cd.astro";
 import BaseHead, { type Metadata } from "./_components/base-head.astro";
 import Header from "./_components/header.astro";
 import Footer from "./_components/footer.astro";
+import ToTop from "#/components/ui/to-top.astro";
 
 type Props = HTMLAttributes<"main"> & {
   metadata?: Metadata;
@@ -28,7 +29,8 @@ const { metadata = {}, class: className, ...props } = Astro.props;
       </main>
       {Astro.url.pathname !== "/" && <Cd />}
       <Footer />
-      {Astro.url.pathname !== "/blog/*" && <ArtPlum />}
+      {!Astro.url.pathname.startsWith("/blog/") && <ArtPlum />}
+      <ToTop />
       <Toast.Root position="bottom-right" />
     </div>
   </body>

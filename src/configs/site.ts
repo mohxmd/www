@@ -17,8 +17,8 @@ export const siteConfig = {
   ],
 
   contacts: [
-    { icon: "mail", text: "hi@mohammedsh.com", href: "mailto:hi@mohammedsh.com" },
-    { icon: "send", text: "@mhdZhHan", href: "https://t.me/mhdZhHan" },
+    { icon: "mail", text: "hello@mohammedsh.com", href: "mailto:hello@mohammedsh.xyz" },
+    { icon: "send", text: "@mohxmdsh", href: "https://t.me/mohxmdsh" },
     {
       icon: "at-sign",
       text: "@mohxmd@mstdn.social",

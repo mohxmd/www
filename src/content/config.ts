@@ -49,7 +49,7 @@ const projectSchema = z.object({
 });
 
 const REPO_NAMES = [
-  "oryft",
+  "mohx-cli",
   "breeze-graphql-starter",
   "sass-kit",
   "honobox",

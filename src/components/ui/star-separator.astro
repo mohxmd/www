@@ -7,7 +7,7 @@ const separatorVariants = cva(
     "flex items-center justify-center",
     "h-auto border-0 bg-transparent",
     "text-center relative",
-    "font-mono text-[0.875em] tracking-[0.25em]",
+    "font-mono tracking-wide",
     "text-slate-500 dark:text-slate-400",
   ],
   {
@@ -16,33 +16,24 @@ const separatorVariants = cva(
         stars: "before:content-['***']",
         dots: "before:content-['•••']",
         dashes: "before:content-['---']",
-        asterisks: "before:content-['*_*_*'] before:tracking-[1em]",
+        asterisks: "before:content-['*_*_*'] before:tracking-widest",
+      },
+      size: {
+        sm: "text-fluid-sm",
+        base: "text-fluid-base",
+        lg: "text-fluid-lg",
       },
     },
     defaultVariants: {
-      variant: "stars",
+      variant: "asterisks",
+      size: "base",
     },
   }
 );
 
 export type StarSeparatorVariants = VariantProps<typeof separatorVariants>;
-
 type Props = HTMLAttributes<"div"> & StarSeparatorVariants;
-
-const { class: className, variant, ...props } = Astro.props;
+const { class: className, variant, size, ...props } = Astro.props;
 ---
 
-<div {...props} role="separator" class={separatorVariants({ variant, className })}></div>
-
-<style>
-  div[role="separator"] {
-    --mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
-    --text-tertiary: rgb(107 114 128);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    div[role="separator"] {
-      --text-tertiary: rgb(156 163 175);
-    }
-  }
-</style>
+<div {...props} role="separator" class={separatorVariants({ variant, size, className })}></div>

@@ -1,26 +1,56 @@
 ---
-import type { HTMLAttributes } from "astro/types";
-import { cn } from "#/lib/utils";
+import Icon from "#/components/ui/icon.astro";
+import * as Alert from "#/components/ui/alert";
 
-import Icon from "./icon.astro";
+type AlertVariant = Alert.AlertVariants["variant"];
 
-type Props = HTMLAttributes<"aside">;
+let raw = "";
+if (Astro.slots.has("default")) {
+  raw = await Astro.slots.render("default");
+}
 
-const { class: className, id, ...props } = Astro.props;
-const idFallback = crypto.randomUUID();
+const plain = raw
+  .replace(/<[^>]*>/g, " ")
+  .replace(/\s+/g, " ")
+  .trim();
+
+let variant: AlertVariant = "info";
+let icon = "info";
+let title = "";
+let message = raw;
+
+const rules = [
+  { key: "success", variant: "success" as AlertVariant, icon: "check-circle" },
+  { key: "error", variant: "error" as AlertVariant, icon: "flame" },
+  { key: "warning", variant: "warning" as AlertVariant, icon: "alert-octagon" },
+  { key: "info", variant: "info" as AlertVariant, icon: "info" },
+  { key: "tip", variant: "info" as AlertVariant, icon: "coffee" },
+  { key: "fact", variant: "info" as AlertVariant, icon: "sparkles" },
+];
+
+for (const r of rules) {
+  const regex = new RegExp(`\\b${r.key}\\s*[:\\-]\\s*`, "i");
+  if (regex.test(plain)) {
+    variant = r.variant;
+    icon = r.icon;
+    title = r.key.charAt(0).toUpperCase() + r.key.slice(1);
+    message = raw.replace(regex, "").trim();
+    break;
+  }
+}
+
+const inferredRole = variant === "error" || variant === "warning" ? "alert" : "status";
 ---
 
-<aside
-  {...props}
-  aria-labelledby={id ?? idFallback}
-  class={cn(
-    "bg-accent text-accent-foreground flex items-start gap-2 rounded px-4 py-2.5",
-    "border-accent border-l-8 **:text-xs",
-    className
-  )}
->
-  <p id={id ?? idFallback} aria-label="Note">
-    <Icon name="info" class="translate-y-0.5" />
-  </p>
-  <section><slot /></section>
-</aside>
+<blockquote class="not-prose" aria-label={title || "Note"}>
+  <Alert.Root variant={variant} role={inferredRole}>
+    <Alert.Title>
+      <Icon name={icon} />
+      <span>{title}</span>
+    </Alert.Title>
+
+    <Alert.Description>
+      <Fragment set:html={message} />
+    </Alert.Description>
+  </Alert.Root>
+</blockquote>

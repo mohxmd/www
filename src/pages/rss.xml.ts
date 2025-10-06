@@ -9,7 +9,8 @@ export async function GET(context: APIContext) {
     stylesheet: "/rss/styles.xsl",
     title: "Mohammed's Blog",
     trailingSlash: false,
-    description: "Tech enthusiast sharing coding tips and tech insights. Join the coding journey!",
+    description:
+      "Typing dreams into reality — FOSS, Linux, and late-night commits under the moonlight.",
     site: String(context.site),
     items: posts.map((post) => ({
       title: post.data.title,

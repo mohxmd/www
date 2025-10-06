@@ -123,7 +123,6 @@
     if (container) {
       const mask = "radial-gradient(circle, transparent, black)";
       container.style.maskImage = mask;
-      container.style.webkitMaskImage = mask;
     }
   };
 
@@ -135,7 +134,7 @@
     updateMask();
   };
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     canvas = document.getElementById("tree-canvas") as HTMLCanvasElement;
     if (!canvas) return;
 

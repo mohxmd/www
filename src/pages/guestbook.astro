@@ -19,11 +19,14 @@ const entries = await db.select().from(guestbook).orderBy(desc(guestbook.publish
 
 <Layout title="Mohammed's blog | Guestbook">
   <section class="space-y-4 py-8 text-base">
-    <Text as="h1" size="2xl" class="font-8bit font-bold">Guestbook 🖋️</Text>
+    <div>
+      <Text as="h1" size="fluid-2xl" class="font-8bit font-bold" variant="muted">Guestbook 🖋️</Text>
+      <Text class="text-muted-foreground">Every visitor has a story — what’s yours?</Text>
+    </div>
 
-    <form id="🚁" method="POST" action={actions.addEntry} class="inline-flex gap-3">
-      <Input type="text" name="name" placeholder="Your name" required />
-      <Input type="text" name="message" placeholder="Write something nice..." required />
+    <form id="🚁" method="POST" action={actions.addEntry} class="flex flex-col gap-3 md:flex-row">
+      <Input type="text" name="name" placeholder="Name" required class="flex-1" />
+      <Input type="text" name="message" placeholder="Note" required class="flex-3" />
       <Button type="submit" class="rounded-sm" variant="secondary">Sign</Button>
     </form>
 
@@ -33,10 +36,14 @@ const entries = await db.select().from(guestbook).orderBy(desc(guestbook.publish
           entries.map((entry) => (
             <List.Item class="flex items-center justify-between">
               <div class="flex gap-2">
-                <Text class="font-medium capitalize">{entry.name}:</Text>
-                <Text class="text-muted-foreground">{entry.message}</Text>
+                <Text size="fluid-base" class="font-medium whitespace-nowrap capitalize">
+                  {entry.name}:
+                </Text>
+                <Text size="fluid-base" class="text-muted-foreground">
+                  {entry.message}
+                </Text>
               </div>
-              <Text class="text-muted-foreground text-sm whitespace-nowrap">
+              <Text size="fluid-base" class="text-muted-foreground text-sm whitespace-nowrap">
                 {formatDate(entry.published!)}
               </Text>
             </List.Item>

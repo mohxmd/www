@@ -88,24 +88,38 @@ const publishDate = pubDate.toLocaleString();
 
     <div
       class:list={[
-        "w-full space-y-4 font-sans text-lg text-current/80",
-        // Heading styles
-        "[&_h1]:mt-0 [&_h1]:mb-6 [&_h1]:text-4xl [&_h1]:font-bold",
-        "[&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:text-3xl [&_h2]:font-bold",
-        "[&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-2xl [&_h3]:font-bold",
-        "[&_h4]:mt-4 [&_h4]:mb-2 [&_h4]:text-xl [&_h4]:font-bold",
-        "[&_h5]:mt-3 [&_h5]:mb-2 [&_h5]:text-lg [&_h5]:font-bold",
-        "[&_h6]:mt-2 [&_h6]:mb-2 [&_h6]:text-base [&_h6]:font-bold",
+        // Base text with fluid sizing
+        "w-full space-y-4 font-sans text-[clamp(0.875rem,2.5vw,1.125rem)] leading-relaxed text-current/80 md:space-y-6",
+
+        // Heading styles - fluid typography
+        "[&_h1]:text-[clamp(1.5rem,5vw,2.25rem)] [&_h1]:font-bold",
+        "[&_h2]:text-[clamp(1.25rem,4vw,1.875rem)] [&_h2]:font-bold",
+        "[&_h3]:text-[clamp(1.125rem,3vw,1.5rem)] [&_h3]:font-bold",
+        "[&_h4]:text-[clamp(1rem,2.5vw,1.25rem)] [&_h4]:font-bold",
+        "[&_h5]:text-[clamp(0.938rem,2vw,1.125rem)] [&_h5]:font-bold",
+        "[&_h6]:text-[clamp(0.875rem,1.5vw,1rem)] [&_h6]:font-bold",
+
         // List styles
         "[&_:where(ol,ul)]:list-inside [&_:where(ol,ul)]:space-y-2",
         "[&_ol]:list-decimal [&_ul]:list-disc",
+
         // Fix p tags in list items - make them inline
         "[&_li>p]:m-0 [&_li>p]:inline",
         "[&_li>p+p]:mt-4 [&_li>p+p]:block",
-        // Inline code
+
+        // Image styles
+        "[&>img]:rounded-xl",
+        "[&>img]:shadow-md",
+        "[&>img]:my-6",
+        "[&>img]:mx-auto",
+        "[&>img]:max-w-full",
+        "[&>img]:h-auto",
+
+        // Inline code with
         "[&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:relative [&_:not(pre)>code]:rounded",
         "[&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-0.5",
-        "[&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-sm [&_:not(pre)>code]:font-normal",
+        "[&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-[clamp(0.75rem,1.5vw,0.875rem)] [&_:not(pre)>code]:font-normal",
+
         // Dark mode inline code
         "dark:[&_:not(pre)>code]:bg-muted/50",
       ]}

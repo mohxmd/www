@@ -5,31 +5,33 @@ import Text from "#/components/ui/text.astro";
 ---
 
 <Layout title="Mohammed's blog | About">
-  <section class="text-muted-foreground flex flex-col gap-4 py-8 text-base">
-    <Text as="h1" size="3xl" class="font-8bit text-center font-bold">🧑‍🚀 About Me !</Text>
+  <section class="flex flex-col gap-4 py-8 text-base">
+    <Text as="h1" size="3xl" variant="muted" class="font-8bit text-center font-bold"
+      >🧑‍🚀 About Me !</Text
+    >
 
     <!-- About Content -->
     <div class="font-syne-mono space-y-6 font-semibold">
       <Text as="h2" class="mt-3 mb-7 font-bold" size="lg">Hey there! 👋 I'm Mohammed, </Text>
 
-      <p>
+      <Text>
         A tech-savvy teen who loves to create and explore the world of programming. I was born on
         21st March 2003, making me a 21st-century kid! 🎉
-      </p>
-      <p>
+      </Text>
+      <Text>
         I started my programming journey at the age of 15 back in 2018, and since then, I've been
         passionately tinkering with code and building exciting projects.
-      </p>
-      <p>
+      </Text>
+      <Text>
         I'm a full-stack developer and open-source enthusiast, embracing the collaborative nature of
         programming and the freedom to hack software to fit our needs. I support Free Software, Open
         Knowledge & Sharing.
-      </p>
-      <p>
+      </Text>
+      <Text>
         I'm currently based in Kerala, India, and I speak both Malayalam (മലയാളം) and English.
         Though I might not be a beginner anymore, I'm constantly exploring and learning new
         technologies to further improve my skills.
-      </p>
+      </Text>
     </div>
 
     <!-- Contact Section -->
@@ -83,7 +85,7 @@ import Text from "#/components/ui/text.astro";
       </form>
 
       <!-- Telegram -->
-      <p class="via-telegram my-4">
+      <Text class="my-4">
         For the quickest response, reach me on Telegram
         <Link
           href="https://t.me/mohxmd"
@@ -93,14 +95,14 @@ import Text from "#/components/ui/text.astro";
         >
           @mohxmd
         </Link>
-      </p>
+      </Text>
 
-      <p>
+      <Text>
         Thanks for stopping by, and feel free to explore my projects and share your tech journey
         with me!
-      </p>
+      </Text>
 
-      <p>Happy coding! 🚀</p>
+      <Text>Happy coding! 🚀</Text>
     </div>
   </section>
 </Layout>

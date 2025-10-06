@@ -16,8 +16,10 @@ const projects = await getCollection("projects");
   }}
 >
   <section class="font-syne-mono space-y-6 py-6">
-    <Text as="h1" size="3xl" class="font-8bit mb-2 text-center font-bold"> 🛠️ Projects ! </Text>
-    <Text variant="muted" class="text-center font-sans">
+    <Text as="h1" size="3xl" variant="muted" class="font-8bit mb-2 text-center font-bold">
+      🛠️ Projects !
+    </Text>
+    <Text class="text-muted-foreground text-center font-sans">
       Showcase of my selected projects over the years.
     </Text>
 
@@ -26,11 +28,11 @@ const projects = await getCollection("projects");
     </div>
 
     <div class="font-syne-mono text-muted-foreground space-y-3">
-      <p>
+      <Text>
         These are just a few examples of the projects I've enjoyed working on. Each one has taught
         me something valuable and contributed to my growth as a developer.
-      </p>
-      <p>
+      </Text>
+      <Text>
         Feel free to explore them on
         <Link href="https://github.com/mhdZhHan" class="text-link hover:text-link-hover">
           Github
@@ -41,7 +43,7 @@ const projects = await getCollection("projects");
         </Link>, and if you have any questions or feedback, I'd love to hear from you!
         <br />
         Happy coding! 🚀💻
-      </p>
+      </Text>
     </div>
   </section>
 </Layout>

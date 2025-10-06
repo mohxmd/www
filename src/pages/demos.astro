@@ -6,6 +6,8 @@ import * as Tooltip from "#/components/ui/tooltip";
 import * as Tabs from "#/components/ui/tabs";
 import * as Table from "#/components/ui/table";
 import * as Dialog from "#/components/ui/dialog";
+import * as Alert from "#/components/ui/alert";
+import Icon from "#/components/ui/icon.astro";
 ---
 
 <Layout title="Mohammed's blog | Demos">
@@ -328,6 +330,24 @@ import * as Dialog from "#/components/ui/dialog";
           </Table.Root>
         </div>
       </div>
+    </section>
+
+    <section class="space-y-6">
+      <h1 class="text-3xl font-bold">Alert Demo</h1>
+
+      <Alert.Root variant="success">
+        <Alert.Title>
+          <Icon name="check-circle" />
+          Success!
+        </Alert.Title>
+        <Alert.Description> Your changes have been saved successfully. </Alert.Description>
+      </Alert.Root>
+
+      <!-- Error alert -->
+      <Alert.Root variant="error">
+        <Alert.Title>Error</Alert.Title>
+        <Alert.Description>Something went wrong.</Alert.Description>
+      </Alert.Root>
     </section>
 
     <!-- Toast Component Demo -->

@@ -15,7 +15,7 @@ const posts = (await getSortedPosts()).slice(0, 6);
 ---
 
 <section class:list={[className, "print:hidden"]}>
-  <Text as="h1" size="2xl" class="font-8bit mb-3">Recent posts</Text>
+  <Text as="h1" size="fluid-2xl" class="font-8bit mb-3">Recent posts</Text>
 
   <div class="no-scrollbar flex gap-3 overflow-x-auto pb-2">
     {

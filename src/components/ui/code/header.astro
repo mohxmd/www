@@ -10,7 +10,7 @@ const { class: className, ...props } = Astro.props;
 
 <figcaption
   {...props}
-  class={cn("bg-muted text-muted-foreground border-b px-3 py-1.5 text-sm", className)}
+  class={cn("bg-muted text-muted-foreground text-fluid-sm border-b px-3 py-1.5", className)}
 >
   <slot />
 </figcaption>

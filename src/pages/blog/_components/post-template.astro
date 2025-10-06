@@ -31,19 +31,19 @@ const totalViews = views?.totalViews ?? 0;
     description: "Explore the Cosmos of Ideas! Latest Blog Posts",
   }}
 >
-  <section class="text-muted-foreground space-y-4 py-6 font-sans">
+  <section class="space-y-4 py-6 font-sans">
     <div class="w-full space-y-3 text-center">
       <Text as="h1" class="font-8bit font-bold" size="3xl" variant="muted"
         >🧑‍🚀 Latest Blog Posts !</Text
       >
-      <p>Explore the Cosmos of Ideas! Latest Blog Posts</p>
+      <Text class="text-muted-foreground">Explore the Cosmos of Ideas! Latest Blog Posts</Text>
 
       <div class="text-foreground mt-6 flex items-center gap-4">
-        <Text as="h1" size="2xl" class="font-bold uppercase">ALL Posts</Text>
+        <Text as="h1" size="fluid-2xl" class="font-bold uppercase">ALL Posts</Text>
 
         <Separator class="flex-1" />
 
-        <div class="flex items-center text-sm">
+        <div class="text-fluid-sm flex items-center">
           <Number value={+totalViews}> Views</Number>
           <Icon name="dot" class="shrink-0" size="sm" aria-hidden />
           <span>{total} Posts</span>

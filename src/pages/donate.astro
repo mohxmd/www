@@ -6,34 +6,35 @@ import * as List from "#/components/ui/list";
 ---
 
 <Layout title="Mohammed's blog | Donate">
-  <section class="text-muted-foreground flex flex-col gap-4 py-8 text-base">
-    <Text as="h1" size="3xl" class="font-8bit text-center font-bold">💰 Donate</Text>
+  <section class="flex flex-col gap-4 py-8 text-base">
+    <Text as="h1" size="3xl" variant="muted" class="font-8bit text-center font-bold">💰 Donate</Text
+    >
 
     <!-- Intro -->
     <div class="font-syne-mono space-y-6 font-semibold">
-      <p>
+      <Text>
         To keep my site and projects up and running, there are costs. As a full-time college
         student, I work on projects in my free time.
-      </p>
-      <p>
+      </Text>
+      <Text>
         So, please consider a donation for my future projects and the maintenance of all my sites &
         projects.
-      </p>
-      <p>
+      </Text>
+      <Text>
         If you would like to mention your website or a message to display on this page, please send
         them to me after donation. Every donation will be publicly mentioned here, if you’d like not
         to, please do contact after.
-      </p>
+      </Text>
     </div>
 
     <!-- Instructions -->
     <div class="font-syne-mono space-y-6">
       <h3 class="text-lg font-semibold">How to donate</h3>
-      <p>
+      <Text>
         Thank you for considering a donation! Your support means a lot to me and helps me continue
         my work in the tech world.
-      </p>
-      <p>You can donate via one of the following methods:</p>
+      </Text>
+      <Text>You can donate via one of the following methods:</Text>
 
       <List.Root class="font-syne-mono space-y-4 pl-6">
         <!-- UPI -->
@@ -56,20 +57,17 @@ import * as List from "#/components/ui/list";
         </List.Item>
 
         <!-- Buy Me a Coffee -->
-        <List.Item>
-          <a
-            href="https://www.buymeacoffee.com/mohammedsh"
-            target="_blank"
-            aria-label="Buy me a coffee"
-            class="inline-block"
-          >
-            <img
-              src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png"
-              alt="Buy Me A Coffee"
-              class="h-14 w-[217px]"
-            />
-          </a>
-        </List.Item>
+        <List.ItemLink
+          href="https://www.buymeacoffee.com/mohammedsh"
+          target="_blank"
+          aria-label="Buy me a coffee"
+        >
+          <img
+            src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png"
+            alt="Buy Me A Coffee"
+            class="h-14 w-[217px]"
+          />
+        </List.ItemLink>
       </List.Root>
 
       <p>Your contribution is greatly appreciated! 😊</p>

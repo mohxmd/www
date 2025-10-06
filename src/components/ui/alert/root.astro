@@ -1,0 +1,40 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "#/lib/utils";
+
+type Props = HTMLAttributes<"div"> & AlertVariants;
+
+export type AlertVariants = VariantProps<typeof alertVariants>;
+
+export const alertVariants = cva("text-foreground relative w-full rounded-lg border px-4 py-3", {
+  variants: {
+    variant: {
+      default: "bg-background dark:bg-input/30 [&>h5>svg]:text-foreground",
+      primary: "border-primary bg-primary/7 [&>h5>svg]:text-primary",
+      secondary: "border-secondary bg-secondary/7 [&>h5>svg]:text-secondary",
+      info: "border-info bg-info/7 [&>h5>svg]:text-info",
+      success: "border-success bg-success/7 [&>h5>svg]:text-success",
+      warning: "border-warn bg-warn/7 [&>h5>svg]:text-warn",
+      error: "border-destructive bg-destructive/7 [&>h5>svg]:text-destructive",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
+const { variant, class: className, ...rest } = Astro.props;
+
+const inferredRole =
+  rest.role ?? (variant === "error" || variant === "warning" ? "alert" : "status");
+---
+
+<div
+  class={cn(alertVariants({ variant }), className)}
+  data-slot="alert"
+  role={inferredRole}
+  {...rest}
+>
+  <slot />
+</div>

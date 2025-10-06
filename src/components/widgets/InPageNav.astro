@@ -100,14 +100,11 @@ const { routes, defaultActiveIndex = 0 } = Astro.props;
 
 <script>
   document.addEventListener("astro:page-load", () => {
-    const navContainers =
-      document.querySelectorAll<HTMLElement>(".tabs-container");
+    const navContainers = document.querySelectorAll<HTMLElement>(".tabs-container");
 
     navContainers.forEach((container) => {
-      const tabButtons =
-        container.querySelectorAll<HTMLButtonElement>(".tab-button");
-      const tabContents =
-        container.querySelectorAll<HTMLElement>(".tab-content > *");
+      const tabButtons = container.querySelectorAll<HTMLButtonElement>(".tab-button");
+      const tabContents = container.querySelectorAll<HTMLElement>(".tab-content > *");
 
       function setActiveTab(index: number) {
         tabButtons.forEach((button, i) => {

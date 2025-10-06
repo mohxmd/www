@@ -17,8 +17,6 @@ import Icon from "./icon.astro";
 <script>
   import { handleToggleClick } from "astro-theme-toggle";
   const handle = () =>
-    document
-      .getElementById("theme")
-      ?.addEventListener("click", handleToggleClick);
+    document.getElementById("theme")?.addEventListener("click", handleToggleClick);
   (handle(), document.addEventListener("astro:after-swap", handle));
 </script>

@@ -29,9 +29,7 @@ const StateContext = createContext({
 // ContextProvider component encapsulates the user authentication state
 export const ContextProvider = ({ children }) => {
   // Initialize user data state using local storage
-  const [userData, setUserData] = useState(
-    JSON.parse(localStorage.getItem("user_data")),
-  );
+  const [userData, setUserData] = useState(JSON.parse(localStorage.getItem("user_data")));
 
   // Function to update user data based on action type
   const updateUserData = (action) => {
@@ -56,9 +54,7 @@ export const ContextProvider = ({ children }) => {
 
   // Provide the user authentication state to child components
   return (
-    <StateContext.Provider value={{ userData, updateUserData }}>
-      {children}
-    </StateContext.Provider>
+    <StateContext.Provider value={{ userData, updateUserData }}>{children}</StateContext.Provider>
   );
 };
 

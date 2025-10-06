@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 window.addEventListener("DOMContentLoaded", () => {
   if (process.env.NODE_ENV === "production") {
     console.clear();
@@ -19,6 +20,6 @@ window.addEventListener("DOMContentLoaded", () => {
                                                                                                                                            "Y88P"  
           
               `,
-    "font-family:monospace; color: #DB2251;",
+    "font-family:monospace; color: #DB2251;"
   );
 });

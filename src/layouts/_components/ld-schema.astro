@@ -9,15 +9,7 @@ type Props = {
   modifiedDate?: string;
 };
 
-const {
-  type,
-  title,
-  description,
-  pageUrl,
-  ogImageUrl,
-  publishDate,
-  modifiedDate,
-} = Astro.props;
+const { type, title, description, pageUrl, ogImageUrl, publishDate, modifiedDate } = Astro.props;
 
 const baseMetadata = {
   "@context": "https://schema.org",
@@ -66,4 +58,4 @@ const webPageSchema = {
 const structuredData = type === "blog" ? blogPostingSchema : webPageSchema;
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+<script type="application/ld+json" set:text={JSON.stringify(structuredData)} />

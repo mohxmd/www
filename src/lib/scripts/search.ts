@@ -11,10 +11,7 @@ interface Post {
 }
 
 document.addEventListener("astro:page-load", () => {
-  const executeSearch = async (
-    search: string,
-    activeTags: string[]
-  ): Promise<Post[]> => {
+  const executeSearch = async (search: string, activeTags: string[]): Promise<Post[]> => {
     const searchQuery = search.toLowerCase().trim();
 
     const response = await fetch("/api/blog/search.json");
@@ -25,8 +22,7 @@ document.addEventListener("astro:page-load", () => {
         (searchQuery === "" ||
           post.title.toLowerCase().includes(searchQuery) ||
           post.description.toLowerCase().includes(searchQuery)) &&
-        (activeTags.length === 0 ||
-          activeTags.some((tag) => post.tags.includes(tag)));
+        (activeTags.length === 0 || activeTags.some((tag) => post.tags.includes(tag)));
 
       return isVisible;
     });
@@ -38,18 +34,10 @@ document.addEventListener("astro:page-load", () => {
     return filteredPosts;
   };
 
-  const searchFilter = document.querySelector(
-    "[data-post-filter-search]"
-  ) as HTMLInputElement;
-  const tagsFilter = document.querySelector(
-    "[data-post-filter-tags]"
-  ) as HTMLElement;
-  const staticPosts = document.querySelector(
-    "[data-static-posts]"
-  ) as HTMLElement;
-  const searchedPosts = document.querySelector(
-    "[data-searched-posts]"
-  ) as HTMLElement;
+  const searchFilter = document.querySelector("[data-post-filter-search]") as HTMLInputElement;
+  const tagsFilter = document.querySelector("[data-post-filter-tags]") as HTMLElement;
+  const staticPosts = document.querySelector("[data-static-posts]") as HTMLElement;
+  const searchedPosts = document.querySelector("[data-searched-posts]") as HTMLElement;
 
   const activeTags: string[] = [];
 
@@ -72,10 +60,7 @@ document.addEventListener("astro:page-load", () => {
   });
 
   async function requestSearch(): Promise<void> {
-    const payload = await executeSearch(
-      searchFilter.value,
-      Array.from(activeTags)
-    );
+    const payload = await executeSearch(searchFilter.value, Array.from(activeTags));
 
     searchedPosts.innerHTML = "";
 

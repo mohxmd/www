@@ -15,7 +15,7 @@ export function readingTime(
   options: {
     wordsPerMinute?: number;
     wordBound?: (char: string) => boolean;
-  } = {},
+  } = {}
 ): ReadingTimeResult {
   const { wordsPerMinute = 200, wordBound = isAnsiWordBound } = options;
   let words = 0;
@@ -35,10 +35,7 @@ export function readingTime(
 
     if (
       (current && isCJK(current)) ||
-      (current &&
-        !wordBound(current) &&
-        next &&
-        (wordBound(next) || isCJK(next)))
+      (current && !wordBound(current) && next && (wordBound(next) || isCJK(next)))
     ) {
       words++;
     }

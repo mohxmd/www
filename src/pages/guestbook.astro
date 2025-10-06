@@ -12,6 +12,7 @@ import * as List from "#/components/ui/list";
 import Date from "#/components/ui/date.astro";
 
 const result = Astro.getActionResult(actions.addEntry);
+// eslint-disable-next-line no-console
 if (result?.error) console.error(result.error);
 
 const entries = await db.select().from(guestbook).orderBy(desc(guestbook.published));

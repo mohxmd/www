@@ -1,6 +1,7 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import Clipboard from "../clipboard.astro";
+import { cn } from "#/lib/utils";
 
 type Props = HTMLAttributes<"pre">;
 
@@ -12,4 +13,8 @@ const { class: className, dir = "ltr", tabindex, ...props } = Astro.props;
   class="absolute top-0 right-0"
   value="$el.nextElementSibling.textContent.trim()"
 />
-<pre {...props} {dir} class="thin-scrollbar overflow-auto p-3.5"><slot /></pre>
+<pre
+  {...props}
+  {dir}
+  {tabindex}
+  class={cn("thin-scrollbar overflow-auto p-3.5", className)}><slot /></pre>

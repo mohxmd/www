@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 
@@ -36,17 +37,12 @@ function createBlogPost(title: string) {
 
   // Check if the file already exists
   if (existsSync(filepath)) {
-    console.error(
-      `Error: File "${filename}" already exists. Please use a different title.`,
-    );
+    console.error(`Error: File "${filename}" already exists. Please use a different title.`);
     process.exit(1);
   }
 
   // Define the frontmatter data based on the BlogPost type
-  const frontmatter: Omit<
-    BlogSchema,
-    "pubDate" | "updatedDate" | "image" | "repo"
-  > & {
+  const frontmatter: Omit<BlogSchema, "pubDate" | "updatedDate" | "image" | "repo"> & {
     pubDate: string;
     updatedDate?: string;
   } = {

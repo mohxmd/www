@@ -20,16 +20,10 @@ export function toText(value?: unknown, options: Options = {}): string {
   return processNode(value, includeImageAlt, includeHtml);
 }
 
-function processNode(
-  value: unknown,
-  includeImageAlt: boolean,
-  includeHtml: boolean,
-): string {
+function processNode(value: unknown, includeImageAlt: boolean, includeHtml: boolean): string {
   if (isNode(value)) {
     if ("value" in value) {
-      return value.type === "html" && !includeHtml
-        ? ""
-        : (value.value as string);
+      return value.type === "html" && !includeHtml ? "" : (value.value as string);
     }
 
     if (includeImageAlt && "alt" in value && value.alt) {
@@ -48,14 +42,8 @@ function processNode(
   return "";
 }
 
-function processArray(
-  values: unknown[],
-  includeImageAlt: boolean,
-  includeHtml: boolean,
-): string {
-  return values
-    .map((value) => processNode(value, includeImageAlt, includeHtml))
-    .join("");
+function processArray(values: unknown[], includeImageAlt: boolean, includeHtml: boolean): string {
+  return values.map((value) => processNode(value, includeImageAlt, includeHtml)).join("");
 }
 
 function isNode(value: unknown): value is NodeLike {

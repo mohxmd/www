@@ -33,12 +33,12 @@ const posts = (await getSortedPosts()).slice(0, 6);
           />
 
           <div class="h-20 p-3">
-            <div class="text-muted-foreground mb-2 flex items-center gap-2 font-mono text-xs">
+            <div class="text-muted-foreground text-fluid-xs mb-2 flex items-center gap-2 font-mono">
               <span class="text-yellow-600 dark:text-yellow-400">*</span>
               <span>[{String(index + 1).padStart(2, "0")}]</span>
             </div>
 
-            <Text class="line-clamp-2 font-mono leading-tight font-bold" size="sm">
+            <Text class="line-clamp-2 font-mono leading-tight font-bold" size="fluid-sm">
               {post.data.title}
             </Text>
           </div>
@@ -49,7 +49,7 @@ const posts = (await getSortedPosts()).slice(0, 6);
     <!-- View all link -->
     <Link
       href="/blog"
-      class="bg-card text-link hover:text-link-hover relative flex w-52 flex-none items-center justify-center border font-mono text-sm"
+      class="bg-card text-link hover:text-link-hover text-fluid-sm relative flex w-52 flex-none items-center justify-center border font-mono"
     >
       <div class="text-center">
         <div class="mb-2">

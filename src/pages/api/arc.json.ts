@@ -1,7 +1,9 @@
 import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async () => {
-  const now = {
+  const arc = {
+    title: "The Balance Arc ⚖️",
+    summary: "Between faith and code, creation finds its rhythm. 🌙",
     bio: "When I was born, the devil said, ‘Oh shit — competition.’ 😏⚔️",
     listening: "Quran 🎧",
     reading: "Latest Demon Slayer manga chapters 📖",
@@ -30,7 +32,7 @@ export const GET: APIRoute = async () => {
     updatedAt: new Date().toISOString(),
   };
 
-  return new Response(JSON.stringify(now, null, 2), {
+  return new Response(JSON.stringify(arc, null, 2), {
     status: 200,
     headers: {
       "Content-Type": "application/json",

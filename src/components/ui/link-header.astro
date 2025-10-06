@@ -15,10 +15,7 @@ const { class: className, id, variant, size, ...props } = Astro.props;
   {id}
   href={`#${id}`}
   size={size ?? "fluid-xl"}
-  class={cn(
-    "text-foreground counter-item font-8bit max-w-max items-start space-x-2 leading-none",
-    className
-  )}
+  class={cn("text-foreground counter-item font-8bit max-w-max items-start space-x-2", className)}
 >
   <h2><slot /></h2>
   <Icon

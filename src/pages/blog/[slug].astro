@@ -48,11 +48,13 @@ const publishDate = pubDate.toLocaleString();
 >
   <article itemscope class="py-6">
     <header class="mb-8 space-y-4">
-      <Text as="h1" size="3xl" class="font-8bit text-center font-bold">
+      <Text as="h1" size="fluid-2xl" class="font-8bit text-center font-bold">
         {title}
       </Text>
 
-      <div class="text-muted-foreground flex flex-wrap items-center justify-center gap-2 text-sm">
+      <div
+        class="text-muted-foreground text-fluid-sm flex flex-wrap items-center justify-center gap-2"
+      >
         <Chip icon="user">Mohammed</Chip>
 
         <Chip icon="calendar">

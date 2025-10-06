@@ -14,9 +14,9 @@ const { icon, title, class: className, contentClass } = Astro.props;
 ---
 
 <div class={cn("bg-secondary", className)}>
-  <div class="bg-muted flex items-center gap-2 p-0.5">
+  <div class="bg-muted flex items-center gap-2 p-1">
     <Icon name={icon} size="sm" class="text-foreground" />
-    <Text class="font-medium" size="sm">{title}</Text>
+    <Text size="fluid-sm">{title}</Text>
   </div>
 
   <div class={cn(contentClass)}>

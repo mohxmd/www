@@ -13,7 +13,7 @@ import Icon from "#/components/ui/icon.astro";
   @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
   x-transition.opacity.duration.500ms
   aria-label="Back to top"
-  class="hover:bg-secondary fixed right-3 bottom-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-transparent transition-all ease-[cubic-bezier(0.4,0,0.2,1)]"
+  class="hover:bg-secondary fixed right-3 bottom-3 hidden size-8 cursor-pointer items-center justify-center rounded-full bg-transparent transition-all ease-[cubic-bezier(0.4,0,0.2,1)] md:flex"
 >
   <Icon name="arrow-up" size="sm" aria-hidden />
 </button>

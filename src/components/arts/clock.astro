@@ -1,0 +1,84 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "#/lib/utils";
+
+type Props = HTMLAttributes<"div">;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div
+  class={cn("relative size-4 rounded-full border", className)}
+  style="border-width: 1.5px;"
+  data-clock
+  {...props}
+>
+  {/* Hour hand */}
+  <div
+    class="absolute z-[1] origin-bottom bg-current"
+    data-hand="hour"
+    style="width: 1px; height: 25%; left: 50%; top: 50%; transform: translateX(-50%) translateY(-100%);"
+  >
+  </div>
+  {/* Minute hand */}
+  <div
+    class="absolute z-[1] origin-bottom bg-current"
+    data-hand="minute"
+    style="width: 1px; height: 35%; left: 50%; top: 50%; transform: translateX(-50%) translateY(-100%);"
+  >
+  </div>
+  {/* Second hand */}
+  <div
+    class="absolute z-10 origin-bottom bg-red-500"
+    data-hand="second"
+    style="width: 0.5px; height: 40%; left: 50%; top: 50%; transform: translateX(-50%) translateY(-100%);"
+  >
+  </div>
+</div>
+
+<script is:inline>
+  function initClock() {
+    const clocks = document.querySelectorAll("[data-clock]");
+
+    clocks.forEach((clock) => {
+      const hourHand = clock.querySelector('[data-hand="hour"]');
+      const minuteHand = clock.querySelector('[data-hand="minute"]');
+      const secondHand = clock.querySelector('[data-hand="second"]');
+
+      if (!hourHand || !minuteHand || !secondHand) return;
+
+      function updateClock() {
+        const now = new Date();
+        const hours = now.getHours() % 12;
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+
+        // Calculate angles (0 degrees at 12 o'clock, rotating clockwise)
+        const hourAngle = hours * 30 + minutes * 0.5; // 30deg/hour + 0.5deg/minute
+        const minuteAngle = minutes * 6; // 6deg/minute
+        const secondAngle = seconds * 6; // 6deg/second
+
+        hourHand.style.transform = `translateX(-50%) translateY(-100%) rotate(${hourAngle}deg)`;
+        minuteHand.style.transform = `translateX(-50%) translateY(-100%) rotate(${minuteAngle}deg)`;
+        secondHand.style.transform = `translateX(-50%) translateY(-100%) rotate(${secondAngle}deg)`;
+      }
+
+      // Initial update
+      updateClock();
+
+      // Update every second
+      const interval = setInterval(updateClock, 1000);
+
+      // Cleanup on page navigation (for View Transitions)
+      document.addEventListener("astro:before-preparation", () => {
+        clearInterval(interval);
+      });
+    });
+  }
+
+  // Initialize on page load
+  initClock();
+
+  // Re-initialize after View Transitions navigation
+  document.addEventListener("astro:page-load", initClock);
+</script>

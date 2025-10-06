@@ -33,10 +33,10 @@ export const GET: APIRoute = async () => {
   };
 
   return new Response(JSON.stringify(arc, null, 2), {
-    status: 200,
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
+      "Content-Disposition": "inline; filename=arc.json",
     },
   });
 };

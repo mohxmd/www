@@ -4,12 +4,12 @@ export const prerender = false;
 import { db, desc, guestbook } from "astro:db";
 import { actions } from "astro:actions";
 import Layout from "#/layouts/layout.astro";
-import { formatDate } from "#/lib/utils";
 
 import Text from "#/components/ui/text.astro";
 import Input from "#/components/ui/input.astro";
 import Button from "#/components/ui/button.astro";
 import * as List from "#/components/ui/list";
+import Date from "#/components/ui/date.astro";
 
 const result = Astro.getActionResult(actions.addEntry);
 if (result?.error) console.error(result.error);
@@ -24,32 +24,50 @@ const entries = await db.select().from(guestbook).orderBy(desc(guestbook.publish
       <Text class="text-muted-foreground">Every visitor has a story — what’s yours?</Text>
     </div>
 
-    <form id="🚁" method="POST" action={actions.addEntry} class="flex flex-col gap-3 md:flex-row">
-      <Input type="text" name="name" placeholder="Name" required class="flex-1" />
-      <Input type="text" name="message" placeholder="Note" required class="flex-3" />
-      <Button type="submit" class="rounded-sm" variant="secondary">Sign</Button>
+    <form
+      x-data="{ name: '', message: '' }"
+      method="POST"
+      action={actions.addEntry}
+      class="border-border bg-card grid grid-cols-1 gap-3 rounded-lg border p-4 md:grid-cols-[1fr_2fr_auto] md:items-start"
+    >
+      <Input type="text" name="name" placeholder="Your Name" x-model="name" required />
+      <Input
+        type="text"
+        name="message"
+        placeholder="Leave a short note…"
+        x-model="message"
+        required
+      />
+
+      <Button
+        :disabled="!name.trim() || !message.trim()"
+        :class="{ 'opacity-50 cursor-not-allowed': !name.trim() || !message.trim() }"
+        type="submit"
+        class="rounded-sm"
+        variant="secondary"
+      >
+        Sign
+      </Button>
     </form>
 
-    <List.Root class="flex flex-col gap-2">
+    <List.Root class="divide-border divide-y rounded-md border">
       {
         entries.length > 0 ? (
           entries.map((entry) => (
-            <List.Item class="flex items-center justify-between">
-              <div class="flex gap-2">
-                <Text size="fluid-base" class="font-medium whitespace-nowrap capitalize">
-                  {entry.name}:
+            <List.Item class="flex items-start justify-between gap-3 p-3">
+              <div class="min-w-0">
+                <Text size="fluid-base" class="truncate font-medium">
+                  {entry.name}
                 </Text>
-                <Text size="fluid-base" class="text-muted-foreground">
+                <Text size="fluid-base" class="text-muted-foreground text-pretty">
                   {entry.message}
                 </Text>
               </div>
-              <Text size="fluid-base" class="text-muted-foreground text-sm whitespace-nowrap">
-                {formatDate(entry.published!)}
-              </Text>
+              <Date value={entry.published} class="text-muted-foreground shrink-0 text-xs" />
             </List.Item>
           ))
         ) : (
-          <List.Item class="text-center italic">
+          <List.Item class="border-border bg-card text-muted-foreground rounded-md border border-dashed p-4 text-center italic">
             No messages yet — be the first to sign the guestbook ✍️
           </List.Item>
         )

@@ -7,7 +7,7 @@ const projects = await getCollection("projects");
 const lastThreeProjects = projects.slice(0, 2);
 ---
 
-<section class="py-6">
+<section>
   <Text as="h1" size="fluid-2xl" class="font-8bit mb-3">Recent Projects</Text>
   <div class="grid gap-4 sm:grid-cols-2">
     {lastThreeProjects.map((project) => <ProjectCard project={project.data} />)}

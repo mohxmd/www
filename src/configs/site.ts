@@ -1,11 +1,8 @@
 export const siteConfig = {
   site: "https://mohammedsh.xyz",
-  title: "Mohammed's blog",
-  description: "Thoughts, code, and a little chaos — Live a life you can be proud of 🚀",
+  title: "Mohx Notes",
   og: "/images/avatar.svg",
   author: "Mohammed",
-  username: "ryugin_001",
-  avatarUrl: "https://images7.alphacoders.com/607/607718.png",
 
   navLinks: [
     { label: "Root", href: "/" },
@@ -39,16 +36,23 @@ export const siteConfig = {
   ],
 
   keywords: [
+    "mohx notes",
+    "MohxNotes",
     "mohammed's blog",
     "mohammedsh",
     "mohammed shajahan",
     "hello world",
     "mhdzhhan",
     "mohxmd",
+    "mohxmdsh",
+    "mohxmd__",
     "mohx",
     "programming",
     "linux",
     "kde",
+    "anime",
+    "manga",
+    "islam",
     "tech",
     "tips",
     "tutorials",

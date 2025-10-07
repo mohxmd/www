@@ -37,6 +37,7 @@ const external = href?.toString().startsWith("https://");
     (icon || external) && "gap-1",
     className
   )}
+  data-astro-prefetch="tap"
 >
   {icon && iconPosition === "left" ? <Icon name={icon} size={iconSize} /> : null}
   <slot />

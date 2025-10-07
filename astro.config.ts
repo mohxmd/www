@@ -30,9 +30,6 @@ export default defineConfig({
   site: "https://mohammedsh.xyz",
   adapter,
   prefetch: true,
-  security: {
-    checkOrigin: true,
-  },
 
   markdown: {
     syntaxHighlight: false,

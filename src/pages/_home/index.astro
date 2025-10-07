@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import Layout from "#/layouts/layout.astro";
 import Callout from "#/components/ui/callout.astro";
-import Masthead from "#/components/ui/masthead.astro";
+import NoteCard from "#/components/ui/note-card.astro";
 
 import RecentPosts from "./_components/recent-posts.astro";
 import RecentProjects from "./_components/recent-projects.astro";
@@ -15,12 +15,12 @@ import Armin from "#/assets/armin.gif";
 import Text from "#/components/ui/text.astro";
 ---
 
-<Layout title="Mohammed's blog">
+<Layout title="Mohammed's blog" class="space-y-6 pt-6">
   <Hero />
   <RecentProjects />
   <RecentPosts />
 
-  <section class="grid auto-rows-fr grid-cols-1 gap-2 py-6 md:grid-cols-2">
+  <section class="grid auto-rows-fr grid-cols-1 gap-2 md:grid-cols-2">
     <Callout title="Get in touch" icon="handshake" contentClass="p-2">
       <Contact />
     </Callout>
@@ -30,11 +30,11 @@ import Text from "#/components/ui/text.astro";
     </Callout>
   </section>
 
-  <section class="pb-6">
-    <Masthead
+  <section>
+    <NoteCard
       title="Beyond the Walls"
       subtitle="Shiganshina District — Year 850"
-      class="font-syne-mono text-fluid-base font-semibold"
+      class="font-syne-mono text-fluid-base"
     >
       <Image src={Armin} alt="Armin Arlert under the sky" class="rounded-xs md:max-w-[500px]" />
 
@@ -51,6 +51,6 @@ import Text from "#/components/ui/text.astro";
         Like Armin staring at the ocean, every project is a reminder that beyond the walls of our
         comfort zone, there’s always a world of possibility.
       </Text>
-    </Masthead>
+    </NoteCard>
   </section>
 </Layout>

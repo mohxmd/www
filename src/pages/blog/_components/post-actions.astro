@@ -1,5 +1,8 @@
 ---
 import Link from "#/components/ui/link.astro";
+
+const pathname = Astro.url.pathname.replace(/\/$/, ""); // remove trailing slash if exists
+const editUrl = `https://github.com/mohxmd/www/tree/main/src/content${pathname}.mdx`;
 ---
 
 <div class="text-fluid-base flex flex-wrap items-center justify-between gap-3">
@@ -15,7 +18,7 @@ import Link from "#/components/ui/link.astro";
   </Link>
 
   <Link
-    href={`https://github.com/mohxmd/www/tree/main/src/content${Astro.url.pathname}.mdx`}
+    href={editUrl}
     icon="file-pen-line"
     iconPosition="right"
     target="_blank"

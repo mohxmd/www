@@ -1,6 +1,16 @@
-function simplifyDate() {}
+/* eslint-disable no-console */
+import { formatDate } from "../utils";
 
-interface Post {
+// Configuration
+const CONFIG = {
+  API_URL: "/blog/blog.json",
+  DEBOUNCE_DELAY: 300,
+  MAX_TITLE_LENGTH: 60,
+  MAX_DESCRIPTION_LENGTH: 80,
+  SEARCH_FIELDS: ["title", "description", "tags"] as const,
+} as const;
+
+type Post = {
   slug: string;
   image?: string;
   title: string;
@@ -8,162 +18,181 @@ interface Post {
   pubDate: string;
   readingTime: number;
   tags: string[];
+};
+
+// Debounce utility
+function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
+  let timeout: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), delay);
+  };
 }
 
-document.addEventListener("astro:page-load", () => {
-  const executeSearch = async (search: string, activeTags: string[]): Promise<Post[]> => {
-    const searchQuery = search.toLowerCase().trim();
+// Truncate text helper
+const truncate = (text: string, max: number) =>
+  text.length > max ? text.substring(0, max) + "..." : text;
 
-    const response = await fetch("/api/blog/search.json");
-    const searchData: Post[] = await response.json();
+// Card update functions
+const updateCard = {
+  links: (el: HTMLElement, slug: string) =>
+    el.querySelectorAll("a").forEach((a) => a.setAttribute("href", `/blog/${slug}`)),
 
-    const filteredPosts = searchData.filter((post) => {
-      const isVisible =
-        (searchQuery === "" ||
-          post.title.toLowerCase().includes(searchQuery) ||
-          post.description.toLowerCase().includes(searchQuery)) &&
-        (activeTags.length === 0 || activeTags.some((tag) => post.tags.includes(tag)));
-
-      return isVisible;
-    });
-
-    if (searchQuery === "" && activeTags.length === 0) {
-      return [];
+  image: (el: HTMLElement, src: string, alt: string) => {
+    const img = el.querySelector("img");
+    if (img) {
+      img.src = src || "";
+      img.alt = alt;
     }
+  },
 
-    return filteredPosts;
+  title: (el: HTMLElement, text: string) => {
+    const link = el.querySelector("h3 a");
+    if (link) link.textContent = truncate(text, CONFIG.MAX_TITLE_LENGTH);
+  },
+
+  description: (el: HTMLElement, text: string) => {
+    const p = el.querySelector("p.text-muted-foreground");
+    if (p) p.textContent = truncate(text, CONFIG.MAX_DESCRIPTION_LENGTH);
+  },
+
+  date: (el: HTMLElement, date: string) => {
+    const span = el.querySelector('[aria-label="calendar"]')?.nextElementSibling;
+    if (span) span.textContent = formatDate(date);
+  },
+
+  readingTime: (el: HTMLElement, time: number) => {
+    const span = el.querySelector('[aria-label="timer"]')?.nextElementSibling;
+    if (span) span.textContent = time.toString();
+  },
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Get DOM elements
+  const $ = {
+    search: document.querySelector("[data-post-filter-search]") as HTMLInputElement,
+    tags: document.querySelector("[data-post-filter-tags]") as HTMLElement,
+    static: document.querySelector("[data-static-posts]") as HTMLElement,
+    results: document.querySelector("[data-searched-posts]") as HTMLElement,
+    noResults: document.querySelector("[data-no-posts-found]") as HTMLElement,
+    template: document.querySelector("[data-template-card]") as HTMLTemplateElement,
   };
 
-  const searchFilter = document.querySelector("[data-post-filter-search]") as HTMLInputElement;
-  const tagsFilter = document.querySelector("[data-post-filter-tags]") as HTMLElement;
-  const staticPosts = document.querySelector("[data-static-posts]") as HTMLElement;
-  const searchedPosts = document.querySelector("[data-searched-posts]") as HTMLElement;
+  // Safety check
+  if (!$.search || !$.static || !$.results || !$.template) {
+    console.error("Search: Required elements not found", $);
+    return;
+  }
+
+  // Get the first article from template
+  const templateCard = $.template.content.querySelector("article");
+
+  if (!templateCard) {
+    console.error("Search: Template card not found");
+    return;
+  }
 
   const activeTags: string[] = [];
+  let postsCache: Post[] = [];
 
-  searchFilter.oninput = () => requestSearch();
+  // Fetch and cache posts
+  const getPosts = async (): Promise<Post[]> => {
+    if (postsCache.length > 0) return postsCache;
+    const res = await fetch(CONFIG.API_URL);
+    postsCache = await res.json();
+    return postsCache;
+  };
 
-  tagsFilter.querySelectorAll("input").forEach((tag) => {
-    if (tag instanceof HTMLInputElement) {
-      tag.onchange = () => {
-        if (tag.checked) {
-          activeTags.push(tag.value);
-        } else {
-          const index = activeTags.indexOf(tag.value);
-          if (index !== -1) {
-            activeTags.splice(index, 1);
+  // Search posts
+  const searchPosts = async (query: string, tags: string[]): Promise<Post[]> => {
+    if (!query && tags.length === 0) return [];
+
+    const posts = await getPosts();
+    const q = query.toLowerCase().trim();
+
+    return posts.filter((post) => {
+      // Check search query across configured fields
+      const matchesQuery =
+        !q ||
+        CONFIG.SEARCH_FIELDS.some((field) => {
+          const value = post[field];
+          if (Array.isArray(value)) {
+            return value.some((v) => v.toLowerCase().includes(q));
           }
-        }
-        requestSearch();
-      };
-    }
-  });
+          return String(value).toLowerCase().includes(q);
+        });
 
-  async function requestSearch(): Promise<void> {
-    const payload = await executeSearch(searchFilter.value, Array.from(activeTags));
+      // Check tags filter
+      const matchesTags = tags.length === 0 || tags.some((tag) => post.tags.includes(tag));
 
-    searchedPosts.innerHTML = "";
-
-    if (payload.length) {
-      staticPosts.classList.add("hidden");
-      searchedPosts.classList.remove("hidden");
-    } else {
-      staticPosts.classList.remove("hidden");
-      searchedPosts.classList.add("hidden");
-    }
-
-    payload.forEach((post) => {
-      const { image, title, description, pubDate, readingTime } = post;
-
-      searchedPosts.innerHTML += `
-			<article class="post-card">
-				<a href="/blog/${post.slug}" aria-label="${title}. ${description}">
-					${
-            image && image !== ""
-              ? `
-					<div class="post-card__thumbnail-container">
-						<img src="${image}" alt="${title}" />
-					</div>
-					`
-              : ""
-          }
-
-					<div class="post-card__body">
-						<h2 class="title">${title}</h2>
-
-						<p class="body-text">${description}</p>
-
-						<div class="white-space"></div>
-
-						<hr class="post-card__border" />
-
-						<div class="meta">
-							<div class="date">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									stroke-width="2"
-									width="14"
-									height="14"
-									stroke="currentColor"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									fill="none"
-									viewBox="0 0 24 24"
-									class="shrink-0"
-									aria-hidden="true"
-									data-astro-source-loc="23:17"
-								>
-									<path d="M8 2v4" data-astro-source-loc="7:3"></path>
-									<path d="M16 2v4" data-astro-source-loc="8:3"></path>
-									<rect
-										width="18"
-										height="18"
-										x="3"
-										y="4"
-										rx="2"
-										data-astro-source-loc="9:3"
-									></rect>
-									<path d="M3 10h18" data-astro-source-loc="10:3"></path>
-								</svg>
-								<time datetime="${pubDate}"
-									>${simplifyDate(pubDate).simplifiedDate}</time
-								>
-							</div>
-
-							<div class="read">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									stroke-width="2"
-									width="14"
-									height="14"
-									stroke="currentColor"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									fill="none"
-									viewBox="0 0 24 24"
-									class="shrink-0"
-									aria-hidden="true"
-									data-astro-source-loc="23:17"
-								>
-									<circle
-										cx="12"
-										cy="12"
-										r="10"
-										data-astro-source-loc="7:3"
-									></circle>
-									<polyline
-										points="12 6 12 12 16 14"
-										data-astro-source-loc="8:3"
-									></polyline>
-								</svg>
-								<span>${readingTime} Min Read</span>
-							</div>
-						</div>
-					</div>
-				</a>
-			</article>
-
-    `;
+      return matchesQuery && matchesTags;
     });
-  }
+  };
+
+  // Create post card from template
+  const createCard = (post: Post): HTMLElement => {
+    const card = templateCard.cloneNode(true) as HTMLElement;
+
+    updateCard.links(card, post.slug);
+    updateCard.image(card, post.image || "", post.title);
+    updateCard.title(card, post.title);
+    updateCard.description(card, post.description);
+    updateCard.date(card, post.pubDate);
+    updateCard.readingTime(card, post.readingTime);
+
+    return card;
+  };
+
+  // Render results
+  const render = (posts: Post[]) => {
+    const fragment = document.createDocumentFragment();
+    posts.forEach((post) => fragment.appendChild(createCard(post)));
+    $.results.innerHTML = "";
+    $.results.appendChild(fragment);
+  };
+
+  // Toggle views
+  const toggle = (state: "results" | "empty" | "default") => {
+    $.static.classList.toggle("hidden", state !== "default");
+    $.results.classList.toggle("hidden", state !== "results");
+    $.results.classList.toggle("grid", state === "results");
+    $.noResults?.classList.toggle("hidden", state !== "empty");
+  };
+
+  // Main search handler
+  const handleSearch = async () => {
+    const results = await searchPosts($.search.value, activeTags);
+    const isSearching = $.search.value || activeTags.length > 0;
+
+    if (results.length > 0) {
+      render(results);
+      toggle("results");
+    } else if (isSearching) {
+      toggle("empty");
+    } else {
+      toggle("default");
+    }
+  };
+
+  // Debounced search
+  const debouncedSearch = debounce(handleSearch, CONFIG.DEBOUNCE_DELAY);
+
+  // Event: Search input
+  $.search.addEventListener("input", debouncedSearch);
+
+  // Event: Tag filters
+  $.tags?.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
+    checkbox.addEventListener("change", (e) => {
+      const target = e.target as HTMLInputElement;
+      const idx = activeTags.indexOf(target.value);
+
+      if (target.checked && idx === -1) {
+        activeTags.push(target.value);
+      } else if (!target.checked && idx !== -1) {
+        activeTags.splice(idx, 1);
+      }
+
+      handleSearch(); // Instant for tags
+    });
+  });
 });

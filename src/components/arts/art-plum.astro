@@ -126,13 +126,13 @@
     }
   };
 
-  const handleResize = () => {
-    size = getWindowSize();
-    const { ctx: newCtx } = initCanvas(canvas, size.width, size.height);
-    ctx = newCtx;
-    start();
-    updateMask();
-  };
+  // const handleResize = () => {
+  //   size = getWindowSize();
+  //   const { ctx: newCtx } = initCanvas(canvas, size.width, size.height);
+  //   ctx = newCtx;
+  //   start();
+  //   updateMask();
+  // };
 
   document.addEventListener("astro:page-load", () => {
     canvas = document.getElementById("tree-canvas") as HTMLCanvasElement;
@@ -145,7 +145,7 @@
     updateMask();
     start();
 
-    window.addEventListener("resize", handleResize);
+    // window.addEventListener("resize", handleResize);
   });
 </script>
 

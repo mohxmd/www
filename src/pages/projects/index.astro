@@ -16,7 +16,7 @@ const projects = await getCollection("projects");
   }}
 >
   <section class="font-syne-mono space-y-6 py-6">
-    <Text as="h1" size="3xl" variant="muted" class="font-8bit mb-2 text-center font-bold">
+    <Text as="h1" size="fluid-3xl" variant="muted" class="font-8bit mb-2 text-center font-bold">
       🛠️ Projects !
     </Text>
     <Text class="text-muted-foreground text-center font-sans">
@@ -27,7 +27,7 @@ const projects = await getCollection("projects");
       {projects.map((project) => <ProjectCard project={project.data} />)}
     </div>
 
-    <div class="font-syne-mono text-muted-foreground space-y-3">
+    <div class="font-syne-mono space-y-3">
       <Text>
         These are just a few examples of the projects I've enjoyed working on. Each one has taught
         me something valuable and contributed to my growth as a developer.

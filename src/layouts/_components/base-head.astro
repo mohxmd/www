@@ -60,7 +60,7 @@ const {
 <meta name="keywords" content={keywords.join(", ")} />
 
 <!-- Links -->
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/svg+xml" href={siteConfig.favicon} />
 <link
   rel="alternate"
   type="application/rss+xml"
@@ -88,8 +88,5 @@ const {
 <ThemeScript />
 <ClientRouter />
 
-<script is:inline type="module">
-  // UI Helpers
-  document.documentElement.classList.add("[&_[x-cloak]]:hidden");
-</script>
+<script is:inline set:text="document.documentElement.classList.add('[&_[x-cloak]]:hidden')" />
 <script src="../_scripts/fun.ts"></script>

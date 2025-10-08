@@ -21,10 +21,13 @@ const year = new Date().getFullYear();
   <div class="space-y-2">
     <Text variant="muted">
       <span class="text-green-600 opacity-70 dark:text-green-400">$</span>
-      echo "© $(date +"%Y") $(whoami)"
+      echo "© $(date +"%Y") $(whoami) · sign"
     </Text>
     <Text class="-ml-[1px]">
-      © {year} mohammedsh · <Link href="/guestbook" class="hover:underline">sign</Link>
+      © {year} mohammedsh · <Link
+        href="/guestbook"
+        class="text-link hover:text-link-ho hover:underline">sign</Link
+      >
     </Text>
   </div>
 
@@ -38,7 +41,7 @@ const year = new Date().getFullYear();
     </Text>
 
     <div class="flex items-center gap-3">
-      <Link href="/api/arc.json" class="text-link hover:text-link-hover">/arc</Link>
+      <Link href="/arc.json" class="text-link hover:text-link-hover">/arc</Link>
       <Link href="/rss.xml" aria-label="RSS feed" class="text-link hover:text-link-hover">
         <Icon name="rss" size="sm" />
       </Link>

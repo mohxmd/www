@@ -22,7 +22,7 @@ const tags = await getAllTags();
               href={`/tags/${tag.id}`}
               class={cn(
                 "text-muted-foreground hover:text-foreground rounded border px-4 py-1 text-sm capitalize transition-colors",
-                `lang-${tag.text.toLocaleLowerCase()}`
+                `lang-${tag.text.toLowerCase()}`
               )}
             >
               #{tag.text}

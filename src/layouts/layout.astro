@@ -17,11 +17,11 @@ type Props = HTMLAttributes<"main"> & {
 const { metadata = {}, class: className, ...props } = Astro.props;
 ---
 
-<html>
+<html lang="en" class="scroll-pt-24 antialiased [scrollbar-gutter:stable]">
   <head>
     <BaseHead metadata={metadata} />
   </head>
-  <body class="antialiased">
+  <body>
     <div class="mx-auto flex min-h-screen max-w-5xl flex-col p-6 text-sm md:p-4">
       <Header />
       <main {...props} class:list={[className]}>

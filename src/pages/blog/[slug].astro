@@ -34,7 +34,7 @@ export const getStaticPaths = (async () =>
   })) satisfies GetStaticPaths;
 
 const { id: postId, data, headings, Content, morePosts } = Astro.props;
-const { title, pubDate, image, description } = data;
+const { title, pubDate, image, description, author } = data;
 const [prevPost, nextPost] = morePosts;
 
 const publishDate = pubDate.toLocaleString();
@@ -44,6 +44,8 @@ const publishDate = pubDate.toLocaleString();
   metadata={{
     title: `Mohammed's blog | ${title}`,
     description: description,
+    og: image.src,
+    author,
   }}
 >
   <article itemscope class="py-6">

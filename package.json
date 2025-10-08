@@ -32,6 +32,7 @@
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/ts-plugin": "^1.10.4",
     "@astrojs/vercel": "8.2.8",
+    "@iconify-json/arcticons": "^1.2.38",
     "@iconify-json/lucide": "^1.2.68",
     "@octokit/rest": "^22.0.0",
     "@shikijs/transformers": "^3.13.0",

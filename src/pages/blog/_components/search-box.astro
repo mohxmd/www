@@ -24,7 +24,16 @@ const { tags } = Astro.props;
   </form>
 
   <div data-post-filter-tags class="flex flex-wrap gap-2">
-    {tags.map((tag) => <Chip>{tag}</Chip>)}
+    {
+      tags.map((tag) => (
+        <label class="cursor-pointer">
+          <input type="checkbox" value={tag} class="peer sr-only" />
+          <Chip class="peer-checked:border-primary peer-checked:text-primary-foreground transition-colors">
+            {tag}
+          </Chip>
+        </label>
+      ))
+    }
     <Link href="/tags"><Chip> Explore All Tags</Chip></Link>
   </div>
 </div>

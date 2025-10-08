@@ -27,7 +27,7 @@ export const GET: APIRoute = async () => {
       homepage: "https://mohammedsh.xyz",
       blog: "https://mohammedsh.xyz/blog",
       guestbook: "https://mohammedsh.xyz/guestbook",
-      chat: "https://t.me/mohammedsh",
+      chat: "https://t.me/mohxmdsh",
     },
     updatedAt: new Date().toISOString(),
   };

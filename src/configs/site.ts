@@ -1,7 +1,10 @@
 export const siteConfig = {
   site: "https://mohammedsh.xyz",
   title: "Mohx Notes",
-  og: "/images/avatar.svg",
+  description:
+    "A corner of the internet where I write, build, and share my story through code, design, and quiet thoughts.",
+  og: "/avatar.svg",
+  favicon: "/favicon.svg",
   author: "Mohammed",
 
   navLinks: [
@@ -32,7 +35,7 @@ export const siteConfig = {
       text: "@mohxmd__",
       href: "https://instagram.com/mohxmd__",
     },
-    { icon: "twitter", text: "@mohxmdsh", href: "https://x.com/mohxmdsh" },
+    { icon: "arcticons:x-twitter", text: "@mohxmdsh", href: "https://x.com/mohxmdsh" },
   ],
 
   keywords: [

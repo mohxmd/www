@@ -12,6 +12,7 @@ import * as Paginator from "#/components/ui/paginator";
 
 import PostCard from "./post-card.astro";
 import SearchBox from "./search-box.astro";
+import SearchTemplates from "./search-templates.astro";
 
 type Props = Page<GetSortedPosts[0]> & { tag?: GetAllTags[0]["id"] };
 
@@ -33,7 +34,7 @@ const totalViews = views?.totalViews ?? 0;
 >
   <section class="space-y-4 py-6 font-sans">
     <div class="w-full space-y-3 text-center">
-      <Text as="h1" class="font-8bit font-bold" size="3xl" variant="muted"
+      <Text as="h1" class="font-8bit font-bold" size="fluid-3xl" variant="muted"
         >🧑‍🚀 Latest Blog Posts !</Text
       >
       <Text class="text-muted-foreground">Explore the Cosmos of Ideas! Latest Blog Posts</Text>
@@ -53,6 +54,9 @@ const totalViews = views?.totalViews ?? 0;
       <SearchBox tags={tags} />
     </div>
 
+    <!-- Search-related templates and containers -->
+    <SearchTemplates />
+
     <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-static-posts>
       {
         paginatedPosts.map((post) => (
@@ -70,3 +74,5 @@ const totalViews = views?.totalViews ?? 0;
     </Paginator.Root>
   </section>
 </Layout>
+
+<script src="#/lib/scripts/search.ts"></script>

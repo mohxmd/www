@@ -1,15 +1,17 @@
 ---
-import Separator from "#/components/ui/separator.astro";
+import type { ProjectSchema } from "#/content/config";
+import { cn } from "#/lib/utils";
 import Icon from "#/components/ui/icon.astro";
 import Text from "#/components/ui/text.astro";
 import Link from "#/components/ui/link.astro";
-import { cn } from "#/lib/utils";
-import type { ProjectSchema } from "#/content/config";
+import Separator from "#/components/ui/separator.astro";
+
 type Props = {
   project: ProjectSchema;
 };
+
 const { project } = Astro.props;
-const { description, forks, githubUrl, name, stars, language } = project;
+const { description, forks, githubUrl, homepageUrl, name, stars, language } = project;
 ---
 
 <div class="bg-card flex flex-col rounded border shadow-sm">
@@ -17,40 +19,67 @@ const { description, forks, githubUrl, name, stars, language } = project;
     <Icon name="book" size="sm" class="text-muted-foreground" aria-hidden="true" />
     <span class="font-semibold">{name}</span>
   </div>
+
   <div class="text-fluid-sm flex flex-1 flex-col gap-3 p-3">
-    <Text as="p" size="sm" class="flex-1">{description}</Text>
+    <Text as="p" size="fluid-sm" class="flex-1">{description}</Text>
     <Separator />
+
     <div class="flex items-center justify-between">
       <div class="text-fluid-xs flex items-center gap-3">
-        <span class="text-fluid-sm flex items-center gap-1">
-          <Icon name="star" size="sm" />
-          {stars}
-        </span>
-        <span class="text-fluid-sm flex items-center gap-1">
-          <Icon name="git-fork" size="sm" />
-          {forks}
-        </span>
+        {
+          stars > 0 && (
+            <span class="text-fluid-sm flex items-center gap-1">
+              <Icon name="star" size="sm" />
+              {stars}
+            </span>
+          )
+        }
+        {
+          forks > 0 && (
+            <span class="text-fluid-sm flex items-center gap-1">
+              <Icon name="git-fork" size="sm" />
+              {forks}
+            </span>
+          )
+        }
         {
           language && (
             <span class="text-fluid-sm flex items-center gap-1">
-              <span class={cn("bg-primary size-2 rounded-full", language)} />
+              <span
+                class={cn("bg-primary size-2 rounded-full", `lang-${language.toLowerCase()}`)}
+              />
               {language}
             </span>
           )
         }
       </div>
-      {
-        githubUrl && (
-          <Link
-            href={githubUrl}
-            target="_blank"
-            class="hover:text-link text-fluid-sm"
-            iconSize="sm"
-          >
-            Code
-          </Link>
-        )
-      }
+
+      <div class="flex items-center gap-2">
+        {
+          githubUrl && (
+            <Link
+              href={githubUrl}
+              target="_blank"
+              class="hover:text-link text-fluid-sm"
+              iconSize="sm"
+            >
+              Code
+            </Link>
+          )
+        }
+        {
+          homepageUrl && (
+            <Link
+              href={homepageUrl}
+              target="_blank"
+              class="hover:text-link text-fluid-sm"
+              iconSize="sm"
+            >
+              Demo
+            </Link>
+          )
+        }
+      </div>
     </div>
   </div>
 </div>

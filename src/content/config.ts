@@ -17,7 +17,6 @@ const blogSchema = ({ image }: { image: ImageFunction }) =>
     updatedDate: z.coerce.date().optional(),
     repo: z
       .string()
-      .optional()
       .transform(async (repo) => {
         if (!repo) return null;
         return octokit.repos.get({ owner: USERNAME, repo }).then((response) => ({
@@ -30,7 +29,8 @@ const blogSchema = ({ image }: { image: ImageFunction }) =>
           githubUrl: response.data.homepage,
           websiteUrl: response.data.html_url,
         }));
-      }),
+      })
+      .optional(),
   });
 
 const projectSchema = z.object({
@@ -42,18 +42,19 @@ const projectSchema = z.object({
   watchers: z.number(),
   topics: z.array(z.string()),
   githubUrl: z.string().url(),
+  homepageUrl: z.string().url().nullable(),
   language: z.string().optional(),
   createdAt: z.string().optional(),
   isPrivate: z.boolean().optional(),
-  // websiteUrl: z.string().url(),
 });
 
 const REPO_NAMES = [
-  "mohx-cli",
   "breeze-graphql-starter",
+  "pychat-app",
   "sass-kit",
   "honobox",
-  "pychat-app",
+  "mohx-cli",
+  "echo-mohx",
   "tic-tac-toe-react-native",
 ] as const;
 
@@ -78,10 +79,10 @@ export const collections = {
             watchers: response.data.watchers_count,
             topics: response.data.topics,
             githubUrl: response.data.html_url,
+            homepageUrl: response.data.homepage || null,
             language: response.data.language,
             createdAt: response.data.created_at,
             isPrivate: response.data.private,
-            // websiteUrl: response.data.created_at,
           }))
         )
       ),

@@ -21,8 +21,12 @@ const { description, pubDate, title, readingTime, image } = post;
     <Image
       src={image}
       alt={title}
+      width={800}
+      height={400}
+      loading="eager"
       decoding="async"
-      loading="lazy"
+      format="webp"
+      quality={80}
       class="absolute inset-0 size-full object-cover"
     />
   </Link>

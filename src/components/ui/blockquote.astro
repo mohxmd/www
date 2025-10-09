@@ -17,7 +17,6 @@ const plain = raw
 let variant: AlertVariant = "info";
 let icon = "info";
 let title = "";
-let message = raw;
 
 const rules = [
   { key: "success", variant: "success" as AlertVariant, icon: "check-circle" },
@@ -29,12 +28,11 @@ const rules = [
 ];
 
 for (const r of rules) {
-  const regex = new RegExp(`\\b${r.key}\\s*[:\\-]\\s*`, "i");
+  const regex = new RegExp(`^\\s*${r.key}\\s*[:\\-]\\s*`, "i");
   if (regex.test(plain)) {
     variant = r.variant;
     icon = r.icon;
     title = r.key.charAt(0).toUpperCase() + r.key.slice(1);
-    message = raw.replace(regex, "").trim();
     break;
   }
 }
@@ -50,7 +48,7 @@ const inferredRole = variant === "error" || variant === "warning" ? "alert" : "s
     </Alert.Title>
 
     <Alert.Description>
-      <Fragment set:text={message} />
+      <slot />
     </Alert.Description>
   </Alert.Root>
 </blockquote>

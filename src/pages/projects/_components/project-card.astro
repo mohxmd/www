@@ -14,10 +14,10 @@ const { project } = Astro.props;
 const { description, forks, githubUrl, homepageUrl, name, stars, language } = project;
 ---
 
-<div class="bg-card flex flex-col rounded border shadow-sm">
-  <div class="bg-muted flex items-center gap-2 border-b px-2 py-1.5">
-    <Icon name="book" size="sm" class="text-muted-foreground" aria-hidden="true" />
-    <span class="font-semibold">{name}</span>
+<div class="bg-card flex flex-col border font-sans shadow-sm">
+  <div class="bg-muted flex items-center gap-2 border-b p-1">
+    <Icon name="book" size="sm" class="text-muted-foreground" />
+    <Text as="h3" size="fluid-sm" class="font-medium">{name}</Text>
   </div>
 
   <div class="text-fluid-sm flex flex-1 flex-col gap-3 p-3">

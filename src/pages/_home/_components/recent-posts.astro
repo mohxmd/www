@@ -22,13 +22,17 @@ const posts = (await getSortedPosts()).slice(0, 6);
       posts.map((post, index) => (
         <Link
           href={`/blog/${post.id}`}
-          class="bg-card group relative block w-52 flex-none rounded-none border"
+          class="bg-card group relative block w-52 flex-none rounded-md border"
         >
           <Image
             src={post.data.image}
             alt={post.data.title}
+            width={800}
+            height={400}
+            loading="eager"
             decoding="async"
-            loading="lazy"
+            format="webp"
+            quality={80}
             class="h-32 w-full object-cover"
           />
 
@@ -38,7 +42,7 @@ const posts = (await getSortedPosts()).slice(0, 6);
               <span>[{String(index + 1).padStart(2, "0")}]</span>
             </div>
 
-            <Text class="line-clamp-2 font-mono leading-tight font-bold" size="fluid-sm">
+            <Text as="h1" class="line-clamp-2 font-mono leading-tight font-bold" size="fluid-sm">
               {post.data.title}
             </Text>
           </div>

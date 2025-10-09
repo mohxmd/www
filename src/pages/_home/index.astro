@@ -1,32 +1,34 @@
 ---
+import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import Layout from "#/layouts/layout.astro";
 import Callout from "#/components/ui/callout.astro";
 import NoteCard from "#/components/ui/note-card.astro";
 
 import RecentPosts from "./_components/recent-posts.astro";
-import RecentProjects from "./_components/recent-projects.astro";
 import Hero from "./_components/hero.astro";
 import Contact from "./_components/contact.astro";
+import ProjectCard from "../projects/_components/project-card.astro";
 
 // assets
-import NotFun from "#/assets/not-fun.png";
 import Armin from "#/assets/armin.gif";
 import Text from "#/components/ui/text.astro";
+
+const projects = await getCollection("projects");
+const lastThreeProjects = projects.slice(0, 2);
 ---
 
 <Layout title="Mohammed's blog" class="space-y-6 pt-6">
   <Hero />
-  <RecentProjects />
   <RecentPosts />
 
   <section class="grid auto-rows-fr grid-cols-1 gap-2 md:grid-cols-2">
-    <Callout title="Get in touch" icon="handshake" contentClass="p-2">
-      <Contact />
+    <Callout title="Recent Projects" icon="shapes" contentClass="p-2 grid gap-4">
+      {lastThreeProjects.map((project) => <ProjectCard project={project.data} />)}
     </Callout>
 
-    <Callout title="When Promises Meet Deadlines" icon="bug" contentClass="overflow-hidden">
-      <Image src={NotFun} alt="Never said" class="rounded-md border object-cover" />
+    <Callout title="Get in touch" icon="handshake" contentClass="p-2">
+      <Contact />
     </Callout>
   </section>
 
@@ -36,7 +38,12 @@ import Text from "#/components/ui/text.astro";
       subtitle="Shiganshina District — Year 850"
       class="font-syne-mono text-fluid-base"
     >
-      <Image src={Armin} alt="Armin Arlert under the sky" class="rounded-xs md:max-w-[500px]" />
+      <Image
+        src={Armin}
+        alt="Armin Arlert under the sky"
+        format="webp"
+        class="rounded-md md:max-w-[500px]"
+      />
 
       <Text>
         “People who can’t throw something important away can never hope to change anything.” — Armin

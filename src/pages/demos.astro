@@ -3,7 +3,6 @@ import Layout from "#/layouts/layout.astro";
 
 import * as List from "#/components/ui/list";
 import * as Tooltip from "#/components/ui/tooltip";
-import * as Tabs from "#/components/ui/tabs";
 import * as Table from "#/components/ui/table";
 import * as Dialog from "#/components/ui/dialog";
 import * as Alert from "#/components/ui/alert";
@@ -124,95 +123,6 @@ import Icon from "#/components/ui/icon.astro";
             </Tooltip.Trigger>
             <Tooltip.Content side="left"> This is a left tooltip! </Tooltip.Content>
           </Tooltip.Root>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tabs Component Demo -->
-    <section class="space-y-6">
-      <div>
-        <h2 class="mb-2 text-3xl font-bold">Tabs Component</h2>
-        <p class="text-muted-foreground">Keyboard-navigable tabs with sync support</p>
-      </div>
-
-      <div class="space-y-8">
-        <!-- Basic Tabs -->
-        <div class="rounded-lg border p-6">
-          <h3 class="mb-4 text-xl font-semibold">Basic Tabs</h3>
-          <Tabs.Root defaultValue="account">
-            <Tabs.List>
-              <Tabs.Trigger value="account">Account</Tabs.Trigger>
-              <Tabs.Trigger value="password">Password</Tabs.Trigger>
-              <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
-            </Tabs.List>
-
-            <Tabs.Content value="account">
-              <div class="p-4">
-                <h4 class="mb-2 font-semibold">Account Settings</h4>
-                <p class="text-muted-foreground">
-                  Manage your account settings and preferences here.
-                </p>
-              </div>
-            </Tabs.Content>
-
-            <Tabs.Content value="password">
-              <div class="p-4">
-                <h4 class="mb-2 font-semibold">Password Management</h4>
-                <p class="text-muted-foreground">Change your password and security settings.</p>
-              </div>
-            </Tabs.Content>
-
-            <Tabs.Content value="settings">
-              <div class="p-4">
-                <h4 class="mb-2 font-semibold">General Settings</h4>
-                <p class="text-muted-foreground">Configure your general preferences.</p>
-              </div>
-            </Tabs.Content>
-          </Tabs.Root>
-        </div>
-
-        <!-- Synced Tabs Demo -->
-        <div class="rounded-lg border p-6">
-          <h3 class="mb-4 text-xl font-semibold">Synced Tabs (Try switching both)</h3>
-          <div class="grid gap-6 md:grid-cols-2">
-            <Tabs.Root defaultValue="preview" syncKey="demo">
-              <Tabs.List>
-                <Tabs.Trigger value="preview">Preview</Tabs.Trigger>
-                <Tabs.Trigger value="code">Code</Tabs.Trigger>
-              </Tabs.List>
-
-              <Tabs.Content value="preview">
-                <div class="bg-muted mt-2 rounded-md p-4">
-                  <p>Preview content appears here</p>
-                </div>
-              </Tabs.Content>
-
-              <Tabs.Content value="code">
-                <div class="bg-muted mt-2 rounded-md p-4 font-mono text-sm">
-                  <code>console.log('Hello World');</code>
-                </div>
-              </Tabs.Content>
-            </Tabs.Root>
-
-            <Tabs.Root defaultValue="preview" syncKey="demo">
-              <Tabs.List>
-                <Tabs.Trigger value="preview">Preview</Tabs.Trigger>
-                <Tabs.Trigger value="code">Code</Tabs.Trigger>
-              </Tabs.List>
-
-              <Tabs.Content value="preview">
-                <div class="bg-muted mt-2 rounded-md p-4">
-                  <p>Both tabs are synced!</p>
-                </div>
-              </Tabs.Content>
-
-              <Tabs.Content value="code">
-                <div class="bg-muted mt-2 rounded-md p-4 font-mono text-sm">
-                  <code>They stay in sync automatically</code>
-                </div>
-              </Tabs.Content>
-            </Tabs.Root>
-          </div>
         </div>
       </div>
     </section>

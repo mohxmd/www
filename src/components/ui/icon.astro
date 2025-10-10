@@ -8,7 +8,7 @@ type Props = ComponentProps<typeof Component> & IconVariants;
 
 export type IconVariants = VariantProps<typeof iconVariants>;
 
-const iconVariants = cva("shrink-0", {
+const iconVariants = cva("shrink-0 stroke-4", {
   variants: {
     size: {
       xs: "size-2",
@@ -45,6 +45,7 @@ const processedName = processIconName(name);
 <Component
   {...props}
   aria-hidden
+  shape-rendering="crispEdges"
   name={processedName}
-  class={cn(iconVariants({ size }), "shrink-0", className)}
+  class={cn(iconVariants({ size }), className)}
 />

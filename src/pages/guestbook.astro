@@ -44,7 +44,7 @@ const entries = await db.select().from(guestbook).orderBy(desc(guestbook.publish
         :disabled="!name.trim() || !message.trim()"
         :class="{ 'opacity-50 cursor-not-allowed': !name.trim() || !message.trim() }"
         type="submit"
-        class="bg-foreground text-background hover:bg-foreground/80 rounded-sm"
+        class="bg-foreground text-background hover:bg-foreground/80 text-fluid-base h-fit py-2"
       >
         Sign
       </Button>

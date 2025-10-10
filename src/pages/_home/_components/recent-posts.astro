@@ -42,7 +42,11 @@ const posts = (await getSortedPosts()).slice(0, 6);
               <span>[{String(index + 1).padStart(2, "0")}]</span>
             </div>
 
-            <Text as="h1" class="line-clamp-2 font-mono leading-tight font-bold" size="fluid-sm">
+            <Text
+              as="h1"
+              class="line-clamp-2 font-mono leading-tight font-semibold"
+              size="fluid-sm"
+            >
               {post.data.title}
             </Text>
           </div>

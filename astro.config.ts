@@ -10,6 +10,7 @@ import alpine from "@astrojs/alpinejs";
 import tailwindcss from "@tailwindcss/vite";
 import robotsTxt from "astro-robots-txt";
 import icon from "astro-icon";
+import pagefind from "astro-pagefind";
 
 import prettyCode, { type Options as PrettyCodeOption } from "rehype-pretty-code";
 import {
@@ -72,7 +73,7 @@ export default defineConfig({
   experimental: {
     fonts: [
       {
-        name: "Ubuntu Sans",
+        name: "Noto Sans",
         type: "sans",
         weights: "100 900",
       },
@@ -97,6 +98,7 @@ export default defineConfig({
     mdx(),
     db(),
     icon(),
+    pagefind(),
     alpine({ entrypoint: "/alpine.config.ts" }),
     sitemap({ changefreq: "daily", lastmod: new Date() }),
     robotsTxt({

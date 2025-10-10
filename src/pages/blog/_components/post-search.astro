@@ -1,0 +1,83 @@
+---
+import Text from "#/components/ui/text.astro";
+import Icon from "#/components/ui/icon.astro";
+import Input from "#/components/ui/input.astro";
+import Button from "#/components/ui/button.astro";
+import Command from "#/components/ui/command.astro";
+import * as List from "#/components/ui/list";
+import * as Dialog from "#/components/ui/dialog";
+---
+
+<Dialog.Root x-data="{ data: [] }" @close.debounce.200ms="data = []; $refs.query.value = ''">
+  <Button slot="dialog-trigger" variant="secondary" class="w-full px-3">
+    <Icon name="search" size="sm" />
+    <Text variant="muted">Search Posts</Text>
+    <Command key="/" class="ml-auto" @keyup.window.slash="$el.parentElement.click()" />
+  </Button>
+  <Dialog.Header>
+    <Input
+      x-ref="query"
+      placeholder="Search posts..."
+      @keyup="data = await Promise.all((await pagefind.search($event.target.value)).results.map((item) => item.data()))"
+    >
+      <Icon slot="prefix" size="sm" name="search" />
+      <Button
+        slot="suffix"
+        size="icon"
+        variant="ghost"
+        icon="x"
+        aria-label="Reset"
+        class="bg-transparent hover:bg-transparent dark:hover:bg-transparent"
+        @click="$dispatch('close')"
+      />
+    </Input>
+  </Dialog.Header>
+
+  <Dialog.Body>
+    <div x-cloak>
+      <Text
+        class="text-muted-foreground mx-auto max-w-max"
+        x-show="!data.length && $refs.query.value.length"
+      >
+        No Results Found
+      </Text>
+      <List.Root
+        class="[&_mark]:bg-accent [&_mark]:text-foreground [&_mark]:rounded [&_mark]:p-0.5"
+      >
+        <template x-for="post in data">
+          <List.ItemLink
+            :href="post.url"
+            :aria-label="post.meta.title"
+            class:list={[
+              "flex flex-col items-start rounded rounded-b-none border-b py-8",
+              "group-first-of-type:pt-0 group-last-of-type:border-b-0 group-last-of-type:pb-0",
+            ]}
+          >
+            <Text x-text="post.meta.title" size="fluid-lg" class="text-foreground font-semibold" />
+            <Text
+              x-html="post.excerpt + ' ...'"
+              size="fluid-sm"
+              class="text-muted-foreground mt-2 text-left"
+            />
+          </List.ItemLink>
+        </template>
+      </List.Root>
+    </div>
+  </Dialog.Body>
+
+  <Dialog.Footer class="not-lg:hidden">
+    <div class="flex items-center gap-2">
+      <Command icon="corner-down-left" aria-label="Enter key" />
+      <Text size="fluid-sm">to select</Text>
+    </div>
+    <div class="flex items-center gap-1">
+      <Command icon="arrow-down" aria-label="Arrow down key" />
+      <Command icon="arrow-up" aria-label="Arrow up key" />
+      <Text size="fluid-sm" class="ml-1">to navigate</Text>
+    </div>
+    <div class="flex items-center gap-2">
+      <Command key="esc" aria-label="Escape key" />
+      <Text size="fluid-sm">to close</Text>
+    </div>
+  </Dialog.Footer>
+</Dialog.Root>

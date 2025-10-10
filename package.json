@@ -41,6 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^8.46.0",
     "@typescript-eslint/parser": "^8.46.0",
     "astro-icon": "^1.1.5",
+    "astro-pagefind": "^1.8.5",
     "astro-robots-txt": "^1.0.0",
     "astro-theme-toggle": "^0.7.0",
     "class-variance-authority": "^0.7.1",

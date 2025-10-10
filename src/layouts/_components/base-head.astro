@@ -89,4 +89,9 @@ const {
 <ClientRouter />
 
 <script is:inline set:text="document.documentElement.classList.add('[&_[x-cloak]]:hidden')" />
+<script
+  is:inline
+  set:text="window.pagefind = await import('/pagefind/pagefind.js')"
+  type="module"
+/>
 <script src="../_scripts/fun.ts"></script>

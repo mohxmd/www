@@ -10,7 +10,8 @@ const { class: className, ...props } = Astro.props;
 <div
   {...props}
   class={cn(
-    "bg-muted border-border flex h-14 items-center gap-4 rounded-b border-t px-6",
+    "thin-scrollbar overflow-y-auto px-6 py-10",
+    "max-h-[calc(95dvh-5rem)] lg:max-h-[calc(70dvh-9rem)]",
     className
   )}
 >

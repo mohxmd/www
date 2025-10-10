@@ -1,0 +1,28 @@
+---
+import type { ComponentProps } from "astro/types";
+import { cn } from "#/lib/utils/cn";
+import Icon from "./icon.astro";
+import Text from "./text.astro";
+
+type Props = Omit<ComponentProps<typeof Text<"kbd">>, "as"> & {
+  key?: string;
+  icon?: string;
+};
+
+const { class: className, size, key, icon, ...props } = Astro.props;
+---
+
+<Text
+  {...props}
+  x-data
+  as="kbd"
+  size={size ?? "fluid-sm"}
+  class={cn(
+    "text-muted-foreground bg-secondary pointer-events-none inline-flex h-max min-w-6 items-center justify-center rounded border font-sans",
+    "inset-shadow-accent-9/50 px-2 py-1 leading-none whitespace-nowrap shadow-lg inset-shadow-xs",
+    className
+  )}
+>
+  {key}
+  {icon && <Icon name={icon} size="sm" class="translate-y-px" />}
+</Text>

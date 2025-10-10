@@ -8,11 +8,12 @@ import Icon from "#/components/ui/icon.astro";
 import Text from "#/components/ui/text.astro";
 import Number from "#/components/ui/number.astro";
 import Separator from "#/components/ui/separator.astro";
+import Link from "#/components/ui/link.astro";
+import Chip from "#/components/ui/chip.astro";
 import * as Paginator from "#/components/ui/paginator";
 
 import PostCard from "./post-card.astro";
-import SearchBox from "./search-box.astro";
-import SearchTemplates from "./search-templates.astro";
+import PostSearch from "./post-search.astro";
 
 type Props = Page<GetSortedPosts[0]> & { tag?: GetAllTags[0]["id"] };
 
@@ -51,13 +52,26 @@ const totalViews = views?.totalViews ?? 0;
         </div>
       </div>
 
-      <SearchBox tags={tags} />
+      <div class="mt-3 space-y-4 rounded border p-4">
+        <PostSearch tags={tags} />
+
+        <div class="flex flex-wrap gap-2">
+          {
+            tags.map((tag) => (
+              <label class="cursor-pointer">
+                <input type="checkbox" value={tag} class="peer sr-only" />
+                <Chip class="peer-checked:border-primary peer-checked:text-primary-foreground transition-colors">
+                  {tag}
+                </Chip>
+              </label>
+            ))
+          }
+          <Link href="/tags"><Chip> Explore All Tags</Chip></Link>
+        </div>
+      </div>
     </div>
 
-    <!-- Search-related templates and containers -->
-    <SearchTemplates />
-
-    <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-static-posts>
+    <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {
         paginatedPosts.map((post) => (
           <PostCard class="mb-4 break-inside-avoid" slug={post.id} post={post.data} />
@@ -74,5 +88,3 @@ const totalViews = views?.totalViews ?? 0;
     </Paginator.Root>
   </section>
 </Layout>
-
-<script src="#/lib/scripts/search.ts"></script>

@@ -30,7 +30,23 @@ const isActive = (path: string) =>
     </Link>
   </header>
 
-  <div class="fixed right-0 bottom-4 left-0 z-20 px-4 md:hidden">
+  <div
+    x-data="{ showMobileNav: true }"
+    x-init="
+      const footer = document.getElementById('site-footer');
+      if (!footer) return;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          showMobileNav = !entry.isIntersecting;
+        },
+        { rootMargin: '0px 0px 96px 0px' }
+      );
+      observer.observe(footer);
+    "
+    x-show="showMobileNav"
+    x-transition.opacity.duration.200ms
+    class="fixed right-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] left-0 z-20 px-4 md:hidden"
+  >
     <div class="mx-auto flex w-fit max-w-full items-center gap-2">
       <nav
         class="bg-card/80 border-border flex gap-1 rounded-full border p-0.5 shadow-md backdrop-blur"
@@ -62,8 +78,10 @@ const isActive = (path: string) =>
 
 <!-- Desktop -->
 <>
-  <header class="fixed top-3 right-0 left-0 z-10 hidden px-4 md:block">
-    <div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 select-none">
+  <header
+    class="fixed top-3 left-1/2 z-10 box-border hidden w-full max-w-5xl -translate-x-1/2 p-6 md:block md:p-4"
+  >
+    <div class="flex w-full items-center justify-between gap-4 select-none">
       <Link href="/" size="fluid-2xl" class="font-8bit flex items-center gap-2 font-bold">
         <StarBoy class="text-foreground size-10" />
         <span class="gradient-text">MohxNotes</span>

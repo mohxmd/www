@@ -8,7 +8,18 @@ image: "./images/computer-desk-workstation.jpg"
 tags: ["arch linux", "linux", "kde"]
 ---
 
+import * as Stepper from "#/components/ui/stepper";
+
 After a successful Arch Linux installation and the first reboot, it's time to start setting things up! Here's how I began transforming my fresh Arch installation into a functional and personalized environment.
+
+> **Quick path (current approach):** this post is the full manual setup. For a fast setup, clone my dotfiles and run one command.
+>
+> ```bash
+> git clone https://github.com/mohxmd/dotfiles.git ~/dotfiles
+> cd ~/dotfiles
+> ./arch-new-install
+> ```
+
 
 ## First Things First: Update Your System
 
@@ -40,7 +51,7 @@ git config --global user.email "hello@example.com"
 To enhance the functionality of my system and prepare it for daily use, I installed some essential utilities. These tools cover power management, file viewing, and compatibility with various file systems. Here's the command to install them:
 
 ```bash
-sudo pacman -S power-profiles-daemon ntfs-3g exfatprogs linux-headers
+sudo pacman -S power-profiles-daemon ntfs-3g exfatprogs linux-headers bind
 ```
 
 ### What Do These Packages Do?
@@ -78,6 +89,7 @@ Apply the following rules to balance security and functionality:
 sudo ufw limit 22/tcp            # Limit SSH attempts to prevent brute force
 sudo ufw allow 80/tcp            # Allow HTTP traffic
 sudo ufw allow 443/tcp           # Allow HTTPS traffic
+sudo ufw allow 8081/tcp          # Allow Metro bundler for React Native/Expo development
 sudo ufw default deny incoming   # Block all incoming traffic by default
 sudo ufw default allow outgoing  # Allow all outgoing traffic
 sudo ufw enable                  # Enable the firewall
@@ -88,6 +100,71 @@ To check the status and rules:
 ```bash
 sudo ufw status
 ```
+
+## 🌐 Setting Up Cloudflare DNS (1.1.1.1)
+
+After getting the network connection working, I prefer to use Cloudflare DNS for faster and more private name resolution.
+
+Cloudflare’s public DNS servers are:
+
+```
+1.1.1.1
+1.0.0.1
+```
+
+To make them your default DNS system-wide:
+
+<Stepper.Root>
+  <Stepper.Step>
+      1. Create a new file for NetworkManager:
+         ```bash
+         sudo mkdir -p /etc/NetworkManager/conf.d
+         sudo nano /etc/NetworkManager/conf.d/dns.conf
+         ```
+
+      Add this line:
+
+      ```ini
+      [main]
+      dns=none
+      ```
+
+  </Stepper.Step>
+
+   <Stepper.Step>
+      2. Then edit your DNS configuration file:
+
+      ```bash
+      sudo nano /etc/resolv.conf
+      ```
+
+      Add the Cloudflare servers:
+
+      ```bash
+      nameserver 1.1.1.1
+      nameserver 1.0.0.1
+      ```
+
+   </Stepper.Step>
+
+   <Stepper.Step>
+      3. (Optional) Protect it from being changed:
+
+      ```bash
+      sudo chattr +i /etc/resolv.conf
+      ```
+
+      That’s it — now your Arch system will always use Cloudflare DNS for faster lookups, and NetworkManager won’t overwrite it.
+      You can verify it using:
+
+      ```bash
+      dig +short @1.1.1.1 whoami.cloudflare
+      ```
+
+      or visit [https://1.1.1.1/help](https://1.1.1.1/help).
+
+   </Stepper.Step>
+</Stepper.Root>
 
 ## Installing Yay: The AUR Helper
 
@@ -136,7 +213,7 @@ I faced this issue on my system and, after some research, discovered that ICC pr
 
 Here’s what I did:
 
-1. **Download ICC Profiles**: I found a set of ICC profiles that work well for my setup. You can download them from my GitHub repository: [ICC Profiles](https://github.com/mhdZhHan/dotfiles/tree/main/gamma-icc).
+1. **Download ICC Profiles**: I found a set of ICC profiles that work well for my setup. You can download them from my GitHub repository: [ICC Profiles](https://github.com/mohxmd/dotfiles/tree/main/gamma-icc).
 
 2. **Apply the ICC Profile**: Follow the instructions for your desktop environment to apply the ICC profile. Usually, this involves using a color management tool to load and set the profile.
 
@@ -166,7 +243,7 @@ My desktop looks like:
 
 **2. Add the Applet Configuration File**
 
-Download my applet configuration file from [My GitHub - appletarc](https://github.com/mhdZhHan/dotfiles/blob/main/.config/plasma-org.kde.plasma.desktop-appletsrc) and place it inside your `.config` directory.
+Download my applet configuration file from [My GitHub - appletarc](https://github.com/mohxmd/dotfiles/blob/main/.config/plasma-org.kde.plasma.desktop-appletsrc) and place it inside your `.config` directory.
 
 This file configures the panels to look just like mine. Cool, right?
 
@@ -175,7 +252,7 @@ This file configures the panels to look just like mine. Cool, right?
 I’m not a fan of title bars cluttering my view, so I removed them using KWin rules. Here’s how you can do it too:
 
 **1. Download My KWin Rules:**
-Get the KWin rules file from my GitHub: [buraq-kwin-rules.kwinrule](https://github.com/mhdZhHan/dotfiles/blob/main/buraq-kwin-rules.kwinrule)
+Get the KWin rules file from my GitHub: [buraq-kwin-rules.kwinrule](https://github.com/mohxmd/dotfiles/blob/main/buraq-kwin-rules.kwinrule)
 
 **2. Add the KWin Rule:**
 Go to `Settings > Window Management > Window Rules`.
@@ -207,7 +284,7 @@ Feel free to tweak and adjust these settings to match your preferences. Enjoy yo
 
 If you want to replicate my setup, including the wallpapers and other custom configurations, you can download them from my GitHub repository:
 
-[Buraq Dotfiles](https://github.com/mhdZhHan/dotfiles)
+[Buraq Dotfiles](https://github.com/mohxmd/dotfiles)
 
 This repository contains everything you need to make your Arch Linux setup look just like mine. Feel free to explore and use the files to personalize your own system!
 

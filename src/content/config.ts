@@ -49,6 +49,9 @@ const projectSchema = z.object({
 });
 
 const REPO_NAMES = [
+  "vaultlet",
+  "dbstudio",
+  "kiln",
   "breeze-graphql-starter",
   "pychat-app",
   "sass-kit",

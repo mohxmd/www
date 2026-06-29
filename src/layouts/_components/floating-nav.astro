@@ -1,0 +1,104 @@
+---
+import Clock from "#/components/arts/clock.astro";
+import StarBoy from "#/components/svg/star-boy.astro";
+import Icon from "#/components/ui/icon.astro";
+import * as List from "#/components/ui/list";
+import Link from "#/components/ui/link.astro";
+import Theme from "#/components/ui/theme.astro";
+
+const navItems = [
+  { path: "/", label: "Home", icon: "house" },
+  { path: "/blog", label: "Blog", icon: "book-open-text" },
+  { path: "/projects", label: "Projects", icon: "folder-kanban" },
+  { path: "/about", label: "About", icon: "user-round" },
+  { path: "/donate", label: "Donate", icon: "heart" },
+];
+
+const isActive = (path: string) =>
+  Astro.url.pathname === path || (path !== "/" && Astro.url.pathname.startsWith(path));
+---
+
+<!-- Mobile -->
+<>
+  <header
+    class="mx-auto mb-6 flex w-full max-w-5xl items-center justify-center select-none md:hidden"
+  >
+    <Link href="/" size="fluid-2xl" class="font-8bit flex items-center gap-2 font-bold">
+      <StarBoy class="text-foreground size-10" />
+      <span class="gradient-text">MohxNotes</span>
+      <Clock class="ml-1 size-6" />
+    </Link>
+  </header>
+
+  <div class="fixed right-0 bottom-4 left-0 z-20 px-4 md:hidden">
+    <div class="mx-auto flex w-fit max-w-full items-center gap-2">
+      <nav
+        class="bg-card/80 border-border flex gap-1 rounded-full border p-0.5 shadow-md backdrop-blur"
+      >
+        <List.Root orientation="horizontal" class="flex flex-row items-center gap-1">
+          {
+            navItems.map((item) => (
+              <List.ItemLink
+                href={item.path}
+                class:list={[
+                  "nav-item text-foreground hover:bg-background/60 flex items-center rounded-full px-2.5 py-2 text-sm font-medium transition-colors md:px-3",
+                  isActive(item.path) ? "bg-background text-foreground hover:bg-background/80" : "",
+                ]}
+              >
+                <Icon name={item.icon} size="md" class="md:hidden" />
+                <span class="sr-only md:not-sr-only">{item.label}</span>
+              </List.ItemLink>
+            ))
+          }
+        </List.Root>
+      </nav>
+
+      <div class="bg-card/80 border-border flex rounded-full border p-0.5 shadow-md backdrop-blur">
+        <Theme class="text-foreground hover:bg-background/60 rounded-full" />
+      </div>
+    </div>
+  </div>
+</>
+
+<!-- Desktop -->
+<>
+  <header class="fixed top-3 right-0 left-0 z-10 hidden px-4 md:block">
+    <div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 select-none">
+      <Link href="/" size="fluid-2xl" class="font-8bit flex items-center gap-2 font-bold">
+        <StarBoy class="text-foreground size-10" />
+        <span class="gradient-text">MohxNotes</span>
+        <Clock class="ml-1 size-8" />
+      </Link>
+
+      <div class="flex items-center gap-2">
+        <nav
+          class="bg-card/80 border-border flex gap-1 rounded-full border p-0.5 shadow-md backdrop-blur"
+        >
+          <List.Root orientation="horizontal" class="flex flex-row items-center gap-1">
+            {
+              navItems.map((item) => (
+                <List.ItemLink
+                  href={item.path}
+                  class:list={[
+                    "nav-item text-foreground hover:bg-background/60 flex items-center rounded-full px-3 py-2 text-sm font-medium transition-colors",
+                    isActive(item.path)
+                      ? "bg-background text-foreground hover:bg-background/80"
+                      : "",
+                  ]}
+                >
+                  <span>{item.label}</span>
+                </List.ItemLink>
+              ))
+            }
+          </List.Root>
+        </nav>
+
+        <div
+          class="bg-card/80 border-border flex rounded-full border p-0.5 shadow-md backdrop-blur"
+        >
+          <Theme class="text-foreground hover:bg-background/60 rounded-full" />
+        </div>
+      </div>
+    </div>
+  </header>
+</>

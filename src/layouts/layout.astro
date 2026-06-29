@@ -7,8 +7,9 @@ import Cd from "#/components/ui/cd.astro";
 import ToTop from "#/components/ui/to-top.astro";
 
 import BaseHead, { type Metadata } from "./_components/base-head.astro";
-import Header from "./_components/header.astro";
+// import Header from "./_components/header.astro";
 import Footer from "./_components/footer.astro";
+import FloatingNav from "./_components/floating-nav.astro";
 
 type Props = HTMLAttributes<"main"> & {
   metadata?: Metadata;
@@ -23,8 +24,9 @@ const { metadata = {}, class: className, ...props } = Astro.props;
   </head>
   <body>
     <div class="mx-auto flex min-h-screen max-w-5xl flex-col p-6 text-sm md:p-4">
-      <Header />
-      <main {...props} class:list={[className]}>
+      <!-- <Header /> -->
+      <FloatingNav />
+      <main {...props} class:list={["pt-2 pb-24 md:pt-28 md:pb-0", className]}>
         <slot />
       </main>
       {Astro.url.pathname !== "/" && <Cd />}

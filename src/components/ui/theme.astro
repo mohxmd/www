@@ -1,14 +1,18 @@
 ---
 import Button from "#/components/ui/button.astro";
+import { cn } from "#/lib/utils";
 import Icon from "./icon.astro";
+
+const { class: className, ...props } = Astro.props;
 ---
 
 <Button
-  id="theme"
+  data-theme-toggle
   variant="ghost"
   size="icon"
-  class="cursor-pointer hover:bg-transparent"
+  class={cn("cursor-pointer hover:bg-transparent", className)}
   aria-label="Toggle Theme"
+  {...props}
 >
   <Icon name="sun" size="md" class="not-dark:hidden" />
   <Icon name="moon-star" size="md" class="dark:hidden" />
@@ -16,7 +20,14 @@ import Icon from "./icon.astro";
 
 <script>
   import { handleToggleClick } from "astro-theme-toggle";
+
+  const onThemeToggleClick = (event: Event) => {
+    handleToggleClick(event as MouseEvent);
+  };
+
   const handle = () =>
-    document.getElementById("theme")?.addEventListener("click", handleToggleClick);
+    document
+      .querySelectorAll("[data-theme-toggle]")
+      .forEach((element) => element.addEventListener("click", onThemeToggleClick));
   (handle(), document.addEventListener("astro:after-swap", handle));
 </script>

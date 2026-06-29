@@ -58,7 +58,6 @@ const REPO_NAMES = [
   "honobox",
   "mohx-cli",
   "echo-mohx",
-  "tic-tac-toe-react-native",
 ] as const;
 
 export const collections = {

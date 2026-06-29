@@ -3,8 +3,8 @@ import type { APIRoute } from "astro";
 export const GET: APIRoute = async () => {
   const arc = {
     title: "The Balance Arc ⚖️",
+    // bio: "When I was born, the devil said, ‘Oh shit — competition.’ 😏⚔️",
     summary: "Between faith and code, creation finds its rhythm. 🌙",
-    bio: "When I was born, the devil said, ‘Oh shit — competition.’ 😏⚔️",
     listening: "Quran 🎧",
     reading: "Latest Demon Slayer manga chapters 📖",
     helping: "I love sharing what I learn — helping others grow sharpens my own edge 🧠✨",

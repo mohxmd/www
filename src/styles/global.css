@@ -32,24 +32,43 @@
 }
 
 .dark {
-  --background: oklch(0.12 0.008 99.3);
-  --foreground: oklch(0.85 0.012 102.9);
-  --primary: oklch(0.586 0.218 15.2);
-  --secondary: oklch(0.17 0.015 98.1);
-  --muted: oklch(0.25 0.015 96);
-  --muted-foreground: oklch(0.6 0.015 102.9 / 0.7);
-  --border: oklch(0.3 0.02 96);
-  --accent: oklch(0.274 0.006 286.033);
-  --card: oklch(0.14 0.008 99.3);
-  --link: oklch(0.65 0.12 251.1);
-  --link-hover: oklch(0.75 0.1 241.3);
-  --shadow: rgba(0, 0, 0, 0.5);
-  --shadow-light: rgba(0, 0, 0, 0.15);
+  /* --background: oklch(0.1904 0.004 106.7692);
+  --foreground: oklch(0.9755 0.0067 97.351);
+  --primary: oklch(0.8039 0.0702 84.7579);
+  --secondary: oklch(0.2901 0.0061 78.232);
+  --muted: oklch(0.2596 0.0037 106.6523);
+  --muted-foreground: oklch(0.7006 0.0154 84.5911);
+  --border: oklch(0.2901 0.0061 78.232);
+  --accent: oklch(0.8039 0.0702 84.7579);
+  --card: oklch(0.2343 0.0038 106.6863);
+  --link: oklch(0.5498 0.0111 252.878);
+  --link-hover: oklch(0.6926 0.0459 87.9527);
+  --shadow: rgba(0, 0, 0, 0.4);
+  --shadow-light: rgba(0, 0, 0, 0.2);
 
-  --destructive: oklch(0.55 0.12 30.3);
-  --warn: oklch(0.65 0.1 88.8);
-  --info: oklch(0.72 0.13 249.3);
-  --success: oklch(0.71 0.14 147.6);
+  --destructive: oklch(0.6368 0.2078 25.3313);
+  --warn: oklch(0.6926 0.0459 87.9527);
+  --info: oklch(0.5498 0.0111 252.878);
+  --success: oklch(0.7006 0.0154 84.5911); */
+
+  --background: oklch(0.2246 0.0094 107.1335);
+  --foreground: oklch(0.928 0.0263 82.3839);
+  --primary: oklch(0.7369 0.0805 66.0333);
+  --secondary: oklch(0.3796 0.0246 54.5408);
+  --muted: oklch(0.2956 0.017 63.2887);
+  --muted-foreground: oklch(0.8032 0.0335 80.9608);
+  --border: oklch(0.3796 0.0246 54.5408);
+  --accent: oklch(0.4208 0.0385 55.7197);
+  --card: oklch(0.1684 0 0);
+  --link: oklch(0.6898 0.0865 64.3894);
+  --link-hover: oklch(0.7369 0.0805 66.0333);
+  --shadow: rgba(60, 50, 42, 0);
+  --shadow-light: rgba(60, 50, 42, 0);
+
+  --destructive: oklch(0.5679 0.1914 32.9934);
+  --warn: oklch(0.6351 0.1052 63.859);
+  --info: oklch(0.5751 0.0845 67.8075);
+  --success: oklch(0.6898 0.0865 64.3894);
 }
 
 @theme inline {

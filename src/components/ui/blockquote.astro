@@ -42,10 +42,14 @@ const inferredRole = variant === "error" || variant === "warning" ? "alert" : "s
 
 <blockquote class="not-prose" aria-label={title || "Note"}>
   <Alert.Root variant={variant} role={inferredRole}>
-    <Alert.Title>
-      <Icon name={icon} />
-      <span>{title}</span>
-    </Alert.Title>
+    {
+      title && (
+        <Alert.Title>
+          <Icon name={icon} />
+          <span>{title}</span>
+        </Alert.Title>
+      )
+    }
 
     <Alert.Description>
       <slot />

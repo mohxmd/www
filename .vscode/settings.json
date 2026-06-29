@@ -47,7 +47,15 @@
   },
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
+    "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "ngClass",
+    "class:list",
+    ".*ClassName",
+    ".*Class"
+  ]
   // theme
   // "window.autoDetectColorScheme": true,
   // "workbench.preferredLightColorTheme": "Vitesse Light",

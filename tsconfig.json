@@ -6,10 +6,7 @@
     "jsxImportSource": "react",
     "verbatimModuleSyntax": true,
     "plugins": [{ "name": "@astrojs/ts-plugin" }],
-    "baseUrl": ".",
-    "paths": {
-      "#/*": ["src/*"]
-    }
+    "paths": { "#/*": ["./src/*"] }
   },
   "exclude": ["dist", ".vercel", ".astro", ".vscode", "node_modules"]
 }

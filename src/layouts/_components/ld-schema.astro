@@ -58,4 +58,4 @@ const webPageSchema = {
 const structuredData = type === "blog" ? blogPostingSchema : webPageSchema;
 ---
 
-<script type="application/ld+json" set:text={JSON.stringify(structuredData)} />
+<script is:inline type="application/ld+json" set:text={JSON.stringify(structuredData)} />

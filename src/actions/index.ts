@@ -1,6 +1,6 @@
 import { defineAction } from "astro:actions";
-import { db, guestbook } from "astro:db";
-import { z } from "astro:schema";
+import { z } from "astro/zod";
+import { db, guestbook } from "#/db";
 
 export const server = {
   addEntry: defineAction({

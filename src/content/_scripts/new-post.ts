@@ -2,7 +2,7 @@
 import { writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 
-import { type BlogSchema } from "#/content/config";
+import { type BlogSchema } from "#/content.config";
 
 // Utility to sanitize the title into a slug
 function createSlug(title: string): string {
@@ -83,7 +83,7 @@ Write your blog post content here!
 const title = process.argv[2];
 if (!title) {
   console.error("Error: Please provide a title for the blog post.");
-  console.error("Usage: bun run create-post <title>");
+  console.error("Usage: bun run new <title>");
   process.exit(1);
 }
 

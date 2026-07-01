@@ -29,10 +29,10 @@ const posts = (await getSortedPosts()).slice(0, 6);
             alt={post.data.title}
             width={800}
             height={400}
-            loading="eager"
             decoding="async"
             format="webp"
             quality={80}
+            layout="constrained"
             class="h-32 w-full object-cover"
           />
 

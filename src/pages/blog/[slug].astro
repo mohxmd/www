@@ -86,7 +86,10 @@ const publishDate = pubDate.toLocaleString();
         alt={title}
         width={800}
         height={400}
-        class="border-border aspect-[2/1] w-full rounded-lg border object-cover"
+        loading="eager"
+        fetchpriority="high"
+        layout="constrained"
+        class="border-border aspect-2/1 w-full rounded-lg border object-cover"
       />
     </div>
 

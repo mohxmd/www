@@ -1,8 +1,9 @@
 ---
 export const prerender = false;
 
-import { db, desc, guestbook } from "astro:db";
+import { desc } from "drizzle-orm";
 import { actions } from "astro:actions";
+import { db, guestbook } from "#/db";
 import Layout from "#/layouts/layout.astro";
 
 import Text from "#/components/ui/text.astro";

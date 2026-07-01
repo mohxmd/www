@@ -321,7 +321,7 @@ const { position = "bottom-right" } = Astro.props;
     }
 
     show(message: string, options: ToastOptions = {}): string {
-      const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const id = `toast-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
       const duration = options.duration ?? 4000;
 
       const toastElement = this.createToastElement(id, message, options);

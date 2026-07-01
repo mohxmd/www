@@ -7,7 +7,7 @@ type Props<Tag extends HTMLTag = "p"> = Polymorphic<{ as: Tag }> & TextVariants;
 
 export type TextVariants = VariantProps<typeof textVariants>;
 
-export const textVariants = cva("", {
+const textVariants = cva("", {
   variants: {
     variant: {
       default: "text-foreground",

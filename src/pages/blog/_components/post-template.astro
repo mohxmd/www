@@ -1,6 +1,7 @@
 ---
 import type { Page } from "astro";
-import { db, sum, post_view } from "astro:db";
+import { sum } from "drizzle-orm";
+import { db, postView } from "#/db";
 import { getPopularTags, type GetAllTags, type GetSortedPosts } from "#/content/utils";
 
 import Layout from "#/layouts/layout.astro";
@@ -21,8 +22,8 @@ const tags = (await getPopularTags()).map((tag) => tag.text);
 const { data: paginatedPosts, url, currentPage, lastPage, total } = Astro.props;
 
 const views = await db
-  .select({ totalViews: sum(post_view.views) })
-  .from(post_view)
+  .select({ totalViews: sum(postView.views) })
+  .from(postView)
   .get();
 const totalViews = views?.totalViews ?? 0;
 ---

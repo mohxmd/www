@@ -1,9 +1,22 @@
 import { Octokit } from "@octokit/rest";
-import { glob } from "astro/loaders";
-import { defineCollection, z, type ImageFunction } from "astro:content";
+import { defineCollection, type ImageFunction } from "astro:content";
 import { GITHUB_TOKEN, USERNAME } from "astro:env/server";
+import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
-const octokit = new Octokit({ auth: GITHUB_TOKEN });
+const octokit = new Octokit(GITHUB_TOKEN ? { auth: GITHUB_TOKEN } : {});
+
+const getRepo = async (repo: string) => {
+  try {
+    return await octokit.repos.get({ owner: USERNAME, repo });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `Skipping GitHub metadata for ${repo}: ${error instanceof Error ? error.message : "Unknown error"}`
+    );
+    return null;
+  }
+};
 
 const blogSchema = ({ image }: { image: ImageFunction }) =>
   z.object({
@@ -19,16 +32,19 @@ const blogSchema = ({ image }: { image: ImageFunction }) =>
       .string()
       .transform(async (repo) => {
         if (!repo) return null;
-        return octokit.repos.get({ owner: USERNAME, repo }).then((response) => ({
+        const response = await getRepo(repo);
+        if (!response) return null;
+
+        return {
           name: response.data.name,
           description: response.data.description,
           language: response.data.language,
           stargazers: response.data.stargazers_count,
           forks: response.data.forks_count,
           watchers: response.data.watchers_count,
-          githubUrl: response.data.homepage,
-          websiteUrl: response.data.html_url,
-        }));
+          githubUrl: response.data.html_url,
+          websiteUrl: response.data.homepage,
+        };
       })
       .optional(),
   });
@@ -41,8 +57,8 @@ const projectSchema = z.object({
   forks: z.number(),
   watchers: z.number(),
   topics: z.array(z.string()),
-  githubUrl: z.string().url(),
-  homepageUrl: z.string().url().nullable(),
+  githubUrl: z.url(),
+  homepageUrl: z.url().nullable(),
   language: z.string().optional(),
   createdAt: z.string().optional(),
   isPrivate: z.boolean().optional(),
@@ -69,25 +85,30 @@ export const collections = {
     schema: blogSchema,
   }),
   projects: defineCollection({
-    loader: async () =>
-      Promise.all(
-        REPO_NAMES.map((repo) =>
-          octokit.repos.get({ owner: USERNAME, repo }).then((response) => ({
-            id: response.data.id.toString(),
-            name: response.data.name,
-            description: response.data.description,
-            stars: response.data.stargazers_count,
-            forks: response.data.forks_count,
-            watchers: response.data.watchers_count,
-            topics: response.data.topics,
-            githubUrl: response.data.html_url,
-            homepageUrl: response.data.homepage || null,
-            language: response.data.language,
-            createdAt: response.data.created_at,
-            isPrivate: response.data.private,
-          }))
-        )
-      ),
+    loader: async () => {
+      const repos = await Promise.all(REPO_NAMES.map(getRepo));
+
+      return repos.flatMap((response) =>
+        response
+          ? [
+              {
+                id: response.data.id.toString(),
+                name: response.data.name,
+                description: response.data.description ?? "",
+                stars: response.data.stargazers_count,
+                forks: response.data.forks_count,
+                watchers: response.data.watchers_count,
+                topics: response.data.topics ?? [],
+                githubUrl: response.data.html_url,
+                homepageUrl: response.data.homepage || null,
+                language: response.data.language ?? undefined,
+                createdAt: response.data.created_at,
+                isPrivate: response.data.private,
+              },
+            ]
+          : []
+      );
+    },
     schema: projectSchema,
   }),
 };

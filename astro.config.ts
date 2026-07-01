@@ -24,7 +24,7 @@ export default defineConfig({
   adapter: vercel({
     webAnalytics: { enabled: true },
     imageService: true,
-    includeFiles: ["./node_modules/ws/**/*"],
+    includeFiles: ["./node_modules/ws"],
   }),
   prefetch: true,
 

@@ -21,11 +21,21 @@ const { data: paginatedPosts, url, currentPage, lastPage, total } = Astro.props 
   GetSortedPosts[0]
 >;
 
-const views = await db
-  .select({ totalViews: sum(postView.views) })
-  .from(postView)
-  .get();
-const totalViews = views?.totalViews ?? 0;
+const totalViews = await (async () => {
+  try {
+    const views = await db
+      .select({ totalViews: sum(postView.views) })
+      .from(postView)
+      .get();
+    return views?.totalViews ?? 0;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `Skipping blog total views during prerender: ${error instanceof Error ? error.message : "Unknown error"}`
+    );
+    return 0;
+  }
+})();
 ---
 
 <Layout

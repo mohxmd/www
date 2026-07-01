@@ -21,7 +21,11 @@ import { readingTime, toText } from "./src/lib/utils";
 
 export default defineConfig({
   site: "https://mohammedsh.xyz",
-  adapter: vercel({ webAnalytics: { enabled: true }, imageService: true }),
+  adapter: vercel({
+    webAnalytics: { enabled: true },
+    imageService: true,
+    includeFiles: ["./node_modules/ws/**/*"],
+  }),
   prefetch: true,
 
   markdown: {

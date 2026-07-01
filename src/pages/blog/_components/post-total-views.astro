@@ -1,0 +1,27 @@
+---
+export const prerender = false;
+
+import { sum } from "drizzle-orm";
+import type { ComponentProps } from "astro/types";
+import { db, postView } from "#/db";
+
+import Number from "#/components/ui/number.astro";
+
+type Props = Omit<ComponentProps<typeof Number>, "value">;
+
+const props = Astro.props as Props;
+const views = await db
+  .select({ totalViews: sum(postView.views) })
+  .from(postView)
+  .get()
+  .then((res) => res?.totalViews ?? 0)
+  .catch((error) => {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `Skipping blog total views at request time: ${error instanceof Error ? error.message : "Unknown error"}`
+    );
+    return 0;
+  });
+---
+
+<Number {...props} value={+views}> Views</Number>

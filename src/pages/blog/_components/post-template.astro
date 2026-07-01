@@ -1,13 +1,10 @@
 ---
 import type { Page } from "astro";
-import { sum } from "drizzle-orm";
-import { db, postView } from "#/db";
 import { getPopularTags, type GetSortedPosts } from "#/content/utils";
 
 import Layout from "#/layouts/layout.astro";
 import Icon from "#/components/ui/icon.astro";
 import Text from "#/components/ui/text.astro";
-import Number from "#/components/ui/number.astro";
 import Separator from "#/components/ui/separator.astro";
 import Link from "#/components/ui/link.astro";
 import Chip from "#/components/ui/chip.astro";
@@ -15,27 +12,12 @@ import * as Paginator from "#/components/ui/paginator";
 
 import PostCard from "./post-card.astro";
 import PostSearch from "./post-search.astro";
+import PostTotalViews from "./post-total-views.astro";
 
 const tags = await getPopularTags();
 const { data: paginatedPosts, url, currentPage, lastPage, total } = Astro.props as Page<
   GetSortedPosts[0]
 >;
-
-const totalViews = await (async () => {
-  try {
-    const views = await db
-      .select({ totalViews: sum(postView.views) })
-      .from(postView)
-      .get();
-    return views?.totalViews ?? 0;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      `Skipping blog total views during prerender: ${error instanceof Error ? error.message : "Unknown error"}`
-    );
-    return 0;
-  }
-})();
 ---
 
 <Layout
@@ -57,7 +39,9 @@ const totalViews = await (async () => {
         <Separator class="flex-1" />
 
         <div class="text-fluid-sm flex items-center">
-          <Number value={+totalViews}> Views</Number>
+          <PostTotalViews server:defer variant="muted" size="sm">
+            <span slot="fallback">0 Views</span>
+          </PostTotalViews>
           <Icon name="dot" class="shrink-0" size="sm" aria-hidden />
           <span>{total} Posts</span>
         </div>

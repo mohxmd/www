@@ -8,7 +8,37 @@ import * as List from "#/components/ui/list";
 import * as Dialog from "#/components/ui/dialog";
 ---
 
-<Dialog.Root x-data="{ data: [] }" @close.debounce.200ms="data = []; $refs.query.value = ''">
+<Dialog.Root
+  x-data="{
+    data: [],
+    error: '',
+    requestId: 0,
+    async searchPosts(value) {
+      const query = value.trim();
+      if (!query) {
+        this.data = [];
+        this.error = '';
+        return;
+      }
+
+      if (!window.pagefind) {
+        this.data = [];
+        this.error = 'Search is available in the production build.';
+        return;
+      }
+
+      const currentRequest = ++this.requestId;
+      this.error = '';
+      const search = await window.pagefind.search(query);
+      const results = await Promise.all(search.results.map((item) => item.data()));
+
+      if (currentRequest === this.requestId) {
+        this.data = results;
+      }
+    },
+  }"
+  @close.debounce.200ms="data = []; error = ''; requestId = 0; $refs.query.value = ''"
+>
   <Button slot="dialog-trigger" variant="secondary" class="w-full px-3">
     <Icon name="search" size="sm" />
     <Text variant="muted">Search Posts</Text>
@@ -18,7 +48,7 @@ import * as Dialog from "#/components/ui/dialog";
     <Input
       x-ref="query"
       placeholder="Search posts..."
-      @keyup="data = await Promise.all((await pagefind.search($event.target.value)).results.map((item) => item.data()))"
+      @input.debounce.150ms="searchPosts($event.target.value)"
     >
       <Icon slot="prefix" size="sm" name="search" />
       <Button
@@ -37,14 +67,20 @@ import * as Dialog from "#/components/ui/dialog";
     <div x-cloak>
       <Text
         class="text-muted-foreground mx-auto max-w-max"
-        x-show="!data.length && $refs.query.value.length"
+        x-show="error"
+        x-text="error"
+      />
+      <Text
+        class="text-muted-foreground mx-auto max-w-max"
+        x-show="!error && !data.length && $refs.query.value.length"
+        x-cloak
       >
         No Results Found
       </Text>
       <List.Root
         class="[&_mark]:bg-accent [&_mark]:text-foreground [&_mark]:rounded [&_mark]:p-0.5"
       >
-        <template x-for="post in data">
+        <template x-for="post in data" :key="post.url">
           <List.ItemLink
             :href="post.url"
             :aria-label="post.meta.title"

@@ -3,7 +3,7 @@ export const prerender = false;
 
 import type { ComponentProps } from "astro/types";
 import type { CollectionEntry } from "astro:content";
-import { eq, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { db, postView } from "#/db";
 
 import Number from "#/components/ui/number.astro";
@@ -12,13 +12,22 @@ type Props = Omit<ComponentProps<typeof Number>, "value"> & Pick<CollectionEntry
 
 const { id, ...props } = Astro.props;
 const views = await db
-  .update(postView)
-  .set({ views: sql`${postView.views} + 1` })
-  .where(eq(postView.post, id))
+  .insert(postView)
+  .values({ post: id, views: 1 })
+  .onConflictDoUpdate({
+    target: postView.post,
+    set: { views: sql`${postView.views} + 1` },
+  })
   .returning({ views: postView.views })
   .get()
-  .then((res) => res.views ?? 0)
-  .catch(() => 0);
+  .then((res) => res?.views ?? 0)
+  .catch((error) => {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `Skipping post views update for ${id}: ${error instanceof Error ? error.message : "Unknown error"}`
+    );
+    return 0;
+  });
 ---
 
 <Number {...props} value={views}> Views</Number>

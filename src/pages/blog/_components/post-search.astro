@@ -9,6 +9,8 @@ import * as Dialog from "#/components/ui/dialog";
 ---
 
 <Dialog.Root
+  aria-labelledby="blog-search-title"
+  aria-describedby="blog-search-description"
   x-data="{
     data: [],
     error: '',
@@ -45,6 +47,12 @@ import * as Dialog from "#/components/ui/dialog";
     <Command key="/" class="ml-auto" @keyup.window.slash="$el.parentElement.click()" />
   </Button>
   <Dialog.Header>
+    <Text id="blog-search-title" class="sr-only">
+      Search blog posts
+    </Text>
+    <Text id="blog-search-description" class="sr-only">
+      Search posts by typing a title or keyword and choose a result from the list.
+    </Text>
     <Input
       x-ref="query"
       placeholder="Search posts..."

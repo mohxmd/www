@@ -21,6 +21,7 @@
         "drizzle-orm": "^0.45.2",
         "rehype-pretty-code": "^0.14.3",
         "tailwind-merge": "^3.6.0",
+        "ws": "^8.21.0",
       },
       "devDependencies": {
         "@astrojs/check": "^0.9.9",

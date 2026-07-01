@@ -2,16 +2,10 @@ import "dotenv/config";
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import { postView } from "../src/db/schema";
+import { resolveScriptDatabaseConfig } from "./config";
 import { initializeLocalDatabase } from "./initialize";
 
-const useRemote = process.env.USE_REMOTE_DB === "true";
-const url = useRemote
-  ? process.env.TURSO_DATABASE_URL
-  : (process.env.DATABASE_URL ?? "file:local.db");
-
-if (!url) throw new Error("A Turso database URL is required when USE_REMOTE_DB=true.");
-
-const authToken = process.env.TURSO_AUTH_TOKEN;
+const { useRemote, url, authToken } = resolveScriptDatabaseConfig(process.env);
 
 if (!useRemote) await initializeLocalDatabase(url);
 

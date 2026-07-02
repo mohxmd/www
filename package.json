@@ -32,6 +32,7 @@
     "@libsql/client": "^0.17.4",
     "@octokit/rest": "^22.0.1",
     "@shikijs/transformers": "^4.3.0",
+    "@tursodatabase/serverless": "^1.2.3",
     "@types/alpinejs": "^3.13.11",
     "alpinejs": "^3.15.12",
     "astro": "7.0.5",
@@ -42,8 +43,7 @@
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
     "rehype-pretty-code": "^0.14.3",
-    "tailwind-merge": "^3.6.0",
-    "ws": "^8.21.0"
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

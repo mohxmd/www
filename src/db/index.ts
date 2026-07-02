@@ -1,5 +1,5 @@
 import { TURSO_AUTH_TOKEN, TURSO_DATABASE_URL } from "astro:env/server";
-import * as schema from "./schema";
+import { createDatabase as createResolvedDatabase } from "./create-database";
 
 const url =
   TURSO_DATABASE_URL ??
@@ -10,31 +10,20 @@ const authToken = url.startsWith("file:")
   ? undefined
   : (TURSO_AUTH_TOKEN ?? process.env.TURSO_AUTH_TOKEN);
 
-const createDatabase = async () => {
+const createRuntimeDatabase = async () => {
   if (process.env.VERCEL === "1" && url.startsWith("file:")) {
     throw new Error(
       "Missing Turso runtime configuration. Set TURSO_DATABASE_URL and TURSO_AUTH_TOKEN in Vercel."
     );
   }
 
-  if (!url.startsWith("file:")) {
-    const [{ createClient }, { drizzle }] = await Promise.all([
-      import("@libsql/client/http"),
-      import("drizzle-orm/libsql/http"),
-    ]);
-    return drizzle(createClient({ url, ...(authToken ? { authToken } : {}) }), { schema });
-  }
-  const [{ createClient }, { drizzle }] = await Promise.all([
-    import("@libsql/client/sqlite3"),
-    import("drizzle-orm/libsql/sqlite3"),
-  ]);
-  return drizzle(createClient({ url }), { schema });
+  return createResolvedDatabase({ url, authToken });
 };
 
-let databasePromise: ReturnType<typeof createDatabase> | undefined;
+let databasePromise: ReturnType<typeof createRuntimeDatabase> | undefined;
 
 export const getDb = () => {
-  databasePromise ??= createDatabase();
+  databasePromise ??= createRuntimeDatabase();
   return databasePromise;
 };
 

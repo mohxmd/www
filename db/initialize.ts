@@ -1,4 +1,4 @@
-import { createClient } from "@libsql/client";
+import { createClient } from "@libsql/client/sqlite3";
 
 export async function initializeLocalDatabase(url: string) {
   const client = createClient({ url });

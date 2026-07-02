@@ -1,7 +1,6 @@
 import "dotenv/config";
-import { createClient } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
 import { postView } from "../src/db/schema";
+import { createDatabase } from "../src/db/create-database";
 import { resolveScriptDatabaseConfig } from "./config";
 import { initializeLocalDatabase } from "./initialize";
 
@@ -9,8 +8,7 @@ const { useRemote, url, authToken } = resolveScriptDatabaseConfig(process.env);
 
 if (!useRemote) await initializeLocalDatabase(url);
 
-const client = createClient({ url, ...(authToken ? { authToken } : {}) });
-const db = drizzle(client);
+const db = await createDatabase({ url, authToken });
 
 async function seed() {
   // Note: This is real data from my previous Astro Studio database

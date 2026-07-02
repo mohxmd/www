@@ -17,23 +17,3 @@ export function resolveScriptDatabaseConfig(env: ProcessEnvLike) {
 
   return { useRemote, url, authToken };
 }
-
-export function resolveRuntimeDatabaseConfig({
-  databaseUrlOverride,
-  isDev,
-  tursoUrl,
-  tursoAuthToken,
-}: {
-  databaseUrlOverride: string | undefined;
-  isDev: boolean;
-  tursoUrl: string | undefined;
-  tursoAuthToken: string | undefined;
-}) {
-  const url =
-    databaseUrlOverride ?? (isDev ? LOCAL_DATABASE_URL : (tursoUrl ?? LOCAL_DATABASE_URL));
-
-  return {
-    url,
-    authToken: url.startsWith("file:") ? undefined : tursoAuthToken,
-  };
-}

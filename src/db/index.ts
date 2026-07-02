@@ -10,13 +10,13 @@ const authToken = url.startsWith("file:")
   ? undefined
   : (TURSO_AUTH_TOKEN ?? process.env.TURSO_AUTH_TOKEN);
 
-if (process.env.VERCEL === "1" && url.startsWith("file:")) {
-  throw new Error(
-    "Missing Turso runtime configuration. Set TURSO_DATABASE_URL and TURSO_AUTH_TOKEN in Vercel."
-  );
-}
+const createDatabase = async () => {
+  if (process.env.VERCEL === "1" && url.startsWith("file:")) {
+    throw new Error(
+      "Missing Turso runtime configuration. Set TURSO_DATABASE_URL and TURSO_AUTH_TOKEN in Vercel."
+    );
+  }
 
-export const db = await (async () => {
   if (!url.startsWith("file:")) {
     const [{ createClient }, { drizzle }] = await Promise.all([
       import("@libsql/client/http"),
@@ -29,6 +29,13 @@ export const db = await (async () => {
     import("drizzle-orm/libsql/sqlite3"),
   ]);
   return drizzle(createClient({ url }), { schema });
-})();
+};
+
+let databasePromise: ReturnType<typeof createDatabase> | undefined;
+
+export const getDb = () => {
+  databasePromise ??= createDatabase();
+  return databasePromise;
+};
 
 export * from "./schema";

@@ -4,22 +4,25 @@ export const prerender = false;
 import type { ComponentProps } from "astro/types";
 import type { CollectionEntry } from "astro:content";
 import { sql } from "drizzle-orm";
-import { db, postView } from "#/db";
+import { getDb, postView } from "#/db";
 
 import Number from "#/components/ui/number.astro";
 
 type Props = Omit<ComponentProps<typeof Number>, "value"> & Pick<CollectionEntry<"blog">, "id">;
 
 const { id, ...props } = Astro.props;
-const views = await db
-  .insert(postView)
-  .values({ post: id, views: 1 })
-  .onConflictDoUpdate({
-    target: postView.post,
-    set: { views: sql`${postView.views} + 1` },
-  })
-  .returning({ views: postView.views })
-  .get()
+const views = await getDb()
+  .then((db) =>
+    db
+      .insert(postView)
+      .values({ post: id, views: 1 })
+      .onConflictDoUpdate({
+        target: postView.post,
+        set: { views: sql`${postView.views} + 1` },
+      })
+      .returning({ views: postView.views })
+      .get()
+  )
   .then((res) => res?.views ?? 0)
   .catch((error) => {
     // eslint-disable-next-line no-console

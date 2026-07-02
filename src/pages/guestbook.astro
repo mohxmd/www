@@ -3,7 +3,7 @@ export const prerender = false;
 
 import { desc } from "drizzle-orm";
 import { actions } from "astro:actions";
-import { db, guestbook } from "#/db";
+import { getDb, guestbook } from "#/db";
 import Layout from "#/layouts/layout.astro";
 
 import Text from "#/components/ui/text.astro";
@@ -16,6 +16,7 @@ const result = Astro.getActionResult(actions.addEntry);
 // eslint-disable-next-line no-console
 if (result?.error) console.error(result.error);
 
+const db = await getDb();
 const entries = await db.select().from(guestbook).orderBy(desc(guestbook.published));
 ---
 

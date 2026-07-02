@@ -11,7 +11,8 @@ type Props = {
 };
 
 const { project } = Astro.props;
-const { description, forks, githubUrl, homepageUrl, name, stars, language } = project;
+const { description, forks, githubUrl, homepageLabel, homepageUrl, name, stars, language } =
+  project;
 ---
 
 <div class="bg-card flex flex-col border font-sans shadow-sm">
@@ -75,7 +76,7 @@ const { description, forks, githubUrl, homepageUrl, name, stars, language } = pr
               class="hover:text-link text-fluid-sm"
               iconSize="sm"
             >
-              Demo
+              {homepageLabel ?? "Demo"}
             </Link>
           )
         }

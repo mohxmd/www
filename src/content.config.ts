@@ -6,6 +6,26 @@ import { z } from "astro/zod";
 
 const octokit = new Octokit(GITHUB_TOKEN ? { auth: GITHUB_TOKEN } : {});
 
+const getHomepageLabel = (url: string | null) => {
+  if (!url) return null;
+
+  try {
+    const { hostname, pathname } = new URL(url);
+
+    if (hostname === "www.npmjs.com" && pathname.startsWith("/package/")) {
+      return "NPM";
+    }
+
+    if (hostname === "jsr.io") {
+      return "JSR";
+    }
+  } catch {
+    return "Demo";
+  }
+
+  return "Demo";
+};
+
 const getRepo = async (repo: string) => {
   try {
     return await octokit.repos.get({ owner: USERNAME, repo });
@@ -59,6 +79,7 @@ const projectSchema = z.object({
   topics: z.array(z.string()),
   githubUrl: z.url(),
   homepageUrl: z.url().nullable(),
+  homepageLabel: z.string().nullable(),
   language: z.string().optional(),
   createdAt: z.string().optional(),
   isPrivate: z.boolean().optional(),
@@ -66,14 +87,15 @@ const projectSchema = z.object({
 
 const REPO_NAMES = [
   "vaultlet",
+  "drizzle-redis-cache",
   "dbstudio",
   "kiln",
   "breeze-graphql-starter",
   "pychat-app",
   "sass-kit",
-  "honobox",
   "mohx-cli",
   "echo-mohx",
+  "honobox",
 ] as const;
 
 export const collections = {
@@ -101,6 +123,7 @@ export const collections = {
                 topics: response.data.topics ?? [],
                 githubUrl: response.data.html_url,
                 homepageUrl: response.data.homepage || null,
+                homepageLabel: getHomepageLabel(response.data.homepage || null),
                 language: response.data.language ?? undefined,
                 createdAt: response.data.created_at,
                 isPrivate: response.data.private,

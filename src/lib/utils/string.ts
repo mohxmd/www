@@ -16,7 +16,8 @@ export function truncateText(text: string, maxLength: number): string {
 
 export function truncateSafe(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
-  return text.slice(0, text.lastIndexOf(" ", maxLength)).trim() + "…";
+  const safeBreak = text.lastIndexOf(" ", maxLength);
+  return (safeBreak > 0 ? text.slice(0, safeBreak) : text.slice(0, maxLength)).trim() + "…";
 }
 
 export function formatDate(date: string | Date): string {

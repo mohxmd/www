@@ -17,15 +17,28 @@ export function buildToc(headings: Heading[]): Heading[] {
 
   for (const h of headings) {
     const current: Heading = { ...h, subheadings: [] };
-    parents.set(current.depth, current);
 
     if (current.depth === 2) {
+      parents.clear();
+      parents.set(current.depth, current);
       toc.push(current);
       continue;
     }
 
-    const parent = parents.get(current.depth - 1);
-    if (parent) parent.subheadings!.push(current);
+    for (const depth of [...parents.keys()]) {
+      if (depth >= current.depth) parents.delete(depth);
+    }
+
+    const parent =
+      parents.get(current.depth - 1) ??
+      [...parents.entries()]
+        .sort(([a], [b]) => b - a)
+        .find(([depth]) => depth < current.depth)?.[1];
+
+    if (parent) {
+      parent.subheadings!.push(current);
+      parents.set(current.depth, current);
+    }
   }
 
   return toc;

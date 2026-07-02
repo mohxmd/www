@@ -43,7 +43,10 @@ function processNode(value: unknown, includeImageAlt: boolean, includeHtml: bool
 }
 
 function processArray(values: unknown[], includeImageAlt: boolean, includeHtml: boolean): string {
-  return values.map((value) => processNode(value, includeImageAlt, includeHtml)).join("");
+  return values
+    .map((value) => processNode(value, includeImageAlt, includeHtml).trim())
+    .filter(Boolean)
+    .join(" ");
 }
 
 function isNode(value: unknown): value is NodeLike {

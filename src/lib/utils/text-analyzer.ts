@@ -29,21 +29,26 @@ export function readingTime(
 
   // Count words
   for (let i = start; i <= end; i++) {
-    const current = normalizedText[i];
-    const next = normalizedText[i + 1];
-    if (!current) continue;
+    const current = normalizedText.codePointAt(i);
+    const currentChar = current ? String.fromCodePoint(current) : undefined;
+    const nextIndex = i + (currentChar?.length ?? 1);
+    const next = normalizedText.codePointAt(nextIndex);
+    const nextChar = next ? String.fromCodePoint(next) : undefined;
+    if (!currentChar) continue;
 
     if (
-      (current && isCJK(current)) ||
-      (current && !wordBound(current) && next && (wordBound(next) || isCJK(next)))
+      isCJK(currentChar) ||
+      (!wordBound(currentChar) && nextChar && (wordBound(nextChar) || isCJK(nextChar)))
     ) {
       words++;
     }
-    if (current && isCJK(current)) {
-      while (i <= end && next && (isPunctuation(next) || wordBound(next))) {
-        i++;
+    if (isCJK(currentChar)) {
+      while (i <= end && nextChar && (isPunctuation(nextChar) || wordBound(nextChar))) {
+        i = nextIndex;
       }
     }
+
+    if (currentChar.length === 2) i++;
   }
 
   // Calculate reading time
@@ -55,7 +60,8 @@ export function readingTime(
 }
 
 function isCJK(c: string): boolean {
-  const charCode = c.charCodeAt(0);
+  const charCode = c.codePointAt(0);
+  if (charCode === undefined) return false;
   return (
     (0x3040 <= charCode && charCode <= 0x309f) || // Hiragana
     (0x4e00 <= charCode && charCode <= 0x9fff) || // CJK Unified ideographs
@@ -69,7 +75,8 @@ function isAnsiWordBound(c: string): boolean {
 }
 
 function isPunctuation(c: string): boolean {
-  const charCode = c.charCodeAt(0);
+  const charCode = c.codePointAt(0);
+  if (charCode === undefined) return false;
   return (
     (0x21 <= charCode && charCode <= 0x2f) ||
     (0x3a <= charCode && charCode <= 0x40) ||

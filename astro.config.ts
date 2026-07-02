@@ -1,5 +1,6 @@
 import { defineConfig, envField, fontProviders } from "astro/config";
 
+import node from "@astrojs/node";
 import vercel from "@astrojs/vercel";
 
 import mdx from "@astrojs/mdx";
@@ -19,12 +20,16 @@ import {
 } from "@shikijs/transformers";
 import { readingTime, toText } from "./src/lib/utils";
 
+const useNodeAdapter = process.env.ASTRO_ADAPTER === "node";
+
 export default defineConfig({
   site: "https://mohammedsh.xyz",
-  adapter: vercel({
-    webAnalytics: { enabled: true },
-    imageService: true,
-  }),
+  adapter: useNodeAdapter
+    ? node({ mode: "standalone" })
+    : vercel({
+        webAnalytics: { enabled: true },
+        imageService: true,
+      }),
   prefetch: true,
 
   markdown: {

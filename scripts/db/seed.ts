@@ -1,14 +1,19 @@
 import "dotenv/config";
-import { postView } from "../src/db/schema";
-import { createDatabase } from "../src/db/create-database";
-import { resolveScriptDatabaseConfig } from "./config";
-import { initializeLocalDatabase } from "./initialize";
+import { drizzle } from "drizzle-orm/libsql";
+import { postView } from "../../src/db/schema";
 
-const { useRemote, url, authToken } = resolveScriptDatabaseConfig(process.env);
+import * as schema from "../../src/db/schema";
 
-if (!useRemote) await initializeLocalDatabase(url);
+const url = process.env.TURSO_DATABASE_URL;
+const authToken = process.env.TURSO_AUTH_TOKEN;
 
-const db = await createDatabase({ url, authToken });
+if (!url) throw new Error("Missing TURSO_DATABASE_URL.");
+if (!authToken) throw new Error("Missing TURSO_AUTH_TOKEN.");
+
+const db = drizzle({
+  connection: { url, authToken },
+  schema,
+});
 
 async function seed() {
   // Note: This is real data from my previous Astro Studio database

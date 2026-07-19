@@ -10,7 +10,7 @@ export const server = {
       message: z.string().min(1, "Message cannot be empty"),
     }),
     handler: async ({ name, message }) => {
-      const db = await getDb();
+      const db = getDb();
       await db.insert(guestbook).values({ name, message });
     },
   }),

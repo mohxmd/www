@@ -10,8 +10,15 @@ import Number from "#/components/ui/number.astro";
 type Props = Omit<ComponentProps<typeof Number>, "value">;
 
 const props = Astro.props as Props;
-const views = await getDb()
-  .then((db) => db.select({ totalViews: sum(postView.views) }).from(postView).get())
+const views = await Promise.resolve()
+  .then(() => {
+    const db = getDb();
+
+    return db
+      .select({ totalViews: sum(postView.views) })
+      .from(postView)
+      .get();
+  })
   .then((res) => res?.totalViews ?? 0)
   .catch((error) => {
     // eslint-disable-next-line no-console

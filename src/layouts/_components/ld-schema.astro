@@ -1,4 +1,6 @@
 ---
+/* eslint-disable astro/no-set-html-directive */
+
 type Props = {
   type: "blog" | "website";
   title: string;
@@ -58,4 +60,4 @@ const webPageSchema = {
 const structuredData = type === "blog" ? blogPostingSchema : webPageSchema;
 ---
 
-<script is:inline type="application/ld+json" set:text={JSON.stringify(structuredData)} />
+<script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />

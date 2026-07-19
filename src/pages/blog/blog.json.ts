@@ -2,13 +2,13 @@
  * Search API Endpoint
  *
  * Provides JSON endpoint with all blog posts for client-side search.
- * Endpoint: /api/blog/search.json
+ * Endpoint: /blog/blog.json
  *
  * Returns lightweight post data (excludes heavy content like body, headings)
  * for fast client-side filtering.
  */
 
-export const prerender = false;
+export const prerender = true;
 
 import { getSortedPosts } from "#/content/utils";
 import type { APIRoute } from "astro";
@@ -43,26 +43,17 @@ async function getSearchablePosts(): Promise<SearchPost[]> {
 }
 
 /**
- * GET /api/blog/search.json
+ * GET /blog/blog.json
  * Returns all posts in searchable format
  */
 export const GET: APIRoute = async () => {
-  try {
-    const posts = await getSearchablePosts();
+  const posts = await getSearchablePosts();
 
-    return new Response(JSON.stringify(posts), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "public, max-age=3600", // Cache for 1 hour
-      },
-    });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: "Failed to fetch posts", cause: error }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
+  return new Response(JSON.stringify(posts), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, max-age=3600",
+    },
+  });
 };

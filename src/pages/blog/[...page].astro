@@ -3,6 +3,8 @@ import type { GetStaticPaths } from "astro";
 import { getSortedPosts, POSTS_PAGE_SIZE } from "#/content/utils";
 import PostsTemplate from "./_components/post-template.astro";
 
+export const prerender = true;
+
 export const getStaticPaths = (async ({ paginate }) =>
   paginate(await getSortedPosts(), {
     pageSize: POSTS_PAGE_SIZE,

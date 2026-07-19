@@ -12,9 +12,19 @@ import * as Dialog from "#/components/ui/dialog";
   aria-labelledby="blog-search-title"
   aria-describedby="blog-search-description"
   x-data="{
+    posts: null,
     data: [],
     error: '',
     requestId: 0,
+    async loadPosts() {
+      if (this.posts) return this.posts;
+
+      const response = await fetch('/blog/blog.json');
+      if (!response.ok) throw new Error('Search index failed to load.');
+
+      this.posts = await response.json();
+      return this.posts;
+    },
     async searchPosts(value) {
       const query = value.trim();
       if (!query) {
@@ -23,19 +33,31 @@ import * as Dialog from "#/components/ui/dialog";
         return;
       }
 
-      if (!window.pagefind) {
-        this.data = [];
-        this.error = 'Search is available in the production build.';
-        return;
-      }
-
       const currentRequest = ++this.requestId;
       this.error = '';
-      const search = await window.pagefind.search(query);
-      const results = await Promise.all(search.results.map((item) => item.data()));
 
-      if (currentRequest === this.requestId) {
-        this.data = results;
+      try {
+        const posts = await this.loadPosts();
+        const normalizedQuery = query.toLowerCase();
+        const results = posts.filter((post) => {
+          const haystack = [
+            post.title,
+            post.description,
+            post.author,
+            ...post.tags,
+          ].join(' ').toLowerCase();
+
+          return haystack.includes(normalizedQuery);
+        });
+
+        if (currentRequest === this.requestId) {
+          this.data = results;
+        }
+      } catch (error) {
+        if (currentRequest === this.requestId) {
+          this.data = [];
+          this.error = error instanceof Error ? error.message : 'Search failed.';
+        }
       }
     },
   }"
@@ -47,9 +69,7 @@ import * as Dialog from "#/components/ui/dialog";
     <Command key="/" class="ml-auto" @keyup.window.slash="$el.parentElement.click()" />
   </Button>
   <Dialog.Header>
-    <Text id="blog-search-title" class="sr-only">
-      Search blog posts
-    </Text>
+    <Text id="blog-search-title" class="sr-only"> Search blog posts </Text>
     <Text id="blog-search-description" class="sr-only">
       Search posts by typing a title or keyword and choose a result from the list.
     </Text>
@@ -73,11 +93,7 @@ import * as Dialog from "#/components/ui/dialog";
 
   <Dialog.Body>
     <div x-cloak>
-      <Text
-        class="text-muted-foreground mx-auto max-w-max"
-        x-show="error"
-        x-text="error"
-      />
+      <Text class="text-muted-foreground mx-auto max-w-max" x-show="error" x-text="error" />
       <Text
         class="text-muted-foreground mx-auto max-w-max"
         x-show="!error && !data.length && $refs.query.value.length"
@@ -88,18 +104,18 @@ import * as Dialog from "#/components/ui/dialog";
       <List.Root
         class="[&_mark]:bg-accent [&_mark]:text-foreground [&_mark]:rounded [&_mark]:p-0.5"
       >
-        <template x-for="post in data" :key="post.url">
+        <template x-for="post in data" :key="post.slug">
           <List.ItemLink
-            :href="post.url"
-            :aria-label="post.meta.title"
+            :href="`/blog/${post.slug}`"
+            :aria-label="post.title"
             class:list={[
               "flex flex-col items-start rounded rounded-b-none border-b py-8",
               "group-first-of-type:pt-0 group-last-of-type:border-b-0 group-last-of-type:pb-0",
             ]}
           >
-            <Text x-text="post.meta.title" size="fluid-lg" class="text-foreground font-semibold" />
+            <Text x-text="post.title" size="fluid-lg" class="text-foreground font-semibold" />
             <Text
-              x-html="post.excerpt + ' ...'"
+              x-text="post.description"
               size="fluid-sm"
               class="text-muted-foreground mt-2 text-left"
             />

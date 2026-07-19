@@ -1,7 +1,6 @@
 ---
 import "#/styles/global.css";
 
-import * as env from "astro:env/server";
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import { ThemeScript } from "astro-theme-toggle";
@@ -15,6 +14,9 @@ export type Metadata = {
   og?: string;
   author?: string;
   keywords?: string[];
+  type?: "blog" | "website";
+  publishDate?: string;
+  modifiedDate?: string;
 };
 
 type Props = { metadata: Metadata };
@@ -25,7 +27,22 @@ const {
   og = siteConfig.og,
   author = siteConfig.author,
   keywords = siteConfig.keywords,
+  type = "website",
+  publishDate,
+  modifiedDate,
 } = metadata;
+
+const pageUrl = String(new URL(Astro.url.pathname, Astro.site)).replace(/\/+$/, "");
+const imageUrl = new URL(og, Astro.site).toString();
+const schemaMetadata = {
+  type,
+  title,
+  description,
+  pageUrl,
+  ogImageUrl: imageUrl,
+  ...(publishDate !== undefined ? { publishDate } : {}),
+  ...(modifiedDate !== undefined ? { modifiedDate } : {}),
+};
 ---
 
 <title>{title}</title>
@@ -39,22 +56,24 @@ const {
 <meta name="generator" content={Astro.generator} />
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={type === "blog" ? "article" : "website"} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:site_name" content={String(Astro.site).replace(/\/+$/, "")} />
-<meta property="og:url" content={new URL(og, Astro.site)} />
-<meta property="og:image" content={new URL(og, Astro.site)} />
+<meta property="og:url" content={pageUrl} />
+<meta property="og:image" content={imageUrl} />
 <meta property="og:image:alt" content={title} />
 <meta property="og:image:width" content="1280" />
 <meta property="og:image:height" content="675" />
+{publishDate && <meta property="article:published_time" content={publishDate} />}
+{modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:creator" content={`@${env?.USERNAME ?? "mohxmdsh"}`} />
+<meta name="twitter:creator" content={siteConfig.twitterCreator} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={new URL(og, Astro.site)} />
+<meta name="twitter:image" content={imageUrl} />
 
 <!-- Keywords -->
 <meta name="keywords" content={keywords.join(", ")} />
@@ -70,16 +89,10 @@ const {
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <!-- Canonical URL -->
-<link href={String(new URL(Astro.url.pathname, Astro.site)).replace(/\/+$/, "")} rel="canonical" />
+<link href={pageUrl} rel="canonical" />
 
 <!-- JSON-LD Schema -->
-<LDSchema
-  type={"website"}
-  title={title}
-  description={description}
-  pageUrl={Astro.url.href}
-  ogImageUrl={og}
-/>
+<LDSchema {...schemaMetadata} />
 
 <!-- Fonts -->
 <Font cssVariable="--font-sans" preload />
@@ -89,13 +102,4 @@ const {
 <ClientRouter />
 
 <script is:inline set:text="document.documentElement.classList.add('[&_[x-cloak]]:hidden')" />
-{
-  !import.meta.env.DEV && (
-    <script
-      is:inline
-      set:text="window.pagefind = await import('/pagefind/pagefind.js')"
-      type="module"
-    />
-  )
-}
 <script src="../_scripts/fun.ts"></script>

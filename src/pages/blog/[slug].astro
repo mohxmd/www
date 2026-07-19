@@ -23,6 +23,8 @@ import PostToc from "./_components/post-toc.astro";
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
+export const prerender = true;
+
 export const getStaticPaths = (async () =>
   (await getSortedPosts()).map((post, index, posts) => {
     const prevPost = (posts[index + 1] ?? posts[0]) as GetSortedPosts[0];
@@ -34,7 +36,7 @@ export const getStaticPaths = (async () =>
   })) satisfies GetStaticPaths;
 
 const { id: postId, data, headings, Content, morePosts } = Astro.props;
-const { title, pubDate, image, description, author } = data;
+const { title, pubDate, updatedDate, image, description, author } = data;
 const [prevPost, nextPost] = morePosts;
 
 const publishDate = pubDate.toLocaleString();
@@ -46,6 +48,9 @@ const publishDate = pubDate.toLocaleString();
     description: description,
     og: image.src,
     author,
+    type: "blog",
+    publishDate: pubDate.toISOString(),
+    modifiedDate: (updatedDate ?? pubDate).toISOString(),
   }}
 >
   <article itemscope class="py-6">

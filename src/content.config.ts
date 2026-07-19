@@ -5,6 +5,7 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
 const octokit = new Octokit(GITHUB_TOKEN ? { auth: GITHUB_TOKEN } : {});
+const githubOwner = USERNAME ?? "mohammedsh";
 
 const getHomepageLabel = (url: string | null) => {
   if (!url) return null;
@@ -28,7 +29,7 @@ const getHomepageLabel = (url: string | null) => {
 
 const getRepo = async (repo: string) => {
   try {
-    return await octokit.repos.get({ owner: USERNAME, repo });
+    return await octokit.repos.get({ owner: githubOwner, repo });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn(

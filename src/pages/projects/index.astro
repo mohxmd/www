@@ -6,6 +6,8 @@ import Link from "#/components/ui/link.astro";
 
 import ProjectCard from "./_components/project-card.astro";
 
+export const prerender = true;
+
 const projects = await getCollection("projects");
 ---
 

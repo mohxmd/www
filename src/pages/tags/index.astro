@@ -7,6 +7,8 @@ import Link from "#/components/ui/link.astro";
 import Text from "#/components/ui/text.astro";
 import * as List from "#/components/ui/list";
 
+export const prerender = true;
+
 const tags = await getAllTags();
 ---
 

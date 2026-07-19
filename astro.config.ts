@@ -67,7 +67,7 @@ export default defineConfig({
 
   env: {
     schema: {
-      USERNAME: envField.string({ context: "server", access: "secret" }),
+      USERNAME: envField.string({ context: "server", access: "secret", optional: true }),
       GITHUB_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
       TURSO_DATABASE_URL: envField.string({ context: "server", access: "secret", optional: true }),
       TURSO_AUTH_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),

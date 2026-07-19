@@ -11,9 +11,11 @@ import Number from "#/components/ui/number.astro";
 type Props = Omit<ComponentProps<typeof Number>, "value"> & Pick<CollectionEntry<"blog">, "id">;
 
 const { id, ...props } = Astro.props;
-const views = await getDb()
-  .then((db) =>
-    db
+const views = await Promise.resolve()
+  .then(() => {
+    const db = getDb();
+
+    return db
       .insert(postView)
       .values({ post: id, views: 1 })
       .onConflictDoUpdate({
@@ -21,8 +23,8 @@ const views = await getDb()
         set: { views: sql`${postView.views} + 1` },
       })
       .returning({ views: postView.views })
-      .get()
-  )
+      .get();
+  })
   .then((res) => res?.views ?? 0)
   .catch((error) => {
     // eslint-disable-next-line no-console

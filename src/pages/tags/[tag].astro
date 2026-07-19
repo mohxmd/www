@@ -6,6 +6,8 @@ import Text from "#/components/ui/text.astro";
 
 import PostCard from "../blog/_components/post-card.astro";
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const allPosts = await getSortedPosts();
 

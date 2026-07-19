@@ -10,16 +10,19 @@ import BaseHead, { type Metadata } from "./_components/base-head.astro";
 import Footer from "./_components/footer.astro";
 import FloatingNav from "./_components/floating-nav.astro";
 
-type Props = HTMLAttributes<"main"> & {
-  metadata?: Metadata;
-};
+type Props = Omit<HTMLAttributes<"main">, "title"> &
+  Metadata & {
+    metadata?: Metadata;
+  };
 
-const { metadata = {}, class: className, ...props } = Astro.props;
+const { metadata, class: className, ...props } = Astro.props;
+
+const pageMetadata: Metadata = metadata ?? Astro.props;
 ---
 
 <html lang="en" class="scroll-pt-24 scrollbar-gutter-stable antialiased">
   <head>
-    <BaseHead metadata={metadata} />
+    <BaseHead metadata={pageMetadata} />
   </head>
   <body>
     <div class="mx-auto flex min-h-screen max-w-5xl flex-col p-6 text-sm md:p-4">

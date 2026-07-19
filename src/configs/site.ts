@@ -6,6 +6,7 @@ export const siteConfig = {
   og: "/avatar.svg",
   favicon: "/favicon.svg",
   author: "Mohammed",
+  twitterCreator: "@mohxmdsh",
 
   navLinks: [
     { label: "Root", href: "/" },

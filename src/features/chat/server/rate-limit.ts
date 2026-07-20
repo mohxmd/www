@@ -43,10 +43,7 @@ async function countVisitorMessagesSince(db: Db, conversationId: string, since: 
  * Without login/signup, limits are scoped to the signed chat conversation
  * rather than a user account. This is enough for low-volume personal-site chat.
  */
-export async function checkChatRateLimit(
-  db: Db,
-  conversationId: string
-): Promise<RateLimitResult> {
+export async function checkChatRateLimit(db: Db, conversationId: string): Promise<RateLimitResult> {
   const totalMessages = await countVisitorMessagesSince(db, conversationId, new Date(0));
   if (totalMessages >= CHAT_LIMITS.maxMessagesPerConversation) {
     return {

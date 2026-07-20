@@ -147,7 +147,7 @@ const prompts = [
             <template x-for="prompt in prompts" :key="prompt">
               <button
                 type="button"
-                class="border-border bg-background text-foreground hover:border-primary hover:text-primary inline-flex max-w-full items-center border px-3 py-1.5 text-left text-xs font-semibold transition-colors"
+                class="border-border bg-background text-foreground hover:border-primary hover:text-primary text-fluid-xs inline-flex max-w-full items-center border px-3 py-1.5 text-left font-semibold transition-colors"
                 :disabled="sending"
                 @click="send(prompt)"
               >
@@ -164,7 +164,7 @@ const prompts = [
               :class="message.sender === 'visitor' ? 'justify-end' : 'justify-start'"
             >
               <div
-                class="max-w-[80%] px-3 py-2 text-sm leading-relaxed"
+                class="text-fluid-sm max-w-[80%] px-3 py-2 leading-relaxed"
                 :class="message.sender === 'visitor' ? 'bg-foreground text-background' : 'bg-muted text-foreground border border-border'"
               >
                 <span x-text="message.body"></span>
@@ -191,7 +191,7 @@ const prompts = [
         </div>
 
         <div
-          class="border-destructive/40 bg-destructive/5 text-destructive border px-3 py-2 text-sm"
+          class="border-destructive/40 bg-destructive/5 text-destructive text-fluid-sm border px-3 py-2"
           x-show="error"
           x-cloak
         >
@@ -210,7 +210,7 @@ const prompts = [
           type="text"
           autocomplete="off"
           placeholder="Type here..."
-          class="text-foreground placeholder:text-muted-foreground min-h-12 min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm outline-none"
+          class="text-foreground placeholder:text-muted-foreground text-fluid-sm min-h-12 min-w-0 flex-1 bg-transparent px-3 py-2.5 outline-none"
           :disabled="loading || sending"
         />
         <Button
@@ -223,7 +223,7 @@ const prompts = [
           <Icon name="send-horizontal" size="sm" />
         </Button>
       </div>
-      <div class="text-muted-foreground mt-2 flex items-center justify-between text-xs">
+      <div class="text-muted-foreground text-fluid-xs mt-2 flex items-center justify-between">
         <span>Enter to send</span>
         <span><span x-text="count">0</span> / <span x-text="maxLength">500</span></span>
       </div>

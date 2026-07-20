@@ -34,7 +34,7 @@ const { posts } = Astro.props;
     </Text>
 
     <div class="grid gap-6 md:grid-cols-3">
-      {posts.map((post) => <PostCard slug={post.id} post={post.data} />)}
+      {posts.map((post, index) => <PostCard slug={post.id} post={post.data} priority={index < 3} />)}
     </div>
   </section>
 </Layout>

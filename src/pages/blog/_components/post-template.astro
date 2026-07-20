@@ -68,8 +68,13 @@ const { data: paginatedPosts, url, currentPage, lastPage, total } = Astro.props 
 
     <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {
-        paginatedPosts.map((post) => (
-          <PostCard class="mb-4 break-inside-avoid" slug={post.id} post={post.data} />
+        paginatedPosts.map((post, index) => (
+          <PostCard
+            class="mb-4 break-inside-avoid"
+            slug={post.id}
+            post={post.data}
+            priority={index < 3}
+          />
         ))
       }
     </div>

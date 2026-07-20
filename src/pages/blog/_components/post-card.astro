@@ -10,16 +10,17 @@ import { formatDate, truncateSafe } from "#/lib/utils/string";
 type Props = {
   slug: string;
   post: GetSortedPosts[0]["data"];
+  priority?: boolean;
   class?: string;
 };
 
-const { slug, post, class: className } = Astro.props;
+const { slug, post, priority = false, class: className } = Astro.props;
 const { description, pubDate, title, readingTime, image } = post;
 // const series = post.series ? await getSeriesBySlug(post.series) : null;
 ---
 
 <article class:list={["bg-card flex h-full flex-col overflow-hidden rounded-lg border", className]}>
-  <Link href={`/blog/${slug}`} aria-label={title} class="relative aspect-2/1">
+  <Link href={`/blog/${slug}`} aria-label={title} class="bg-muted relative aspect-2/1">
     <Image
       src={image}
       alt={title}
@@ -28,6 +29,7 @@ const { description, pubDate, title, readingTime, image } = post;
       quality={80}
       layout="constrained"
       fit="cover"
+      priority={priority}
       sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
       class="absolute inset-0 size-full object-cover"
     />

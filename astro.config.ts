@@ -71,6 +71,18 @@ export default defineConfig({
       GITHUB_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
       TURSO_DATABASE_URL: envField.string({ context: "server", access: "secret", optional: true }),
       TURSO_AUTH_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
+      CHAT_COOKIE_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
+      TELEGRAM_BOT_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
+      TELEGRAM_ADMIN_USER_ID: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      TELEGRAM_WEBHOOK_SECRET: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
     },
   },
 

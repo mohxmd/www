@@ -2,6 +2,7 @@
 import Layout from "#/layouts/layout.astro";
 import Link from "#/components/ui/link.astro";
 import Text from "#/components/ui/text.astro";
+import ContactChat from "./about/_components/contact-chat.astro";
 
 export const prerender = true;
 ---
@@ -41,51 +42,7 @@ export const prerender = true;
         >📭 Contact Me !</Text
       >
 
-      <form class="max-w-lg space-y-6">
-        <!-- Name -->
-        <div class="space-y-2">
-          <label for="username" class="block font-medium">Your Name</label>
-          <input
-            type="text"
-            autocomplete="off"
-            placeholder="What's your good name ?"
-            required
-            class="border-border bg-secondary text-foreground placeholder:text-gray focus:border-primary w-full rounded-md border-2 px-4 py-3 font-medium outline-none"
-          />
-        </div>
-
-        <!-- Email -->
-        <div class="space-y-2">
-          <label for="email" class="block font-medium">Your Email</label>
-          <input
-            type="email"
-            autocomplete="off"
-            placeholder="What's your web address ?"
-            required
-            class="border-border bg-secondary text-foreground placeholder:text-gray focus:border-primary w-full rounded-md border-2 px-4 py-3 font-medium outline-none"
-          />
-        </div>
-
-        <!-- Message -->
-        <div class="space-y-2">
-          <label for="message" class="block font-medium">Your Message</label>
-          <textarea
-            rows="7"
-            name="message"
-            placeholder="What do you want to say ?"
-            class="border-border bg-secondary text-foreground placeholder:text-gray focus:border-primary w-full rounded-md border-2 px-4 py-3 font-medium outline-none"
-          ></textarea>
-        </div>
-
-        <!-- Submit -->
-        <button
-          type="submit"
-          aria-label="Submit contact form"
-          class="border-border bg-secondary text-foreground hover:border-primary hover:text-primary rounded-lg border-2 px-6 py-3 font-bold transition-colors"
-        >
-          Send
-        </button>
-      </form>
+      <ContactChat />
 
       <!-- Telegram / Discord -->
       <Text class="my-4">

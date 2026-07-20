@@ -1,0 +1,203 @@
+---
+import Button from "#/components/ui/button.astro";
+import Icon from "#/components/ui/icon.astro";
+import Text from "#/components/ui/text.astro";
+
+const prompts = [
+  "Just saying hi",
+  "I found a bug",
+  "I want to ask about a post",
+  "I want to work together",
+];
+---
+
+<section
+  class="max-w-lg"
+  aria-labelledby="contact-chat-title"
+  x-data={`{
+    draft: '',
+    maxLength: 500,
+    prompts: ${JSON.stringify(prompts)},
+    messages: [],
+    loading: true,
+    sending: false,
+    started: false,
+    error: '',
+    pollTimer: null,
+    get count() {
+      return this.draft.length;
+    },
+    get canSend() {
+      return !this.sending && this.draft.trim().length > 0 && this.draft.length <= this.maxLength;
+    },
+    async waitForApi() {
+      for (let attempt = 0; attempt < 20; attempt += 1) {
+        if (window.contactChatApi) return;
+        await new Promise((resolve) => window.setTimeout(resolve, 50));
+      }
+
+      throw new Error('Chat failed to load.');
+    },
+    async init() {
+      await this.waitForApi();
+      await this.start();
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && this.started && this.messages.length > 0) {
+          this.refresh();
+          this.startPolling();
+        }
+      });
+    },
+    async start() {
+      this.loading = true;
+      this.error = '';
+
+      try {
+        const response = await window.contactChatApi.resumeChat();
+        this.messages = response.messages;
+        this.started = this.messages.length > 0;
+        if (this.messages.length > 0) this.startPolling();
+      } catch {
+        this.messages = [];
+      } finally {
+        this.loading = false;
+      }
+    },
+    async refresh() {
+      if (!this.started || document.hidden) return;
+
+      try {
+        const response = await window.contactChatApi.loadMessages();
+        this.messages = response.messages;
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Messages could not be loaded.';
+      }
+    },
+    startPolling() {
+      if (this.pollTimer) return;
+      this.pollTimer = window.setInterval(() => this.refresh(), 5000);
+    },
+    async send(value = this.draft) {
+      const body = value.trim();
+      if (this.sending) return;
+      if (!body || body.length > this.maxLength) return;
+
+      await this.waitForApi();
+      this.sending = true;
+      this.error = '';
+
+      try {
+        const response = await window.contactChatApi.sendMessage(body);
+        this.messages.push(response.message);
+        this.draft = '';
+        this.started = true;
+        this.startPolling();
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Message could not be sent.';
+      } finally {
+        this.sending = false;
+      }
+    },
+  }`}
+  x-init="init()"
+>
+  <div class:list={["border-border bg-background flex min-h-112 flex-col border", "shadow-xs"]}>
+    <div class="flex-1 px-4 py-6 md:px-6">
+      <div class="mb-8 text-center">
+        <Text
+          id="contact-chat-title"
+          as="h3"
+          size="fluid-base"
+          class="font-8bit text-foreground font-bold tracking-normal uppercase"
+        >
+          Mohammed
+        </Text>
+        <Text size="fluid-sm" class="text-muted-foreground mt-2">
+          Ask me something or leave a note.
+        </Text>
+      </div>
+
+      <div class="min-h-64 space-y-8">
+        <div class="text-muted-foreground" x-show="loading">
+          <Text size="fluid-sm">Opening chat...</Text>
+        </div>
+
+        <div x-show="!loading && messages.length === 0">
+          <Text as="h4" size="fluid-xl" class="mb-5 leading-snug font-semibold">
+            Hey - what do you want to say?
+          </Text>
+
+          <div class="flex flex-wrap gap-2">
+            <template x-for="prompt in prompts" :key="prompt">
+              <button
+                type="button"
+                class="border-border bg-background text-foreground hover:border-primary hover:text-primary inline-flex max-w-full items-center border px-4 py-2 text-left text-sm font-semibold transition-colors"
+                :disabled="sending"
+                @click="send(prompt)"
+              >
+                <span class="truncate" x-text="prompt"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <div class="space-y-6" x-show="!loading && messages.length > 0" x-cloak>
+          <template x-for="message in messages" :key="message.id">
+            <div
+              class="flex"
+              :class="message.sender === 'visitor' ? 'justify-end' : 'justify-start'"
+            >
+              <div
+                class="max-w-[80%] px-4 py-3 text-sm leading-relaxed"
+                :class="message.sender === 'visitor' ? 'bg-foreground text-background' : 'bg-muted text-foreground border border-border'"
+              >
+                <span x-text="message.body"></span>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <div
+          class="border-destructive/40 bg-destructive/5 text-destructive border px-3 py-2 text-sm"
+          x-show="error"
+          x-cloak
+        >
+          <span x-text="error"></span>
+        </div>
+      </div>
+    </div>
+
+    <form class="border-border border-t px-4 py-4 md:px-6" @submit.prevent="send()">
+      <div
+        class="border-border bg-background focus-within:border-primary flex items-center border-x border-t-2 border-b"
+      >
+        <input
+          x-model="draft"
+          :maxlength="maxLength"
+          type="text"
+          autocomplete="off"
+          placeholder="Type here..."
+          class="text-foreground placeholder:text-muted-foreground min-h-14 min-w-0 flex-1 bg-transparent px-4 py-3 text-base outline-none"
+          :disabled="loading || sending"
+        />
+        <Button
+          type="submit"
+          size="icon"
+          aria-label="Send message"
+          class="bg-foreground text-background hover:bg-foreground/80 disabled:bg-muted disabled:text-muted-foreground m-2 rounded-none"
+          :disabled="!canSend"
+        >
+          <Icon name="send-horizontal" size="md" />
+        </Button>
+      </div>
+      <div class="text-muted-foreground mt-2 flex items-center justify-between text-xs">
+        <span>Enter to send</span>
+        <span><span x-text="count">0</span> / <span x-text="maxLength">500</span></span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  import "#/features/chat/client/contact-chat";
+</script>

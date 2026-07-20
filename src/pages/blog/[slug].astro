@@ -20,6 +20,7 @@ import PostViews from "./_components/post-views.astro";
 import PostNavigator from "./_components/post-navigator.astro";
 import PostActions from "./_components/post-actions.astro";
 import PostToc from "./_components/post-toc.astro";
+import PostOutline from "./_components/post-outline.astro";
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
@@ -53,6 +54,8 @@ const publishDate = pubDate.toLocaleString();
     modifiedDate: (updatedDate ?? pubDate).toISOString(),
   }}
 >
+  <PostOutline headings={headings} />
+
   <article itemscope class="py-6">
     <header class="mb-8 space-y-4">
       <Text as="h1" size="fluid-2xl" class="font-8bit text-center font-bold">

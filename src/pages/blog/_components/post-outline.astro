@@ -1,0 +1,178 @@
+---
+import type { MarkdownHeading } from "astro";
+import { buildToc } from "#/lib/utils";
+import Icon from "#/components/ui/icon.astro";
+
+type Props = {
+  headings: MarkdownHeading[];
+};
+
+const { headings } = Astro.props;
+const toc = buildToc(headings);
+const hasOutline = toc.length > 3;
+const outlineMarkers = toc
+  .flatMap((heading) => [
+    { slug: heading.slug, depth: heading.depth },
+    ...(heading.subheadings ?? []).map((subheading) => ({
+      slug: subheading.slug,
+      depth: subheading.depth,
+    })),
+  ])
+  .slice(0, 18);
+const markerGapClass = outlineMarkers.length > 12 ? "gap-1.5" : "gap-2";
+---
+
+{
+  hasOutline && (
+    <aside
+      aria-label="Post outline"
+      class="group fixed top-1/2 right-5 z-40 hidden -translate-y-1/2 xl:block"
+      data-post-outline
+    >
+      <button
+        type="button"
+        aria-label="Open post outline"
+        class:list={[
+          "text-muted-foreground hover:text-foreground",
+          "flex h-52 w-12 items-center justify-center rounded-md",
+          "transition-colors duration-150 focusable",
+        ]}
+        data-post-outline-trigger
+      >
+        <span class:list={["flex flex-col items-center", markerGapClass]} aria-hidden="true">
+          {outlineMarkers.map((heading) => {
+            const isSection = heading.depth === 2;
+            const baseWidth = isSection ? "22px" : "12px";
+            const activeWidth = isSection ? "28px" : "18px";
+
+            return (
+            <span
+              class="rounded-full transition-all duration-150"
+              data-outline-marker={heading.slug}
+              data-base-width={baseWidth}
+              data-active-width={activeWidth}
+              style={{
+                width: baseWidth,
+                height: "2px",
+                backgroundColor: "var(--muted-foreground)",
+                opacity: "0.45",
+              }}
+            />
+            );
+          })}
+        </span>
+      </button>
+
+      <nav
+        aria-label="Post outline links"
+        class:list={[
+          "border-border bg-background/95 thin-scrollbar absolute top-1/2 right-0 max-h-[70vh] w-80 -translate-y-1/2 overflow-y-auto rounded-lg border p-4 shadow-xl backdrop-blur",
+          "pointer-events-none translate-x-4 scale-95 opacity-0 transition-all duration-150",
+          "group-hover:pointer-events-auto group-hover:translate-x-0 group-hover:scale-100 group-hover:opacity-100",
+          "group-focus-within:pointer-events-auto group-focus-within:translate-x-0 group-focus-within:scale-100 group-focus-within:opacity-100",
+        ]}
+      >
+        <div class="mb-3 flex items-center justify-between gap-3">
+          <p class="font-8bit text-muted-foreground text-xs font-bold uppercase">On this page</p>
+          <Icon name="list-tree" size="sm" class="text-muted-foreground" />
+        </div>
+
+        <ol class="space-y-1">
+          {toc.map((heading) => (
+            <li>
+              <a
+                href={`#${heading.slug}`}
+                data-outline-link={heading.slug}
+                data-outline-section={heading.slug}
+                class:list={[
+                  "text-muted-foreground hover:bg-muted hover:text-foreground block rounded px-2 py-1.5 text-sm leading-snug transition-colors",
+                ]}
+              >
+                {heading.text.replace("#", "")}
+              </a>
+
+              {Array.isArray(heading.subheadings) && heading.subheadings.length > 0 && (
+                <ol class="border-border/70 mt-1 ml-2 space-y-1 border-l pl-3">
+                  {heading.subheadings.map((sub) => (
+                    <li>
+                      <a
+                        href={`#${sub.slug}`}
+                        data-outline-link={sub.slug}
+                        data-outline-section={heading.slug}
+                        class="text-muted-foreground hover:bg-muted hover:text-foreground block rounded px-2 py-1 text-xs leading-snug transition-colors"
+                      >
+                        {sub.text.replace("#", "")}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </aside>
+  )
+}
+
+<script>
+  function setupPostOutline() {
+    const outline = document.querySelector<HTMLElement>("[data-post-outline]");
+    if (!outline) return;
+
+    const links = Array.from(outline.querySelectorAll<HTMLAnchorElement>("[data-outline-link]"));
+    const markers = Array.from(outline.querySelectorAll<HTMLElement>("[data-outline-marker]"));
+    const headings = links
+      .map((link) => {
+        const slug = link.dataset.outlineLink;
+        if (!slug) return null;
+        const heading = document.getElementById(slug);
+        return heading ? { slug, heading, link } : null;
+      })
+      .filter((item): item is { slug: string; heading: HTMLElement; link: HTMLAnchorElement } =>
+        Boolean(item)
+      );
+
+    if (!headings.length) return;
+
+    function setActive(slug: string) {
+      for (const item of headings) {
+        const active = item.slug === slug;
+        item.link.toggleAttribute("aria-current", active);
+        item.link.classList.toggle("bg-muted", active);
+        item.link.classList.toggle("text-link", active);
+        item.link.classList.toggle("text-muted-foreground", !active);
+      }
+
+      for (const marker of markers) {
+        const active = marker.dataset.outlineMarker === slug;
+        marker.style.width =
+          (active ? marker.dataset.activeWidth : marker.dataset.baseWidth) ?? "";
+        marker.style.height = active ? "4px" : "2px";
+        marker.style.backgroundColor = active ? "var(--foreground)" : "var(--muted-foreground)";
+        marker.style.opacity = active ? "1" : "0.45";
+        marker.style.boxShadow = active ? "0 0 12px var(--foreground)" : "none";
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+
+        if (visible?.target.id) setActive(visible.target.id);
+      },
+      {
+        rootMargin: "-20% 0px -65% 0px",
+        threshold: [0, 1],
+      }
+    );
+
+    headings.forEach(({ heading }) => observer.observe(heading));
+    setActive(headings[0]!.slug);
+  }
+
+  document.addEventListener("astro:page-load", setupPostOutline);
+  document.addEventListener("astro:after-swap", setupPostOutline);
+</script>

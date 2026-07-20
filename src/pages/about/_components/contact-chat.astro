@@ -19,6 +19,7 @@ const prompts = [
     maxLength: 500,
     prompts: ${JSON.stringify(prompts)},
     messages: [],
+    pendingMessageId: '',
     loading: true,
     sending: false,
     started: false,
@@ -83,18 +84,32 @@ const prompts = [
       if (!body || body.length > this.maxLength) return;
 
       await this.waitForApi();
+      const pendingId = \`pending-\${Date.now()}\`;
+      const pendingMessage = {
+        id: pendingId,
+        sender: 'visitor',
+        body,
+        createdAt: new Date().toISOString(),
+      };
+
+      this.messages.push(pendingMessage);
+      this.pendingMessageId = pendingId;
+      this.draft = '';
+      this.started = true;
       this.sending = true;
       this.error = '';
 
       try {
         const response = await window.contactChatApi.sendMessage(body);
-        this.messages.push(response.message);
-        this.draft = '';
-        this.started = true;
+        this.messages = this.messages.map((message) =>
+          message.id === pendingId ? response.message : message
+        );
         this.startPolling();
       } catch (error) {
+        this.messages = this.messages.filter((message) => message.id !== pendingId);
         this.error = error instanceof Error ? error.message : 'Message could not be sent.';
       } finally {
+        this.pendingMessageId = '';
         this.sending = false;
       }
     },
@@ -155,6 +170,24 @@ const prompts = [
               </div>
             </div>
           </template>
+
+          <div class="flex justify-start" x-show="sending && pendingMessageId" x-cloak>
+            <div class="border-border bg-muted text-foreground flex items-center gap-1 border px-3 py-2">
+              <span
+                class="bg-muted-foreground/70 size-1.5 rounded-full motion-safe:animate-bounce"
+                style="animation-delay: 0ms"
+              ></span>
+              <span
+                class="bg-muted-foreground/70 size-1.5 rounded-full motion-safe:animate-bounce"
+                style="animation-delay: 120ms"
+              ></span>
+              <span
+                class="bg-muted-foreground/70 size-1.5 rounded-full motion-safe:animate-bounce"
+                style="animation-delay: 240ms"
+              ></span>
+              <span class="sr-only">Sending message</span>
+            </div>
+          </div>
         </div>
 
         <div

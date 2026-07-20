@@ -49,7 +49,7 @@ const isActive = (path: string) =>
   >
     <div class="mx-auto flex w-fit max-w-full items-center gap-2">
       <nav
-        class="bg-card/80 border-border flex gap-1 rounded-full border p-0.5 shadow-md backdrop-blur"
+        class="bg-card/80 border-border flex gap-1 rounded-full border p-0.5 shadow-sm backdrop-blur"
       >
         <List.Root orientation="horizontal" class="flex flex-row items-center gap-1">
           {
@@ -69,7 +69,7 @@ const isActive = (path: string) =>
         </List.Root>
       </nav>
 
-      <div class="bg-card/80 border-border flex rounded-full border p-0.5 shadow-md backdrop-blur">
+      <div class="bg-card/80 border-border flex rounded-full border p-0.5 shadow-sm backdrop-blur">
         <Theme class="text-foreground hover:bg-background/60 rounded-full" />
       </div>
     </div>
@@ -78,19 +78,23 @@ const isActive = (path: string) =>
 
 <!-- Desktop -->
 <>
-  <header
-    class="fixed top-3 left-1/2 z-10 box-border hidden w-full max-w-5xl -translate-x-1/2 p-6 md:block md:p-4"
-  >
-    <div class="flex w-full items-center justify-between gap-4 select-none">
+  <header class="mb-8 hidden select-none md:block">
+    <div class="flex items-center">
       <Link href="/" size="fluid-2xl" class="font-8bit flex items-center gap-2 font-bold">
         <StarBoy class="text-foreground size-10" />
         <span class="gradient-text">MohxNotes</span>
         <Clock class="ml-1 size-8" />
       </Link>
+    </div>
+  </header>
 
+  <div
+    class="fixed top-6 left-1/2 z-10 box-border hidden w-full max-w-5xl -translate-x-1/2 px-4 md:block"
+  >
+    <div class="flex justify-end">
       <div class="flex items-center gap-2">
         <nav
-          class="bg-card/80 border-border flex gap-1 rounded-full border p-0.5 shadow-md backdrop-blur"
+          class="bg-card/80 border-border flex gap-1 rounded-full border p-0.5 shadow-sm backdrop-blur"
         >
           <List.Root orientation="horizontal" class="flex flex-row items-center gap-1">
             {
@@ -112,11 +116,11 @@ const isActive = (path: string) =>
         </nav>
 
         <div
-          class="bg-card/80 border-border flex rounded-full border p-0.5 shadow-md backdrop-blur"
+          class="bg-card/80 border-border flex rounded-full border p-0.5 shadow-sm backdrop-blur"
         >
           <Theme class="text-foreground hover:bg-background/60 rounded-full" />
         </div>
       </div>
     </div>
-  </header>
+  </div>
 </>

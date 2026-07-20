@@ -27,7 +27,7 @@ const pageMetadata: Metadata = metadata ?? Astro.props;
   <body>
     <div class="mx-auto flex min-h-screen max-w-5xl flex-col p-6 text-sm md:p-4">
       <FloatingNav />
-      <main {...props} class:list={["md:pt-20", className]}>
+      <main {...props} class:list={[className]}>
         <slot />
       </main>
       {Astro.url.pathname !== "/" && <Cd />}

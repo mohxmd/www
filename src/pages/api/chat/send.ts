@@ -3,7 +3,7 @@ import type { APIRoute } from "astro";
 import { chatMessage, getDb } from "#/db";
 import { chatSendInputSchema } from "#/features/chat/schema";
 import { errorResponse, jsonResponse } from "#/features/chat/server/http";
-import { toMessageDto } from "#/features/chat/server/messages";
+import { createInitialSystemReply, toMessageDto } from "#/features/chat/server/messages";
 import { checkChatRateLimit } from "#/features/chat/server/rate-limit";
 import { ensureChatSession, touchChatSession } from "#/features/chat/server/session";
 import {
@@ -35,6 +35,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     };
 
     await db.insert(chatMessage).values(message);
+    const systemMessage = await createInitialSystemReply(db, session.conversationId);
 
     let deliveredToTelegram = false;
     try {
@@ -64,6 +65,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     return jsonResponse<ChatSendResponse>({
       message: toMessageDto(message),
+      ...(systemMessage ? { systemMessage } : {}),
       deliveredToTelegram,
     });
   } catch (error) {

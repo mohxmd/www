@@ -16,6 +16,7 @@ export type ChatSessionDto = {
 
 export type ChatSendResponse = {
   message: ChatMessageDto;
+  systemMessage?: ChatMessageDto;
   deliveredToTelegram: boolean;
 };
 

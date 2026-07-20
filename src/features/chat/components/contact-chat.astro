@@ -104,6 +104,7 @@ const prompts = [
         this.messages = this.messages.map((message) =>
           message.id === pendingId ? response.message : message
         );
+        if (response.systemMessage) this.messages.push(response.systemMessage);
         this.startPolling();
       } catch (error) {
         this.messages = this.messages.filter((message) => message.id !== pendingId);
@@ -172,19 +173,18 @@ const prompts = [
           </template>
 
           <div class="flex justify-start" x-show="sending && pendingMessageId" x-cloak>
-            <div class="border-border bg-muted text-foreground flex items-center gap-1 border px-3 py-2">
+            <div
+              class="border-border bg-muted text-foreground flex items-center gap-1 border px-3 py-2"
+            >
               <span
                 class="bg-muted-foreground/70 size-1.5 rounded-full motion-safe:animate-bounce"
-                style="animation-delay: 0ms"
-              ></span>
+                style="animation-delay: 0ms"></span>
               <span
                 class="bg-muted-foreground/70 size-1.5 rounded-full motion-safe:animate-bounce"
-                style="animation-delay: 120ms"
-              ></span>
+                style="animation-delay: 120ms"></span>
               <span
                 class="bg-muted-foreground/70 size-1.5 rounded-full motion-safe:animate-bounce"
-                style="animation-delay: 240ms"
-              ></span>
+                style="animation-delay: 240ms"></span>
               <span class="sr-only">Sending message</span>
             </div>
           </div>

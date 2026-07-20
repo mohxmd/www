@@ -17,6 +17,9 @@ type TelegramSendMessageResponse = {
   description?: string;
 };
 
+const CONVERSATION_ID_PATTERN =
+  /Conversation:\s*([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i;
+
 /**
  * Verifies Telegram's webhook secret header.
  *
@@ -93,7 +96,7 @@ export async function storeTelegramMessageMap(
  */
 export async function storeTelegramReply(db: Db, request: Request) {
   const update = telegramUpdateSchema.parse(await request.json());
-  const message = update.message;
+  const message = update.message ?? update.edited_message;
 
   if (!message?.text || !message.reply_to_message) {
     return { stored: false, reason: "ignored" as const };
@@ -109,11 +112,15 @@ export async function storeTelegramReply(db: Db, request: Request) {
     .where(eq(chatTelegramMap.telegramMessageId, message.reply_to_message.message_id))
     .get();
 
-  if (!map) return { stored: false, reason: "not_found" as const };
+  const fallbackConversationId =
+    message.reply_to_message.text?.match(CONVERSATION_ID_PATTERN)?.[1] ?? null;
+  const conversationId = map?.conversationId ?? fallbackConversationId;
+
+  if (!conversationId) return { stored: false, reason: "not_found" as const };
 
   const reply = {
     id: crypto.randomUUID(),
-    conversationId: map.conversationId,
+    conversationId,
     sender: "admin" as const,
     body: message.text,
     telegramMessageId: message.message_id,
@@ -121,7 +128,7 @@ export async function storeTelegramReply(db: Db, request: Request) {
   };
 
   await db.insert(chatMessage).values(reply);
-  await storeTelegramMessageMap(db, message.message_id, map.conversationId, reply.id);
+  await storeTelegramMessageMap(db, message.message_id, conversationId, reply.id);
 
-  return { stored: true, conversationId: map.conversationId };
+  return { stored: true, conversationId };
 }

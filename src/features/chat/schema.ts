@@ -42,6 +42,7 @@ export const telegramMessageSchema = z.object({
   reply_to_message: z
     .object({
       message_id: z.number(),
+      text: z.string().optional(),
     })
     .optional(),
 });
@@ -49,6 +50,7 @@ export const telegramMessageSchema = z.object({
 export const telegramUpdateSchema = z.object({
   update_id: z.number(),
   message: telegramMessageSchema.optional(),
+  edited_message: telegramMessageSchema.optional(),
 });
 
 export type ChatSendInput = z.infer<typeof chatSendInputSchema>;

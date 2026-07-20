@@ -101,9 +101,9 @@ const prompts = [
   }`}
   x-init="init()"
 >
-  <div class:list={["border-border bg-background flex min-h-112 flex-col border", "shadow-xs"]}>
-    <div class="flex-1 px-4 py-6 md:px-6">
-      <div class="mb-8 text-center">
+  <div class:list={["border-border bg-background flex min-h-96 flex-col border", "shadow-xs"]}>
+    <div class="flex-1 px-4 py-5 md:px-5">
+      <div class="mb-6 text-center">
         <Text
           id="contact-chat-title"
           as="h3"
@@ -112,18 +112,18 @@ const prompts = [
         >
           Mohammed
         </Text>
-        <Text size="fluid-sm" class="text-muted-foreground mt-2">
+        <Text size="fluid-xs" class="text-muted-foreground mt-1.5">
           Ask me something or leave a note.
         </Text>
       </div>
 
-      <div class="min-h-64 space-y-8">
+      <div class="min-h-52 space-y-6">
         <div class="text-muted-foreground" x-show="loading">
           <Text size="fluid-sm">Opening chat...</Text>
         </div>
 
         <div x-show="!loading && messages.length === 0">
-          <Text as="h4" size="fluid-xl" class="mb-5 leading-snug font-semibold">
+          <Text as="h4" size="fluid-lg" class="mb-4 leading-snug font-semibold">
             Hey - what do you want to say?
           </Text>
 
@@ -131,7 +131,7 @@ const prompts = [
             <template x-for="prompt in prompts" :key="prompt">
               <button
                 type="button"
-                class="border-border bg-background text-foreground hover:border-primary hover:text-primary inline-flex max-w-full items-center border px-4 py-2 text-left text-sm font-semibold transition-colors"
+                class="border-border bg-background text-foreground hover:border-primary hover:text-primary inline-flex max-w-full items-center border px-3 py-1.5 text-left text-xs font-semibold transition-colors"
                 :disabled="sending"
                 @click="send(prompt)"
               >
@@ -141,14 +141,14 @@ const prompts = [
           </div>
         </div>
 
-        <div class="space-y-6" x-show="!loading && messages.length > 0" x-cloak>
+        <div class="space-y-4" x-show="!loading && messages.length > 0" x-cloak>
           <template x-for="message in messages" :key="message.id">
             <div
               class="flex"
               :class="message.sender === 'visitor' ? 'justify-end' : 'justify-start'"
             >
               <div
-                class="max-w-[80%] px-4 py-3 text-sm leading-relaxed"
+                class="max-w-[80%] px-3 py-2 text-sm leading-relaxed"
                 :class="message.sender === 'visitor' ? 'bg-foreground text-background' : 'bg-muted text-foreground border border-border'"
               >
                 <span x-text="message.body"></span>
@@ -167,7 +167,7 @@ const prompts = [
       </div>
     </div>
 
-    <form class="border-border border-t px-4 py-4 md:px-6" @submit.prevent="send()">
+    <form class="border-border border-t px-4 py-3 md:px-5" @submit.prevent="send()">
       <div
         class="border-border bg-background focus-within:border-primary flex items-center border-x border-t-2 border-b"
       >
@@ -177,17 +177,17 @@ const prompts = [
           type="text"
           autocomplete="off"
           placeholder="Type here..."
-          class="text-foreground placeholder:text-muted-foreground min-h-14 min-w-0 flex-1 bg-transparent px-4 py-3 text-base outline-none"
+          class="text-foreground placeholder:text-muted-foreground min-h-12 min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm outline-none"
           :disabled="loading || sending"
         />
         <Button
           type="submit"
           size="icon"
           aria-label="Send message"
-          class="bg-foreground text-background hover:bg-foreground/80 disabled:bg-muted disabled:text-muted-foreground m-2 rounded-none"
+          class="bg-foreground text-background hover:bg-foreground/80 disabled:bg-muted disabled:text-muted-foreground m-1.5 rounded-none"
           :disabled="!canSend"
         >
-          <Icon name="send-horizontal" size="md" />
+          <Icon name="send-horizontal" size="sm" />
         </Button>
       </div>
       <div class="text-muted-foreground mt-2 flex items-center justify-between text-xs">

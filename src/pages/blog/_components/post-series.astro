@@ -1,0 +1,100 @@
+---
+import type { PostSeriesContext } from "#/lib/blog/series";
+import Link from "#/components/ui/link.astro";
+import Separator from "#/components/ui/separator.astro";
+import Text from "#/components/ui/text.astro";
+
+type Props = {
+  context: PostSeriesContext;
+};
+
+const { context } = Astro.props;
+const { series, posts, currentPost, currentIndex, previousPost, nextPost } = context;
+---
+
+<section class="border-border bg-card space-y-4 rounded-lg border p-4" aria-labelledby="series-title">
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <Text
+        id="series-title"
+        as="h2"
+        size="fluid-lg"
+        class="font-8bit leading-snug font-bold"
+      >
+        In This Series
+      </Text>
+      <p class="text-muted-foreground mt-1 text-sm">
+        <Link href={`/series/${series.slug}`} class="hover:text-link-hover font-semibold">
+          {series.entry.data.title}
+        </Link>
+        <span> · Part {currentIndex + 1} of {posts.length}</span>
+      </p>
+    </div>
+
+    <Link
+      href={`/series/${series.slug}`}
+      class="border-border text-muted-foreground hover:border-primary hover:text-foreground rounded border px-3 py-1 text-xs font-semibold"
+    >
+      View Series
+    </Link>
+  </div>
+
+  <ol class="space-y-1.5">
+    {
+      posts.map((post) => {
+        const current = post.id === currentPost.id;
+
+        return (
+          <li>
+            <Link
+              href={`/blog/${post.id}`}
+              aria-current={current ? "page" : undefined}
+              class:list={[
+                "group flex gap-3 rounded px-2 py-2 text-sm transition-colors",
+                current
+                  ? "bg-muted text-foreground"
+                  : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
+              ]}
+            >
+              <span class="font-mono text-xs tabular-nums">
+                {String(post.data.seriesOrder).padStart(2, "0")}
+              </span>
+              <span class="min-w-0 flex-1 truncate">{post.data.title}</span>
+              {current && <span class="text-xs font-semibold">Current</span>}
+            </Link>
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  {(previousPost || nextPost) && (
+    <>
+      <Separator />
+      <div class="grid gap-2 md:grid-cols-2">
+        <div>
+          {previousPost && (
+            <Link
+              href={`/blog/${previousPost.id}`}
+              class="border-border hover:border-primary block rounded border p-3 transition-colors"
+            >
+              <span class="text-muted-foreground block text-xs font-semibold">Previous</span>
+              <span class="mt-1 block text-sm font-semibold">{previousPost.data.title}</span>
+            </Link>
+          )}
+        </div>
+        <div>
+          {nextPost && (
+            <Link
+              href={`/blog/${nextPost.id}`}
+              class="border-border hover:border-primary block rounded border p-3 text-right transition-colors"
+            >
+              <span class="text-muted-foreground block text-xs font-semibold">Next</span>
+              <span class="mt-1 block text-sm font-semibold">{nextPost.data.title}</span>
+            </Link>
+          )}
+        </div>
+      </div>
+    </>
+  )}
+</section>

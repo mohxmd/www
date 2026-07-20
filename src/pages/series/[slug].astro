@@ -1,0 +1,89 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { render } from "astro:content";
+import Layout from "#/layouts/layout.astro";
+import Link from "#/components/ui/link.astro";
+import Text from "#/components/ui/text.astro";
+import Separator from "#/components/ui/separator.astro";
+import Date from "#/components/ui/date.astro";
+import { getPublishedSeries, getSeriesPosts } from "#/lib/blog/series";
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+export const prerender = true;
+
+export const getStaticPaths = (async () =>
+  await Promise.all(
+    (await getPublishedSeries()).map(async (series) => ({
+      params: { slug: series.slug },
+      props: {
+        series,
+        posts: await getSeriesPosts(series.slug),
+      },
+    }))
+  )) satisfies GetStaticPaths;
+
+const { series, posts } = Astro.props as Props;
+const { Content } = await render(series.entry);
+---
+
+<Layout
+  metadata={{
+    title: `Mohammed's blog | ${series.entry.data.title}`,
+    description: series.entry.data.description,
+    type: "website",
+  }}
+>
+  <section class="space-y-8 py-6">
+    <header class="space-y-4 text-center">
+      <Text as="h1" size="fluid-3xl" class="font-8bit font-bold">
+        {series.entry.data.title}
+      </Text>
+      <Text class="text-muted-foreground mx-auto max-w-2xl">
+        {series.entry.data.description}
+      </Text>
+      <div class="text-muted-foreground flex items-center justify-center gap-2 text-sm">
+        <span class="rounded border px-2 py-1 text-xs font-semibold capitalize">
+          {series.entry.data.status}
+        </span>
+        <span>{posts.length} Posts</span>
+      </div>
+    </header>
+
+    <div class="prose prose-neutral dark:prose-invert max-w-none">
+      <Content />
+    </div>
+
+    <Separator />
+
+    <section class="space-y-3" aria-labelledby="series-posts-title">
+      <Text id="series-posts-title" as="h2" size="fluid-xl" class="font-8bit font-bold">
+        Posts
+      </Text>
+
+      <ol class="space-y-2">
+        {
+          posts.map((post) => (
+            <li>
+              <Link
+                href={`/blog/${post.id}`}
+                class="border-border hover:border-primary bg-card grid gap-2 rounded-lg border p-4 transition-colors md:grid-cols-[auto_1fr_auto]"
+              >
+                <span class="text-muted-foreground font-mono text-sm tabular-nums">
+                  {String(post.data.seriesOrder).padStart(2, "0")}
+                </span>
+                <span>
+                  <span class="block font-semibold">{post.data.title}</span>
+                  <span class="text-muted-foreground mt-1 block text-sm">
+                    {post.data.description}
+                  </span>
+                </span>
+                <Date value={post.data.pubDate} variant="muted" size="xs" />
+              </Link>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  </section>
+</Layout>

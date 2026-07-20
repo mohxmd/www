@@ -1,0 +1,53 @@
+---
+import Layout from "#/layouts/layout.astro";
+import Link from "#/components/ui/link.astro";
+import Text from "#/components/ui/text.astro";
+import { getPublishedSeries, getSeriesPosts } from "#/lib/blog/series";
+
+export const prerender = true;
+
+const seriesItems = await Promise.all(
+  (await getPublishedSeries()).map(async (series) => ({
+    ...series,
+    posts: await getSeriesPosts(series.slug),
+  }))
+);
+---
+
+<Layout
+  metadata={{
+    title: "Mohammed's blog | Series",
+    description: "Ordered blog series and research paths.",
+  }}
+>
+  <section class="space-y-6 py-6">
+    <div class="space-y-3 text-center">
+      <Text as="h1" size="fluid-3xl" class="font-8bit font-bold">Blog Series</Text>
+      <Text class="text-muted-foreground">
+        Ordered research paths and connected posts.
+      </Text>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      {
+        seriesItems.map((series) => (
+          <article class="border-border bg-card rounded-lg border p-4">
+            <div class="flex items-start justify-between gap-3">
+              <div class="space-y-2">
+                <Text as="h2" size="fluid-lg" class="font-8bit font-bold">
+                  <Link href={`/series/${series.slug}`} class="hover:text-link-hover">
+                    {series.entry.data.title}
+                  </Link>
+                </Text>
+                <p class="text-muted-foreground text-sm">{series.entry.data.description}</p>
+              </div>
+              <span class="border-border text-muted-foreground rounded border px-2 py-1 text-xs font-semibold">
+                {series.posts.length} Posts
+              </span>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

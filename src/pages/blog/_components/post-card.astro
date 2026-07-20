@@ -5,6 +5,7 @@ import type { GetSortedPosts } from "#/content/utils";
 import Separator from "#/components/ui/separator.astro";
 import Link from "#/components/ui/link.astro";
 import { formatDate, truncateSafe } from "#/lib/utils/string";
+// import { getSeriesBySlug } from "#/lib/blog/series";
 
 type Props = {
   slug: string;
@@ -14,6 +15,7 @@ type Props = {
 
 const { slug, post, class: className } = Astro.props;
 const { description, pubDate, title, readingTime, image } = post;
+// const series = post.series ? await getSeriesBySlug(post.series) : null;
 ---
 
 <article class:list={["bg-card flex h-full flex-col overflow-hidden rounded-lg border", className]}>
@@ -41,6 +43,17 @@ const { description, pubDate, title, readingTime, image } = post;
     <p class="text-muted-foreground text-fluid-sm flex-1">
       {truncateSafe(description, 80)}
     </p>
+
+    <!-- {
+      series && post.seriesOrder && (
+        <Link
+          href={`/series/${series.slug}`}
+          class="border-border text-muted-foreground hover:border-primary hover:text-foreground w-fit rounded border px-2 py-1 text-xs font-semibold"
+        >
+          {series.entry.data.title} · Part {post.seriesOrder}
+        </Link>
+      )
+    } -->
 
     <Separator class="my-1.5" />
 

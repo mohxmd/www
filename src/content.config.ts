@@ -40,35 +40,67 @@ const getRepo = async (repo: string) => {
 };
 
 const blogSchema = ({ image }: { image: ImageFunction }) =>
-  z.object({
-    title: z.string(),
-    description: z.string(),
-    image: image(),
-    tags: z.array(z.string()).default([]),
-    author: z.string().default("Mohammed"),
-    draft: z.boolean().default(false),
-    pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    repo: z
-      .string()
-      .transform(async (repo) => {
-        if (!repo) return null;
-        const response = await getRepo(repo);
-        if (!response) return null;
+  z
+    .object({
+      title: z.string(),
+      description: z.string(),
+      image: image(),
+      tags: z.array(z.string()).default([]),
+      author: z.string().default("Mohammed"),
+      draft: z.boolean().default(false),
+      pubDate: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
+      series: z
+        .string()
+        .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use a lowercase slug like ai-from-scratch")
+        .optional(),
+      seriesOrder: z.number().int().positive().optional(),
+      repo: z
+        .string()
+        .transform(async (repo) => {
+          if (!repo) return null;
+          const response = await getRepo(repo);
+          if (!response) return null;
 
-        return {
-          name: response.data.name,
-          description: response.data.description,
-          language: response.data.language,
-          stargazers: response.data.stargazers_count,
-          forks: response.data.forks_count,
-          watchers: response.data.watchers_count,
-          githubUrl: response.data.html_url,
-          websiteUrl: response.data.homepage,
-        };
-      })
-      .optional(),
-  });
+          return {
+            name: response.data.name,
+            description: response.data.description,
+            language: response.data.language,
+            stargazers: response.data.stargazers_count,
+            forks: response.data.forks_count,
+            watchers: response.data.watchers_count,
+            githubUrl: response.data.html_url,
+            websiteUrl: response.data.homepage,
+          };
+        })
+        .optional(),
+    })
+    .superRefine((post, ctx) => {
+      if (post.series && !post.seriesOrder) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["seriesOrder"],
+          message: "seriesOrder is required when series is set.",
+        });
+      }
+
+      if (!post.series && post.seriesOrder) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["seriesOrder"],
+          message: "seriesOrder can only be used when series is set.",
+        });
+      }
+    });
+
+const seriesSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  draft: z.boolean().default(false),
+  status: z.enum(["planned", "active", "complete"]).default("active"),
+  startedDate: z.coerce.date().optional(),
+  updatedDate: z.coerce.date().optional(),
+});
 
 const projectSchema = z.object({
   id: z.string(),
@@ -107,6 +139,13 @@ export const collections = {
     }),
     schema: blogSchema,
   }),
+  series: defineCollection({
+    loader: glob({
+      pattern: "**/index.{md,mdx}",
+      base: "./src/content/series",
+    }),
+    schema: seriesSchema,
+  }),
   projects: defineCollection({
     loader: async () => {
       const repos = await Promise.all(REPO_NAMES.map(getRepo));
@@ -138,4 +177,5 @@ export const collections = {
 };
 
 export type BlogSchema = z.infer<ReturnType<typeof blogSchema>>;
+export type SeriesSchema = z.infer<typeof seriesSchema>;
 export type ProjectSchema = z.infer<typeof projectSchema>;

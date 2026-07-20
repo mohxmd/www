@@ -10,6 +10,9 @@ function daysAgo(days: number) {
   return date;
 }
 
+/**
+ * Marks conversations closed after their signed browser session expires.
+ */
 export async function closeExpiredConversations(db: Db) {
   const now = new Date();
 
@@ -19,6 +22,9 @@ export async function closeExpiredConversations(db: Db) {
     .where(and(eq(chatConversation.status, "open"), lt(chatConversation.expiresAt, now)));
 }
 
+/**
+ * Deletes old closed conversations and messages after the retention window.
+ */
 export async function deleteExpiredChatData(db: Db) {
   const cutoff = daysAgo(CHAT_LIMITS.retentionDays);
 

@@ -1,5 +1,11 @@
 import { z } from "astro/zod";
 
+/**
+ * Product limits for the public website chat.
+ *
+ * Keep these conservative: there is no user account system, so the signed
+ * cookie session is the only durable identity signal available to the server.
+ */
 export const CHAT_LIMITS = {
   messageMaxLength: 500,
   maxMessagesPerConversation: 30,
@@ -9,10 +15,20 @@ export const CHAT_LIMITS = {
   retentionDays: 90,
 } as const;
 
+/**
+ * Validates visitor-submitted chat messages before they are stored or sent to
+ * Telegram. The trim is intentional so whitespace-only messages are rejected.
+ */
 export const chatSendInputSchema = z.object({
   body: z.string().trim().min(1, "Message cannot be empty").max(CHAT_LIMITS.messageMaxLength),
 });
 
+/**
+ * Minimal Telegram message shape used by the webhook route.
+ *
+ * The bot only needs plain-text replies to forwarded visitor messages, so the
+ * schema intentionally ignores every other Telegram update type.
+ */
 export const telegramMessageSchema = z.object({
   message_id: z.number(),
   from: z

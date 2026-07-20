@@ -17,6 +17,12 @@ type TelegramSendMessageResponse = {
   description?: string;
 };
 
+/**
+ * Verifies Telegram's webhook secret header.
+ *
+ * In production this must match the `secret_token` used with `setWebhook`.
+ * Development allows missing secrets so local webhook testing remains possible.
+ */
 export function verifyTelegramWebhookSecret(request: Request) {
   if (!TELEGRAM_WEBHOOK_SECRET) return import.meta.env.DEV;
   return request.headers.get("X-Telegram-Bot-Api-Secret-Token") === TELEGRAM_WEBHOOK_SECRET;
@@ -26,6 +32,12 @@ function isTelegramConfigured() {
   return Boolean(TELEGRAM_BOT_TOKEN && TELEGRAM_ADMIN_USER_ID);
 }
 
+/**
+ * Forwards a visitor message to the configured Telegram admin chat.
+ *
+ * The returned Telegram message id is stored so an admin reply can be mapped
+ * back to the correct website conversation.
+ */
 export async function sendTelegramVisitorMessage(conversationId: string, body: string) {
   if (!isTelegramConfigured()) {
     return { delivered: false, telegramMessageId: null };
@@ -56,6 +68,9 @@ export async function sendTelegramVisitorMessage(conversationId: string, body: s
   return { delivered: true, telegramMessageId: payload.result.message_id };
 }
 
+/**
+ * Stores the relation between a Telegram message and a website chat message.
+ */
 export async function storeTelegramMessageMap(
   db: Db,
   telegramMessageId: number | null,
@@ -70,6 +85,12 @@ export async function storeTelegramMessageMap(
     .onConflictDoNothing();
 }
 
+/**
+ * Stores an admin reply received from Telegram.
+ *
+ * Only replies from `TELEGRAM_ADMIN_USER_ID` to a previously forwarded message
+ * are accepted. Other Telegram updates are ignored.
+ */
 export async function storeTelegramReply(db: Db, request: Request) {
   const update = telegramUpdateSchema.parse(await request.json());
   const message = update.message;

@@ -15,12 +15,24 @@ type CookiePayload = {
   secret: string;
 };
 
+/**
+ * Authenticated browser chat session.
+ *
+ * `conversationId` identifies the DB row. `secret` proves the browser owns that
+ * conversation and is stored only in a signed, HTTP-only cookie.
+ */
 export type ChatSession = {
   conversationId: string;
   secret: string;
   expiresAt: Date;
 };
 
+/**
+ * Returns the signing secret used for chat cookies.
+ *
+ * Production must provide a stable secret. Development gets a fixed fallback so
+ * local UI work does not require deployment secrets.
+ */
 function getCookieSecret() {
   if (CHAT_COOKIE_SECRET) return CHAT_COOKIE_SECRET;
   if (import.meta.env.DEV) return "dev-only-chat-cookie-secret";
@@ -57,12 +69,24 @@ async function sha256(message: string) {
   return base64UrlEncode(digest);
 }
 
+/**
+ * Creates a tamper-evident cookie value.
+ *
+ * The payload is readable if someone inspects the cookie, but it cannot be
+ * changed without invalidating the HMAC signature.
+ */
 async function signPayload(payload: CookiePayload) {
   const encodedPayload = base64UrlEncode(JSON.stringify(payload));
   const signature = await hmac(encodedPayload);
   return `${encodedPayload}.${signature}`;
 }
 
+/**
+ * Verifies and decodes the signed chat cookie.
+ *
+ * This only proves the cookie was issued by this server. `getChatSession` still
+ * checks the DB secret hash, status, and expiry before trusting it.
+ */
 async function verifyCookie(value: string | undefined): Promise<CookiePayload | null> {
   if (!value) return null;
 
@@ -97,6 +121,11 @@ function setSessionCookie(cookies: AstroCookies, value: string) {
   });
 }
 
+/**
+ * Reads the current chat session from the signed HTTP-only cookie.
+ *
+ * Returns `null` for missing, expired, closed, or tampered sessions.
+ */
 export async function getChatSession(db: Db, cookies: AstroCookies): Promise<ChatSession | null> {
   const payload = await verifyCookie(cookies.get(COOKIE_NAME)?.value);
   if (!payload) return null;
@@ -118,6 +147,12 @@ export async function getChatSession(db: Db, cookies: AstroCookies): Promise<Cha
   };
 }
 
+/**
+ * Returns an existing valid session or creates a new conversation.
+ *
+ * Called from the start/send endpoints. A passive page load should use
+ * `getChatSession` instead so it does not create empty DB conversations.
+ */
 export async function ensureChatSession(db: Db, cookies: AstroCookies): Promise<ChatSession> {
   const existingSession = await getChatSession(db, cookies);
   if (existingSession) return existingSession;
@@ -141,6 +176,9 @@ export async function ensureChatSession(db: Db, cookies: AstroCookies): Promise<
   return { conversationId, secret, expiresAt };
 }
 
+/**
+ * Extends the session lifetime after visitor activity and refreshes the cookie.
+ */
 export async function touchChatSession(db: Db, cookies: AstroCookies, session: ChatSession) {
   const now = new Date();
   const expiresAt = addDays(now, CHAT_LIMITS.sessionDays);

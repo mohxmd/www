@@ -4,6 +4,12 @@ import { CHAT_LIMITS } from "../schema";
 
 type Db = ReturnType<typeof getDb>;
 
+/**
+ * Result returned by the chat rate limiter.
+ *
+ * The user-facing message is part of the result so API routes do not duplicate
+ * limit-specific copy.
+ */
 export type RateLimitResult =
   | { allowed: true }
   | {
@@ -31,7 +37,16 @@ async function countVisitorMessagesSince(db: Db, conversationId: string, since: 
   return result?.value ?? 0;
 }
 
-export async function checkChatRateLimit(db: Db, conversationId: string): Promise<RateLimitResult> {
+/**
+ * Applies per-conversation abuse limits.
+ *
+ * Without login/signup, limits are scoped to the signed chat conversation
+ * rather than a user account. This is enough for low-volume personal-site chat.
+ */
+export async function checkChatRateLimit(
+  db: Db,
+  conversationId: string
+): Promise<RateLimitResult> {
   const totalMessages = await countVisitorMessagesSince(db, conversationId, new Date(0));
   if (totalMessages >= CHAT_LIMITS.maxMessagesPerConversation) {
     return {

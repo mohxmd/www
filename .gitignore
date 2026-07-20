@@ -2,11 +2,12 @@
 dist/
 
 # dev time
-dev/
+tmp/
 
 # generated types
 .astro/
 .vercel
+.alchemy/
 
 # dependencies
 node_modules/

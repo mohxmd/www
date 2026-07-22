@@ -9,6 +9,7 @@ export const POSTS_PAGE_SIZE = 9;
 export const getSortedPosts = async () =>
   await Promise.all(
     (await getCollection("blog"))
+      .filter((post) => !post.data.draft)
       .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
       .map(async (post) => {
         const { remarkPluginFrontmatter, ...renderedData } = await render(post);

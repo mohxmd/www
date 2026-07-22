@@ -3,6 +3,8 @@ export const siteConfig = {
   title: "Mohx Notes",
   description:
     "A corner of the internet where I write, build, and share my story through code, design, and quiet thoughts.",
+  // description:
+  //   "Typing dreams into reality — FOSS, Linux, and late-night commits under the moonlight.",
   og: "/avatar.svg",
   favicon: "/favicon.svg",
   author: "Mohammed",
@@ -44,6 +46,10 @@ export const siteConfig = {
     "MohxNotes",
     "mohammed's blog",
     "mohammedsh",
+    "mohmed",
+    "mohmedsh",
+    "mohmed shajhan",
+    "mohmedshajhan",
     "mohammed shajahan",
     "hello world",
     "mhdzhhan",

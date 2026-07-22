@@ -1,0 +1,480 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "#/lib/utils";
+import Icon from "#/components/ui/icon.astro";
+import MotionArtwork from "./motion-artwork.astro";
+
+type Props = Omit<HTMLAttributes<"div">, "id"> & {
+  /** URL for an HLS manifest (m3u8) or a browser-supported video file. */
+  src: string;
+  /** Accessible title used to identify the player controls. */
+  title: string;
+  id?: string;
+  poster?: string;
+  autoplay?: boolean;
+  /** Visible fraction from 0-1, or a whole-number percentage from 1-100. */
+  autoplayVisibilityThreshold?: number;
+  loop?: boolean;
+  muted?: boolean;
+  useControls?: boolean;
+  shouldSuperimposePosterImage?: boolean;
+  aspectRatio?: string;
+  preload?: "none" | "metadata" | "auto";
+  captions?: string;
+  captionsLanguage?: string;
+  captionsLabel?: string;
+  crossorigin?: "anonymous" | "use-credentials";
+};
+
+const {
+  src,
+  title,
+  id,
+  poster,
+  autoplay = false,
+  autoplayVisibilityThreshold = 0,
+  loop = false,
+  muted = true,
+  useControls = true,
+  shouldSuperimposePosterImage = false,
+  aspectRatio = "16 / 9",
+  preload = "none",
+  captions,
+  captionsLanguage = "en",
+  captionsLabel = "English",
+  crossorigin,
+  class: className,
+  ...props
+} = Astro.props;
+---
+
+<astro-video-player
+  {...props}
+  class={cn("not-prose block overflow-hidden rounded bg-black", className)}
+  style={`--video-aspect-ratio: ${aspectRatio}`}
+  data-src={src}
+  data-autoplay={autoplay ? "true" : "false"}
+  data-autoplay-threshold={autoplayVisibilityThreshold}
+  data-state="loading"
+>
+  <div class="video-layer">
+    <MotionArtwork
+      {id}
+      poster={!shouldSuperimposePosterImage ? poster : undefined}
+      {loop}
+      {muted}
+      {preload}
+      {captions}
+      {captionsLanguage}
+      {captionsLabel}
+      {crossorigin}
+    />
+  </div>
+
+  {
+    shouldSuperimposePosterImage && poster && (
+      <img src={poster} class="fake-poster" alt="" aria-hidden="true" loading="lazy" data-poster />
+    )
+  }
+
+  <div class="loading-indicator" aria-hidden="true" data-loading hidden>
+    <span></span><span></span><span></span>
+  </div>
+
+  <p class="error-message" role="status" data-error hidden></p>
+
+  {
+    useControls && (
+      <div class="video-controls" role="group" aria-label={`${title} video controls`} data-controls>
+        <button
+          class="control-button replay-button"
+          type="button"
+          aria-label="Replay"
+          data-replay
+          hidden
+        >
+          <Icon name="rotate-ccw" size="md" />
+        </button>
+
+        <div class="playback-controls">
+          <button class="control-button" type="button" aria-label="Play" data-play>
+            <span data-play-icon>
+              <Icon name="play" size="md" />
+            </span>
+            <span data-pause-icon hidden>
+              <Icon name="pause" size="md" />
+            </span>
+          </button>
+
+          <button
+            class="control-button"
+            type="button"
+            aria-label={muted ? "Unmute" : "Mute"}
+            data-mute
+          >
+            <span data-muted-icon hidden={!muted}>
+              <Icon name="volume-x" size="md" />
+            </span>
+            <span data-volume-icon hidden={muted}>
+              <Icon name="volume-2" size="md" />
+            </span>
+          </button>
+
+          <button
+            class="control-button"
+            type="button"
+            aria-label="Enter fullscreen"
+            data-fullscreen
+          >
+            <Icon name="maximize" size="md" />
+          </button>
+        </div>
+      </div>
+    )
+  }
+</astro-video-player>
+
+<script>
+  import { attachVideoSource, type VideoSourceSession } from "./hls";
+
+  class AstroVideoPlayer extends HTMLElement {
+    #video: HTMLVideoElement | null = null;
+    #session: VideoSourceSession | null = null;
+    #observer: IntersectionObserver | null = null;
+    #events: AbortController | null = null;
+    #started = false;
+
+    connectedCallback() {
+      if (this.#video) return;
+
+      const video = this.querySelector<HTMLVideoElement>("[data-video]");
+      const src = this.dataset.src;
+      if (!video || !src) return;
+
+      this.#video = video;
+      this.#events = new AbortController();
+      this.#bindControls();
+      this.#bindVideoEvents();
+      void attachVideoSource(video, src, (message) => this.#showError(message))
+        .then((session) => {
+          if (this.#video !== video) {
+            session.destroy();
+            return;
+          }
+
+          this.#session = session;
+          this.#observeAutoplay();
+        })
+        .catch((error: unknown) => {
+          if (this.#video !== video) return;
+          this.#showError(
+            error instanceof Error ? error.message : "The video engine could not be loaded."
+          );
+        });
+    }
+
+    disconnectedCallback() {
+      this.#observer?.disconnect();
+      this.#events?.abort();
+      this.#session?.destroy();
+      this.#observer = null;
+      this.#events = null;
+      this.#session = null;
+      this.#video = null;
+    }
+
+    async play() {
+      if (!this.#video) return;
+
+      try {
+        await this.#video.play();
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        this.#syncControls();
+      }
+    }
+
+    pause() {
+      this.#video?.pause();
+    }
+
+    #bindControls() {
+      const signal = this.#events?.signal;
+      if (!signal) return;
+      this.querySelector<HTMLButtonElement>("[data-play]")?.addEventListener(
+        "click",
+        () => {
+          if (this.#video?.paused) void this.play();
+          else this.pause();
+        },
+        { signal }
+      );
+
+      this.querySelector<HTMLButtonElement>("[data-replay]")?.addEventListener(
+        "click",
+        () => {
+          if (!this.#video) return;
+          this.#video.currentTime = 0;
+          void this.play();
+        },
+        { signal }
+      );
+
+      this.querySelector<HTMLButtonElement>("[data-mute]")?.addEventListener(
+        "click",
+        () => {
+          if (!this.#video) return;
+          this.#video.muted = !this.#video.muted;
+          this.#syncControls();
+        },
+        { signal }
+      );
+
+      this.querySelector<HTMLButtonElement>("[data-fullscreen]")?.addEventListener(
+        "click",
+        () => {
+          if (!this.#video) return;
+
+          if (this.#video.requestFullscreen) void this.#video.requestFullscreen();
+          else if ("webkitEnterFullscreen" in this.#video) {
+            (
+              this.#video as HTMLVideoElement & { webkitEnterFullscreen: () => void }
+            ).webkitEnterFullscreen();
+          }
+        },
+        { signal }
+      );
+    }
+
+    #bindVideoEvents() {
+      if (!this.#video) return;
+      const signal = this.#events?.signal;
+      if (!signal) return;
+
+      this.#video.addEventListener(
+        "play",
+        () => {
+          this.#started = true;
+          this.querySelector("[data-replay]")?.removeAttribute("hidden");
+          this.querySelector("[data-poster]")?.setAttribute("hidden", "");
+          this.#syncControls();
+        },
+        { signal }
+      );
+      this.#video.addEventListener("pause", () => this.#syncControls(), { signal });
+      this.#video.addEventListener("volumechange", () => this.#syncControls(), { signal });
+      this.#video.addEventListener("waiting", () => this.#setState("loading"), { signal });
+      this.#video.addEventListener("playing", () => this.#setState("ready"), { signal });
+      this.#video.addEventListener("canplay", () => this.#setState("ready"), { signal });
+      this.#video.addEventListener(
+        "error",
+        () => {
+          const message = this.#video?.error?.message || "The video could not be played.";
+          this.#showError(message);
+        },
+        { signal }
+      );
+      this.#video.addEventListener(
+        "ended",
+        () => {
+          if (!this.#video || this.#video.loop) return;
+          this.#video.currentTime = Math.min(
+            1,
+            Number.isFinite(this.#video.duration) ? this.#video.duration : 1
+          );
+          this.#video.pause();
+          this.#syncControls();
+        },
+        { signal }
+      );
+    }
+
+    #observeAutoplay() {
+      if (this.dataset.autoplay !== "true" || !this.#video) return;
+
+      const configuredThreshold = Number(this.dataset.autoplayThreshold ?? 0);
+      const threshold = Math.min(
+        1,
+        Math.max(0, configuredThreshold > 1 ? configuredThreshold / 100 : configuredThreshold)
+      );
+
+      this.#observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry?.isIntersecting) void this.play();
+          else if (this.#video && !this.#video.paused) this.pause();
+        },
+        { threshold }
+      );
+      this.#observer.observe(this);
+    }
+
+    #syncControls() {
+      if (!this.#video) return;
+
+      const playButton = this.querySelector<HTMLButtonElement>("[data-play]");
+      const muteButton = this.querySelector<HTMLButtonElement>("[data-mute]");
+      const paused = this.#video.paused;
+      const muted = this.#video.muted;
+
+      playButton?.setAttribute("aria-label", paused ? "Play" : "Pause");
+      muteButton?.setAttribute("aria-label", muted ? "Unmute" : "Mute");
+      this.querySelector("[data-play-icon]")?.toggleAttribute("hidden", !paused);
+      this.querySelector("[data-pause-icon]")?.toggleAttribute("hidden", paused);
+      this.querySelector("[data-muted-icon]")?.toggleAttribute("hidden", !muted);
+      this.querySelector("[data-volume-icon]")?.toggleAttribute("hidden", muted);
+    }
+
+    #setState(state: "loading" | "ready" | "error") {
+      this.dataset.state = state;
+      this.querySelector("[data-loading]")?.toggleAttribute(
+        "hidden",
+        state !== "loading" || !this.#started
+      );
+    }
+
+    #showError(message: string) {
+      this.#setState("error");
+      const output = this.querySelector<HTMLElement>("[data-error]");
+      if (!output) return;
+      output.textContent = message;
+      output.removeAttribute("hidden");
+    }
+  }
+
+  if (!customElements.get("astro-video-player")) {
+    customElements.define("astro-video-player", AstroVideoPlayer);
+  }
+</script>
+
+<style>
+  astro-video-player {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--video-aspect-ratio);
+    container: video-player / inline-size;
+    color: white;
+  }
+
+  .video-layer,
+  .fake-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .fake-poster {
+    z-index: 1;
+    object-fit: cover;
+  }
+
+  .video-controls {
+    position: absolute;
+    z-index: 3;
+    inset: auto 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.5rem 0.75rem 0.75rem;
+    background: linear-gradient(to top, rgb(0 0 0 / 68%), rgb(0 0 0 / 20%), transparent);
+    transition: opacity 150ms ease-out;
+  }
+
+  .playback-controls {
+    display: flex;
+    gap: 0.375rem;
+    margin-inline-start: auto;
+  }
+
+  .control-button {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    padding: 0;
+    color: white;
+    border: 1px solid rgb(255 255 255 / 28%);
+    border-radius: 9999px;
+    background: rgb(0 0 0 / 18%);
+    backdrop-filter: blur(20px);
+    transition:
+      background 105ms ease-out,
+      transform 105ms ease-out;
+  }
+
+  .control-button:hover {
+    background: rgb(255 255 255 / 16%);
+  }
+
+  .control-button:active {
+    transform: scale(0.94);
+  }
+
+  .control-button:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+
+  .loading-indicator,
+  .error-message {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .loading-indicator {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .loading-indicator span {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 9999px;
+    background: currentColor;
+    animation: video-loading 900ms ease-in-out infinite alternate;
+  }
+
+  .loading-indicator span:nth-child(2) {
+    animation-delay: 150ms;
+  }
+
+  .loading-indicator span:nth-child(3) {
+    animation-delay: 300ms;
+  }
+
+  .error-message {
+    width: min(90%, 28rem);
+    margin: 0;
+    padding: 0.5rem;
+    text-align: center;
+    color: white;
+    background: rgb(0 0 0 / 72%);
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  @keyframes video-loading {
+    to {
+      opacity: 0.3;
+      transform: translateY(-0.2rem);
+    }
+  }
+
+  @container video-player (max-width: 500px) {
+    .control-button {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loading-indicator span {
+      animation: none;
+    }
+  }
+</style>

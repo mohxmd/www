@@ -1,0 +1,52 @@
+---
+type Props = {
+  id?: string | undefined;
+  poster?: string | undefined;
+  loop: boolean;
+  muted: boolean;
+  preload: "none" | "metadata" | "auto";
+  captions?: string | undefined;
+  captionsLanguage: string;
+  captionsLabel: string;
+  crossorigin?: "anonymous" | "use-credentials" | undefined;
+};
+
+const { id, poster, loop, muted, preload, captions, captionsLanguage, captionsLabel, crossorigin } =
+  Astro.props;
+---
+
+<!-- The source is attached client-side so HLS.js and native playback never compete. -->
+<video
+  {id}
+  {poster}
+  {loop}
+  {muted}
+  {preload}
+  {crossorigin}
+  playsinline
+  disablepictureinpicture
+  data-video
+>
+  {
+    captions && (
+      <track
+        default
+        kind="captions"
+        src={captions}
+        srclang={captionsLanguage}
+        label={captionsLabel}
+      />
+    )
+  }
+</video>
+
+<style>
+  video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: var(--video-aspect-ratio);
+    object-fit: cover;
+    object-position: center;
+  }
+</style>

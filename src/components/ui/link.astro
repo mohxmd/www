@@ -22,7 +22,9 @@ const {
   ...props
 } = Astro.props;
 
-const external = href?.toString().startsWith("https://");
+const hrefValue = href?.toString();
+const external = hrefValue?.startsWith("http://") || hrefValue?.startsWith("https://");
+const prefetchStrategy = hrefValue?.startsWith("#") || external ? "false" : props["data-astro-prefetch"];
 ---
 
 <Text
@@ -37,7 +39,7 @@ const external = href?.toString().startsWith("https://");
     (icon || external) && "gap-1",
     className
   )}
-  data-astro-prefetch="tap"
+  data-astro-prefetch={prefetchStrategy}
 >
   {icon && iconPosition === "left" ? <Icon name={icon} size={iconSize} /> : null}
   <slot />

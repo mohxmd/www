@@ -5,6 +5,8 @@ import Theme from "#/components/ui/theme.astro";
 import Link from "#/components/ui/link.astro";
 import * as List from "#/components/ui/list";
 
+// Deprecated: this legacy header is no longer mounted by the main layout.
+// Use `site-nav.astro` for the active site navigation.
 import { siteConfig } from "#/configs/site";
 
 const currentPath = Astro.url.pathname;

@@ -1,6 +1,8 @@
 ---
 /* eslint-disable astro/no-set-html-directive */
 
+import { siteConfig } from "#/configs/site";
+
 type Props = {
   type: "blog" | "website";
   title: string;
@@ -13,21 +15,42 @@ type Props = {
 
 const { type, title, description, pageUrl, ogImageUrl, publishDate, modifiedDate } = Astro.props;
 
+const siteUrl = siteConfig.site.replace(/\/+$/, "");
+const personId = `${siteUrl}/#person`;
+const websiteId = `${siteUrl}/#website`;
+const webpageId = `${pageUrl}/#webpage`;
+const articleId = `${pageUrl}/#blogposting`;
+const sameAs = siteConfig.contacts
+  .map((contact) => contact.href)
+  .filter((href) => href.startsWith("https://"));
+
+const author = {
+  "@type": "Person",
+  "@id": personId,
+  name: siteConfig.author,
+  url: `${siteUrl}/about`,
+  sameAs,
+};
+
+const website = {
+  "@type": "WebSite",
+  "@id": websiteId,
+  url: siteUrl,
+  name: siteConfig.title,
+  description: siteConfig.description,
+  inLanguage: "en-US",
+  publisher: { "@id": personId },
+};
+
 const baseMetadata = {
-  "@context": "https://schema.org",
+  "@id": webpageId,
   url: pageUrl,
+  inLanguage: "en-US",
+  isPartOf: { "@id": websiteId },
   name: title,
   description,
-  author: {
-    "@type": "Person",
-    name: "Mohammed",
-    url: "https://www.mohammedsh.xyz",
-  },
-  publisher: {
-    "@type": "Person",
-    name: "Mohammed",
-    url: "https://www.mohammedsh.xyz",
-  },
+  author: { "@id": personId },
+  publisher: { "@id": personId },
   ...(ogImageUrl
     ? {
         image: {
@@ -43,13 +66,11 @@ const baseMetadata = {
 const blogPostingSchema = {
   ...baseMetadata,
   "@type": "BlogPosting",
+  "@id": articleId,
   headline: title,
   datePublished: publishDate,
   dateModified: modifiedDate || publishDate,
-  mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": pageUrl,
-  },
+  mainEntityOfPage: { "@id": webpageId },
 };
 
 const webPageSchema = {
@@ -57,7 +78,10 @@ const webPageSchema = {
   "@type": "WebPage",
 };
 
-const structuredData = type === "blog" ? blogPostingSchema : webPageSchema;
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [author, website, type === "blog" ? blogPostingSchema : webPageSchema],
+};
 ---
 
 <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />

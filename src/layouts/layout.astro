@@ -8,7 +8,7 @@ import ToTop from "#/components/ui/to-top.astro";
 
 import BaseHead, { type Metadata } from "./_components/base-head.astro";
 import Footer from "./_components/footer.astro";
-import FloatingNav from "./_components/floating-nav.astro";
+import SiteNav from "./_components/site-nav.astro";
 
 type Props = Omit<HTMLAttributes<"main">, "title"> &
   Metadata & {
@@ -26,7 +26,7 @@ const pageMetadata: Metadata = metadata ?? Astro.props;
   </head>
   <body>
     <div class="mx-auto flex min-h-screen max-w-5xl flex-col p-6 text-sm md:p-4">
-      <FloatingNav />
+      <SiteNav />
       <main {...props} class:list={[className]}>
         <slot />
       </main>

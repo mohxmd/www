@@ -30,7 +30,10 @@ export default defineConfig({
         webAnalytics: { enabled: true },
         imageService: true,
       }),
-  prefetch: true,
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "viewport",
+  },
 
   markdown: {
     syntaxHighlight: false,

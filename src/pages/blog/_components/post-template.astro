@@ -15,9 +15,13 @@ import PostSearch from "./post-search.astro";
 import PostTotalViews from "./post-total-views.astro";
 
 const tags = await getPopularTags();
-const { data: paginatedPosts, url, currentPage, lastPage, total } = Astro.props as Page<
-  GetSortedPosts[0]
->;
+const {
+  data: paginatedPosts,
+  url,
+  currentPage,
+  lastPage,
+  total,
+} = Astro.props as Page<GetSortedPosts[0]>;
 ---
 
 <Layout
@@ -61,7 +65,7 @@ const { data: paginatedPosts, url, currentPage, lastPage, total } = Astro.props 
             ))
           }
           <Link href="/tags"><Chip> Explore All Tags</Chip></Link>
-          <Link href="/series"><Chip icon="list">Explore Series</Chip></Link>
+          <Link href="/arcs"><Chip icon="list">Explore Arcs</Chip></Link>
         </div>
       </div>
     </div>

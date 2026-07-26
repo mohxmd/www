@@ -1,0 +1,53 @@
+---
+import Layout from "#/layouts/layout.astro";
+import Link from "#/components/ui/link.astro";
+import Text from "#/components/ui/text.astro";
+import { getArcPosts, getPublishedArcs } from "#/lib/blog/arc";
+
+export const prerender = true;
+
+const arcItems = await Promise.all(
+  (await getPublishedArcs()).map(async (arc) => ({
+    ...arc,
+    posts: await getArcPosts(arc.slug),
+  }))
+);
+---
+
+<Layout
+  metadata={{
+    title: "Mohammed's blog | Arcs",
+    description: "Connected engineering explorations told across focused posts.",
+  }}
+>
+  <section class="space-y-6 pb-6">
+    <div class="space-y-3 text-center">
+      <Text as="h1" size="fluid-3xl" class="font-8bit font-bold">Story Arcs</Text>
+      <Text class="text-muted-foreground">
+        Connected engineering explorations, one part at a time.
+      </Text>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      {
+        arcItems.map((arc) => (
+          <article class="border-border bg-card rounded-lg border p-4">
+            <div class="flex items-start justify-between gap-3">
+              <div class="space-y-2">
+                <Text as="h2" size="fluid-lg" class="font-8bit font-bold">
+                  <Link href={`/arcs/${arc.slug}`} class="hover:text-link-hover">
+                    {arc.entry.data.title}
+                  </Link>
+                </Text>
+                <p class="text-muted-foreground text-sm">{arc.entry.data.description}</p>
+              </div>
+              <span class="border-border text-muted-foreground rounded border px-2 py-1 text-xs font-semibold">
+                {arc.posts.length} Parts
+              </span>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

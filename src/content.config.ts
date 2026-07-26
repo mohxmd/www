@@ -50,11 +50,11 @@ const blogSchema = ({ image }: { image: ImageFunction }) =>
       draft: z.boolean().default(false),
       pubDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
-      series: z
+      arc: z
         .string()
         .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use a lowercase slug like ai-from-scratch")
         .optional(),
-      seriesOrder: z.number().int().positive().optional(),
+      arcOrder: z.number().int().positive().optional(),
       repo: z
         .string()
         .transform(async (repo) => {
@@ -76,24 +76,24 @@ const blogSchema = ({ image }: { image: ImageFunction }) =>
         .optional(),
     })
     .superRefine((post, ctx) => {
-      if (post.series && !post.seriesOrder) {
+      if (post.arc && !post.arcOrder) {
         ctx.addIssue({
           code: "custom",
-          path: ["seriesOrder"],
-          message: "seriesOrder is required when series is set.",
+          path: ["arcOrder"],
+          message: "arcOrder is required when arc is set.",
         });
       }
 
-      if (!post.series && post.seriesOrder) {
+      if (!post.arc && post.arcOrder) {
         ctx.addIssue({
           code: "custom",
-          path: ["seriesOrder"],
-          message: "seriesOrder can only be used when series is set.",
+          path: ["arcOrder"],
+          message: "arcOrder can only be used when arc is set.",
         });
       }
     });
 
-const seriesSchema = z.object({
+const arcSchema = z.object({
   title: z.string(),
   description: z.string(),
   draft: z.boolean().default(false),
@@ -139,12 +139,12 @@ export const collections = {
     }),
     schema: blogSchema,
   }),
-  series: defineCollection({
+  arcs: defineCollection({
     loader: glob({
       pattern: "**/index.{md,mdx}",
-      base: "./src/content/series",
+      base: "./src/content/arcs",
     }),
-    schema: seriesSchema,
+    schema: arcSchema,
   }),
   projects: defineCollection({
     loader: async () => {
@@ -177,5 +177,5 @@ export const collections = {
 };
 
 export type BlogSchema = z.infer<ReturnType<typeof blogSchema>>;
-export type SeriesSchema = z.infer<typeof seriesSchema>;
+export type ArcSchema = z.infer<typeof arcSchema>;
 export type ProjectSchema = z.infer<typeof projectSchema>;

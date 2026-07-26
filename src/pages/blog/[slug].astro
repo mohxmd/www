@@ -4,7 +4,7 @@ import { Picture } from "astro:assets";
 
 import Layout from "#/layouts/layout.astro";
 import { getSortedPosts, type GetSortedPosts } from "#/content/utils";
-import { getPostSeriesContext } from "#/lib/blog/series";
+import { getPostArcContext } from "#/lib/blog/arc";
 
 import LinkHeader from "#/components/ui/link-header.astro";
 import Link from "#/components/ui/link.astro";
@@ -22,7 +22,7 @@ import PostNavigator from "./_components/post-navigator.astro";
 import PostActions from "./_components/post-actions.astro";
 import PostToc from "./_components/post-toc.astro";
 import PostOutline from "./_components/post-outline.astro";
-import PostSeries from "./_components/post-series.astro";
+import PostArc from "./_components/post-arc.astro";
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
@@ -41,7 +41,7 @@ export const getStaticPaths = (async () =>
 const { id: postId, data, headings, Content, morePosts } = Astro.props;
 const { title, pubDate, updatedDate, image, description, author } = data;
 const [prevPost, nextPost] = morePosts;
-const seriesContext = await getPostSeriesContext(postId);
+const arcContext = await getPostArcContext(postId);
 
 const publishDate = pubDate.toLocaleString();
 ---
@@ -87,10 +87,10 @@ const publishDate = pubDate.toLocaleString();
         </Chip>
 
         {
-          seriesContext && (
-            <Link href={`/series/${seriesContext.series.slug}`}>
+          arcContext && (
+            <Link href={`/arcs/${arcContext.arc.slug}`}>
               <Chip icon="list">
-                {seriesContext.series.entry.data.title} · Part {seriesContext.currentIndex + 1}
+                {arcContext.arc.entry.data.title} · Part {arcContext.currentIndex + 1}
               </Chip>
             </Link>
           )
@@ -169,8 +169,8 @@ const publishDate = pubDate.toLocaleString();
 
     <footer class="mt-10 space-y-6">
       <Separator />
-      {seriesContext && <PostSeries context={seriesContext} />}
-      {seriesContext && <Separator />}
+      {arcContext && <PostArc context={arcContext} />}
+      {arcContext && <Separator />}
       <PostActions />
       <PostNavigator prevPost={prevPost} nextPost={nextPost} />
       <Separator />

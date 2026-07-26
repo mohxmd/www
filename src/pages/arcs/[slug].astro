@@ -1,0 +1,87 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { render } from "astro:content";
+import Layout from "#/layouts/layout.astro";
+import Link from "#/components/ui/link.astro";
+import Text from "#/components/ui/text.astro";
+import Separator from "#/components/ui/separator.astro";
+import Date from "#/components/ui/date.astro";
+import { getArcPosts, getPublishedArcs } from "#/lib/blog/arc";
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+export const prerender = true;
+
+export const getStaticPaths = (async () =>
+  await Promise.all(
+    (await getPublishedArcs()).map(async (arc) => ({
+      params: { slug: arc.slug },
+      props: {
+        arc,
+        posts: await getArcPosts(arc.slug),
+      },
+    }))
+  )) satisfies GetStaticPaths;
+
+const { arc, posts } = Astro.props as Props;
+const { Content } = await render(arc.entry);
+---
+
+<Layout
+  metadata={{
+    title: `Mohammed's blog | ${arc.entry.data.title}`,
+    description: arc.entry.data.description,
+    type: "website",
+  }}
+>
+  <section class="space-y-8 pb-6">
+    <header class="space-y-4 text-center">
+      <Text as="h1" size="fluid-3xl" class="font-8bit font-bold">
+        {arc.entry.data.title}
+      </Text>
+      <Text class="text-muted-foreground mx-auto max-w-2xl">
+        {arc.entry.data.description}
+      </Text>
+      <div class="text-muted-foreground flex items-center justify-center gap-2 text-sm">
+        <span class="rounded border px-2 py-1 text-xs font-semibold capitalize">
+          {arc.entry.data.status}
+        </span>
+        <span>{posts.length} Parts</span>
+      </div>
+    </header>
+
+    <div class="prose prose-neutral dark:prose-invert max-w-none">
+      <Content />
+    </div>
+
+    <Separator />
+
+    <section class="space-y-3" aria-labelledby="arc-parts-title">
+      <Text id="arc-parts-title" as="h2" size="fluid-xl" class="font-8bit font-bold"> Parts </Text>
+
+      <ol class="space-y-2">
+        {
+          posts.map((post) => (
+            <li>
+              <Link
+                href={`/blog/${post.id}`}
+                class="border-border hover:border-primary bg-card grid gap-2 rounded-lg border p-4 transition-colors md:grid-cols-[auto_1fr_auto]"
+              >
+                <span class="text-muted-foreground font-mono text-sm tabular-nums">
+                  {String(post.data.arcOrder).padStart(2, "0")}
+                </span>
+                <span>
+                  <span class="block font-semibold">{post.data.title}</span>
+                  <span class="text-muted-foreground mt-1 block text-sm">
+                    {post.data.description}
+                  </span>
+                </span>
+                <Date value={post.data.pubDate} variant="muted" size="xs" />
+              </Link>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  </section>
+</Layout>

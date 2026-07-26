@@ -1,11 +1,14 @@
 ---
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { render } from "astro:content";
+
+import MarkdownContent from "#/components/content/markdown-content.astro";
 import Layout from "#/layouts/layout.astro";
 import Link from "#/components/ui/link.astro";
 import Text from "#/components/ui/text.astro";
 import Separator from "#/components/ui/separator.astro";
 import Date from "#/components/ui/date.astro";
+
 import { getArcPosts, getPublishedArcs } from "#/lib/blog/arc";
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
@@ -50,9 +53,7 @@ const { Content } = await render(arc.entry);
       </div>
     </header>
 
-    <div class="prose prose-neutral dark:prose-invert max-w-none">
-      <Content />
-    </div>
+    <MarkdownContent Content={Content} />
 
     <Separator />
 

@@ -4,12 +4,13 @@ description: "An engineering exploration of building a small video-on-demand pip
 status: "complete"
 draft: false
 startedDate: 2026-07-23
+updatedDate: 2026-07-26
 ---
 
 I started this experiment to understand what actually happens after a video is uploaded and before a browser can play it as an adaptive stream.
 
 The code behind this exploration lives in [mohxmd/stream-engine](https://github.com/mohxmd/stream-engine).
 
-Across three posts, I follow the project from my initial assumptions to a working local pipeline: inspecting media with FFprobe, transcoding with FFmpeg, generating HLS playlists and segments, tracking background work, organizing storage, and serving the result through Axum.
+Across four posts, I follow the project from my initial assumptions to a working local pipeline and then to Cloudflare R2 storage: inspecting media with FFprobe, transcoding with FFmpeg, generating HLS playlists and segments, tracking background work, organizing storage, and moving generated playback assets out of the API server.
 
 This is not an attempt to recreate Netflix or YouTube. It is a focused exploration of the mechanics and architectural boundaries that become visible when one uploaded file has to become a playback-ready video resource.

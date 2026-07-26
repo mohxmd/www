@@ -1,0 +1,160 @@
+---
+title: "Moving HLS Output to Cloudflare R2"
+draft: false
+pubDate: 2026-07-26
+description: "Why the streaming engine moved generated playlists, segments, and thumbnails out of local disk and into Cloudflare R2 object storage."
+author: "Mohammed"
+image: "./images/moving-hls-output-to-cloudflare-r2.png"
+tags: ["rust", "video", "streaming", "hls", "cloudflare"]
+arc: "building-a-video-streaming-engine"
+arcOrder: 4
+---
+
+The first version of the streaming engine kept everything on local disk. That was the right place to start. FFmpeg wants real file paths, the generated HLS output is easy to inspect, and I could open `media/hls/{video_id}/master.m3u8` directly through Axum.
+
+It also made the next problem very visible.
+
+Local disk is useful while a video is being processed. It is a weak place to keep playback assets after processing has finished. A deployment can restart. A container can disappear. Two instances may not share the same filesystem. If the browser depends on files living beside the API process, the API process has quietly become the media storage system too.
+
+That was not the boundary I wanted.
+
+The storage work lives in [`src/storage`](https://github.com/mohxmd/stream-engine/tree/main/src/storage), with the R2 implementation in [`src/storage/r2.rs`](https://github.com/mohxmd/stream-engine/blob/main/src/storage/r2.rs).
+
+## Local disk did not disappear
+
+The tempting thought was: once I add R2, storage is remote now. But the media pipeline does not work like that yet.
+
+FFmpeg still needs an input path. It still writes thumbnails, rendition playlists, and segment files to a directory. My Rust process still needs to walk that directory after the encode succeeds. R2 is not replacing the processing workspace. It is replacing the durable place where generated media lives after the job is done.
+
+So the flow became:
+
+```text title="R2 publishing flow"
+upload source locally
+  -> run FFprobe and FFmpeg locally
+  -> write HLS output locally
+  -> upload generated HLS files to R2
+  -> return public R2 playback URLs
+```
+
+That distinction matters. Temporary files and durable media are different responsibilities, even when they contain the same bytes for a short period of time.
+
+## Making storage choose the URLs
+
+Before R2, the upload response could hard-code local URLs:
+
+```text
+/hls/{video_id}/master.m3u8
+/hls/{video_id}/thumbnail.jpg
+```
+
+That stopped being true once the generated assets could live somewhere else. The route should not care whether playback comes from Axum's `ServeDir` or a public R2 bucket/custom domain.
+
+I moved that decision behind the storage backend:
+
+```rust title="src/storage/mod.rs" /playlist_url/#v /thumbnail_url/#v
+pub enum StorageBackend {
+    Local(LocalStorage),
+    R2(R2Storage),
+}
+
+impl StorageBackend {
+    pub fn playlist_url(&self, video_id: &str) -> String {
+        match self {
+            Self::Local(_) => format!("/hls/{video_id}/master.m3u8"),
+            Self::R2(storage) => storage.playlist_url(video_id),
+        }
+    }
+
+    pub fn thumbnail_url(&self, video_id: &str) -> String {
+        match self {
+            Self::Local(_) => format!("/hls/{video_id}/thumbnail.jpg"),
+            Self::R2(storage) => storage.thumbnail_url(video_id),
+        }
+    }
+}
+```
+
+This is a small change, but it moved an important policy out of the route. The upload handler now asks storage, "Where will this video be playable?" It no longer assumes the answer is a local path under `/hls`.
+
+## Publishing after processing succeeds
+
+The background worker still runs the same media pipeline first. Only after FFprobe, thumbnail generation, and HLS transcoding succeed does it publish the generated directory.
+
+The R2 implementation walks the output directory and uploads each file using an object key that mirrors the local HLS layout:
+
+```rust title="src/storage/r2.rs" /hls/{video_id}/#v /ByteStream::from_path/#s
+let key = format!(
+    "hls/{video_id}/{}",
+    relative_path.to_string_lossy().replace('\\', "/")
+);
+
+let body = ByteStream::from_path(&path).await?;
+
+self.client
+    .put_object()
+    .bucket(&self.bucket)
+    .key(key)
+    .body(body)
+    .send()
+    .await?;
+```
+
+The object names stay predictable:
+
+```text title="R2 object keys"
+hls/{video_id}/thumbnail.jpg
+hls/{video_id}/master.m3u8
+hls/{video_id}/720p/index.m3u8
+hls/{video_id}/720p/segment_000.ts
+```
+
+That predictability is useful because HLS playlists contain relative paths. If `master.m3u8` points to `720p/index.m3u8`, and that playlist points to `segment_000.ts`, the object layout has to preserve those relationships.
+
+## S3 compatibility is useful, but not invisible
+
+Cloudflare R2 speaks an S3-compatible API, so I could use the AWS S3 SDK from Rust. That does not mean the configuration is exactly the same as AWS S3.
+
+The client needs the R2 endpoint, `auto` region, R2 access keys, bucket name, and a public base URL for playback:
+
+```rust title="src/storage/r2.rs" /endpoint_url/#v /Region::new("auto")/#s /force_path_style/#i
+let config = Builder::new()
+    .endpoint_url(endpoint_url)
+    .credentials_provider(credentials)
+    .region(Region::new("auto"))
+    .force_path_style(true)
+    .build();
+```
+
+The public base URL is separate from the API endpoint. The API endpoint is where the backend writes objects. The public base URL is what the browser uses to read `master.m3u8`, thumbnails, and segments.
+
+That separation is another boundary I had to make explicit. A backend credentialed write path and a browser playback URL are not the same thing.
+
+## Delete became harder than removing a folder
+
+With local storage, deletion was mostly `remove_dir_all`. Once generated media lives in object storage, delete has to remove a prefix of objects.
+
+At first, it is easy to think of that prefix as a folder:
+
+```text
+hls/{video_id}/
+```
+
+But object storage does not really have folders. It has keys. Deleting a video means listing every object whose key starts with that prefix and deleting those objects.
+
+The implementation also needs pagination and batching. A longer video can create many HLS segments, and S3-compatible list/delete operations have limits per request. That pushed the delete code from a filesystem operation into a small remote cleanup workflow.
+
+This was a useful reminder: object storage makes durability and delivery easier, but it does not make lifecycle management disappear.
+
+## What this makes possible
+
+R2 changes the deployment story. Generated media no longer has to survive because the API container survived. The HLS assets can live behind a public R2 URL or custom domain, while the Rust server focuses on accepting uploads, running processing, and exposing video/job state.
+
+It also makes Vercel more realistic than before, because Vercel container functions are stateless. A server that depends on local durable media is a bad fit for that model. A server that treats local disk as temporary processing space is closer.
+
+Closer is not solved.
+
+The source upload still lands on local disk before FFmpeg runs. The video registry is still an in-memory `HashMap`. The worker is still a process-local `spawn_blocking` task. If the process restarts, R2 may still contain the generated HLS files, but the API may forget the video exists.
+
+That is the important limitation after this step. Object storage answers where playback files should live. It does not answer what remembers them, what retries failed jobs, or what resumes processing after a deploy.
+
+The next missing piece is durable state: a database for video records and a real queue for recoverable background work.

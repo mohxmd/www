@@ -1,0 +1,131 @@
+---
+title: "Turning the Media Pipeline Into a Rust Service"
+draft: true
+pubDate: 2026-07-25
+description: "How uploads, background work, video state, local storage, and HLS delivery came together around the media pipeline."
+author: "Mohammed"
+image: "./images/turning-media-pipeline-into-rust-service.png"
+tags: ["rust", "axum", "video", "streaming", "hls"]
+series: "video-streaming-from-scratch"
+seriesOrder: 3
+---
+
+The FFmpeg pipeline could turn a file path into adaptive HLS. That was enough to prove the media path, but not enough to behave like a service.
+
+An HTTP API changes the timing of the problem. Encoding may take longer than the request that started it. The source must survive after the upload ends. A client needs an identity it can query while processing continues. Failures must become state, not terminal output disappearing in a shell.
+
+This is where the experiment stopped being an FFmpeg wrapper and started becoming a small backend.
+
+## Accepting the source without holding it all in memory
+
+The upload route accepts multipart form data and looks for a field named `file`. Axum exposes that field as chunks, which I write to a Tokio file as they arrive:
+
+```rust
+while let Some(chunk) = field.chunk().await? {
+    output_file.write_all(&chunk).await?;
+}
+```
+
+The real handler expands the errors into HTTP responses, but this loop is the important behavior. The complete video is not collected into one `Vec<u8>` before writing begins.
+
+I allow a small list of filename extensions and preserve the accepted extension in `source.{extension}`. This is basic filtering, not content validation. Renaming an arbitrary file to `.mp4` can pass the route and fail later when FFprobe inspects it. FFprobe is currently the first component that validates whether the content is readable as media.
+
+Each upload receives a UUID. That ID becomes the directory name, the public video ID, and part of the playback and thumbnail URLs. It avoids using the original filename as storage identity and keeps two uploads with the same name separate.
+
+## Returning before FFmpeg finishes
+
+Running the complete pipeline inside the request handler would keep the upload request open through metadata inspection, thumbnail extraction, and three encodes. It would also run blocking child-process work in an asynchronous context.
+
+The route instead creates the records and moves the processing closure to Tokio's blocking pool:
+
+```rust
+task::spawn_blocking(move || {
+    process_job(
+        worker_state,
+        job_id,
+        worker_video_id,
+        input,
+        output,
+    );
+});
+```
+
+The API responds with `202 Accepted`, a video ID, a job ID, and the URLs that will become useful after processing succeeds.
+
+`spawn_blocking` is a reasonable bridge for this local experiment. It prevents FFmpeg waiting from occupying an async runtime worker. It is not a real job queue. Work belongs to the current process, there is no retry, and restarting the server abandons anything in progress.
+
+Inside the blocking worker, I use the Tokio runtime handle to update asynchronous `RwLock` state before and after running the pipeline. It works, although it is a sign that the worker and state model are still tightly coupled.
+
+## A job is not the public video
+
+I initially needed only a job status. Once the API returned metadata and playback URLs, using the job as the public resource started to feel wrong.
+
+The current state keeps both:
+
+```text
+VideoJob
+  id, video_id, input, output, status, error
+
+Video
+  id, original_filename, status, metadata,
+  playlist_url, thumbnail_url, error, created_at
+```
+
+`VideoJob` contains worker details, including local paths. `Video` contains the information a consumer needs to display or play the upload.
+
+Both begin as pending and move to processing together. When the pipeline succeeds, the job becomes completed while the video becomes ready and receives the metadata extracted by FFprobe. When it fails, both records keep the error.
+
+The difference between `completed` and `ready` is small in this version, but the language matters. Jobs complete; videos become ready.
+
+The maps are wrapped in `Arc<RwLock<_>>`, allowing handlers and workers to share them. Multiple readers can inspect state concurrently, while mutations require a writer. The lock protects memory correctly, but memory itself is the limitation: every record disappears when the server restarts.
+
+## Making storage a visible responsibility
+
+Uploads and generated files follow separate roots:
+
+```text
+media/
+├── uploads/{video_id}/source.mp4
+└── hls/{video_id}/
+    ├── thumbnail.jpg
+    ├── master.m3u8
+    ├── 720p/
+    ├── 480p/
+    └── 360p/
+```
+
+I introduced a `Storage` trait with operations for creating video directories and deleting all files belonging to a video. `LocalStorage` implements those operations with the filesystem.
+
+This is the beginning of a storage boundary, not yet a backend-independent design. `AppState` still contains `Arc<LocalStorage>`, and the upload route calls a method specific to that concrete type to calculate paths. Replacing local files with S3 or R2 would require more than writing another trait implementation.
+
+That incompleteness is useful to admit. An abstraction earns its name when callers depend on its behavior rather than one implementation's paths. The current trait identifies the responsibility, but it has not fully separated it.
+
+## Serving the generated output
+
+Axum exposes the generated directory under `/hls` using `tower_http::services::ServeDir`:
+
+```rust
+.nest_service("/hls", ServeDir::new("media/hls"))
+```
+
+The player requests `/hls/{video_id}/master.m3u8`, follows the rendition playlists, and then requests `.ts` segments. Safari can use native HLS support; other compatible browsers can use `hls.js` through the Media Source Extensions path.
+
+The current static player proves playback, but its playlist path is hard-coded. It is not connected to the upload response or the `GET /videos/{id}` endpoint. That is an obvious missing interaction rather than a media-processing problem.
+
+There is also no explicit cache policy, authorization, signed URL, or external object storage. `ServeDir` is enough for local verification, but delivery becomes a separate system once generated media must be private or globally available.
+
+## Deletion exposed another race
+
+`DELETE /videos/{id}` removes the upload directory, generated HLS directory, video record, and related jobs. For a ready video, that gives the resource a complete local cleanup path.
+
+Deleting a video while its worker is still processing is less clean. The worker is not cancelled. It may still hold the source open, fail midway, or recreate output files after the API has removed the records. A mature design needs a cancellation state and coordination between deletion and processing.
+
+This is the kind of issue I could not see when the project was only a command. Resource lifecycles create races that file conversion alone does not have.
+
+## Packaging did not solve durability
+
+The Docker image installs FFmpeg, builds the Rust binary, copies the static player, and runs the server on port 8080. Docker Compose mounts `media/` from the host so uploads and generated HLS files survive container replacement.
+
+The mount persists files, but not application state. After a restart, the files are still present and the in-memory video registry is empty. Containerizing the process made that mismatch easier to notice; it did not fix it.
+
+The experiment now has a coherent local path from upload to browser playback. Its next hard problem is no longer HLS syntax. It is durability: a database for video state, a queue that can recover jobs, workers that can be retried or cancelled, and storage that is genuinely independent from the API process.

@@ -1,0 +1,140 @@
+---
+title: "What Happens Between Upload and Adaptive HLS"
+draft: true
+pubDate: 2026-07-24
+description: "What I discovered while turning one uploaded video into metadata, a thumbnail, three HLS renditions, and a master playlist."
+author: "Mohammed"
+image: "./images/from-upload-to-adaptive-hls.png"
+tags: ["rust", "video", "streaming", "hls", "ffmpeg"]
+series: "video-streaming-from-scratch"
+seriesOrder: 2
+---
+
+Once the upload reached disk, I had one source file and several unanswered questions. Did it contain an audio stream? What resolution was it? How long was it? Which codec did it use? More importantly, what outputs should I generate from it?
+
+My first working pipeline answers the inspection questions, but only partially answers the planning question. That difference became one of the most useful discoveries in this experiment.
+
+## Inspect before processing
+
+FFprobe can return stream and container metadata as JSON. Rust starts it as a child process and asks for both:
+
+```rust
+let output = Command::new("ffprobe")
+    .args([
+        "-v", "error",
+        "-show_format",
+        "-show_streams",
+        "-of", "json",
+        path,
+    ])
+    .output()?;
+```
+
+I deserialize that output into `ProbeResult`, `Stream`, and `Format` structs. The pipeline looks for the first video stream and the first audio stream, then stores the duration, dimensions, codecs, and overall bitrate on the public video resource.
+
+Using structs here was more than Rust ceremony. FFprobe reports several numeric values as strings and some fields may be missing. Parsing those values deliberately made the uncertainty visible in the types as `Option<f64>` and `Option<u64>`.
+
+The current code uses metadata for the API, but not yet for choosing the encoding plan. Every accepted upload receives the same three renditions.
+
+## A rendition is a policy decision
+
+I keep the encoding ladder as structured data:
+
+```rust
+pub struct Rendition {
+    pub name: &'static str,
+    pub width: u32,
+    pub height: u32,
+    pub video_bitrate: &'static str,
+    pub maxrate: &'static str,
+    pub buffer_size: &'static str,
+    pub bandwidth: u32,
+}
+```
+
+The current list contains 720p, 480p, and 360p outputs. Each one has a target video bitrate, a maximum rate, a rate-control buffer, and the bandwidth advertised in the master playlist.
+
+I initially saw these as FFmpeg settings. They are really product policy. The ladder decides how much storage encoding consumes, what qualities a player can choose, and how much bandwidth each choice expects.
+
+That also means a fixed ladder is only a first version. If the source is 480p, generating a 720p rendition adds pixels but not detail. If the source has a different aspect ratio, the current `scale=width:height` filter can distort it. A better planner would inspect the source first, avoid upscaling, and preserve its aspect ratio.
+
+## What FFmpeg generates
+
+For each rendition, Rust creates a directory and starts FFmpeg with arguments for scaling, H.264 video, AAC audio, and VOD HLS output. The important part of the output is not one video file:
+
+```text
+720p/
+├── index.m3u8
+├── segment_000.ts
+├── segment_001.ts
+└── segment_002.ts
+```
+
+The media playlist describes the segment order and duration. A shortened output looks like this:
+
+```m3u8
+#EXTM3U
+#EXT-X-TARGETDURATION:6
+#EXTINF:6.000000,
+segment_000.ts
+#EXTINF:6.000000,
+segment_001.ts
+#EXT-X-ENDLIST
+```
+
+My pipeline asks for six-second HLS segments and also uses:
+
+```text
+-force_key_frames expr:gte(t,n_forced*6)
+```
+
+This places forced keyframes on the same six-second rhythm. Segment boundaries matter because a player needs a useful decoding point when it starts a segment or changes rendition. Equal target durations alone do not guarantee good switching if the encoded streams do not have aligned keyframes.
+
+The generated segment durations can still vary around the target. HLS segmentation follows actual keyframe boundaries; `-hls_time 6` is a target, not a promise that every file will be exactly six seconds.
+
+## Connecting the renditions
+
+FFmpeg creates each rendition's media playlist, while my Rust code writes the master playlist after all three commands succeed:
+
+```m3u8
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:BANDWIDTH=2800000,RESOLUTION=1280x720
+720p/index.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=1500000,RESOLUTION=854x480
+480p/index.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=900000,RESOLUTION=640x360
+360p/index.m3u8
+```
+
+This file does not contain media. It is a map. The player reads the declared bandwidth and resolution, chooses one media playlist, and begins fetching its segments. With a compatible player, it can move to another rendition as conditions change.
+
+Writing the master playlist in Rust kept policy close to the rendition definitions. It also exposed a responsibility I will need to improve: the advertised `BANDWIDTH` values are manually configured rather than measured from the generated outputs.
+
+## Process arguments, not shell commands
+
+I use `std::process::Command` and pass every FFmpeg argument separately. This avoids constructing one shell command string containing paths and user-derived values.
+
+It does not make every input safe automatically, but it removes shell parsing from the execution path. Spaces in a filename stay part of one argument, and a filename is not interpreted as a second command.
+
+The trade-off is that the Rust code now owns process failures. A successful spawn is not a successful encode, so every command checks its exit status. At the moment, errors become strings such as `failed to generate 480p`. That tells the API which stage failed, but it discards most of FFmpeg's diagnostic output because the transcoder uses `.status()` rather than capturing stderr.
+
+## The thumbnail is part of the same job
+
+Before transcoding, the worker asks FFmpeg for one JPEG frame at ten seconds:
+
+```text
+-ss 00:00:10 -frames:v 1 -q:v 2
+```
+
+The resulting `thumbnail.jpg` lives beside `master.m3u8`. This is convenient for the current API because both URLs share the same video ID and output directory.
+
+It also creates another failure case. A very short input may not have a frame at ten seconds. Since thumbnail generation happens before HLS generation, that error prevents the video from becoming ready even though transcoding might otherwise work. A production policy might seek relative to duration, use an earlier fallback, or treat thumbnail failure separately from playback readiness.
+
+## Where this pipeline is still naive
+
+The code currently starts one FFmpeg process per rendition. That is easy to understand, but the same source is decoded three times. FFmpeg can produce multiple mapped outputs in one process, which could reduce duplicated work at the cost of a more complicated command and failure model.
+
+The command also requires `0:a:0`. A silent video with no audio stream will fail. Partial files can remain when a later rendition fails, and there is no cleanup or retry policy. The bitrate ladder is fixed, aspect ratio handling is incomplete, and encoding progress is not captured.
+
+The pipeline now produces playable adaptive HLS, but it does not yet derive the right HLS plan for each source. That is the next media problem hiding beneath the working output: processing should be driven by source metadata, not only recorded after the fact.

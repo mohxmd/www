@@ -1,0 +1,103 @@
+---
+title: "I Tried Building a Video Streaming Engine in Rust"
+draft: true
+pubDate: 2026-07-23
+description: "The assumptions, boundaries, and first architecture behind my experiment with Rust, FFmpeg, and adaptive HLS."
+author: "Mohammed"
+image: "./images/building-video-streaming-engine-in-rust.png"
+tags: ["rust", "video", "streaming", "hls", "ffmpeg"]
+series: "video-streaming-from-scratch"
+seriesOrder: 1
+---
+
+I started this experiment with a vague goal: understand how platforms turn an uploaded video into something that can play smoothly in a browser.
+
+The first idea in my head was much smaller than the real problem. Save an MP4, expose it through an HTTP server, put the URL inside a `<video>` element, and that should be video streaming.
+
+It is a form of delivery, but it avoids most of the engineering I wanted to learn. There is no processing lifecycle, no adaptive quality, no playlist, and no useful boundary between an uploaded source and a playback-ready video. It is closer to serving a large file than building a media pipeline.
+
+That mistaken assumption gave the project its direction.
+
+## The boundary I chose
+
+I did not want to implement a video codec. Encoding H.264 or AAC from first principles would be a completely different project, and it would hide the system around the encoder that I was actually curious about.
+
+I chose a narrower boundary:
+
+- FFprobe inspects the uploaded media.
+- FFmpeg performs the expensive media work.
+- Rust controls paths, processes, state, errors, and the HTTP API.
+- HLS becomes the format between processing and playback.
+
+The resulting flow looks like this:
+
+```text
+upload
+  -> save the source
+  -> inspect its streams
+  -> extract a thumbnail
+  -> encode multiple renditions
+  -> generate HLS playlists and segments
+  -> expose a video resource
+  -> serve the generated files
+```
+
+That division is important. Rust is not replacing FFmpeg here. It is making a repeatable application around FFmpeg.
+
+## Why I began with HLS
+
+I wanted the output to be visible and inspectable. HLS is useful for that because most of its structure is made from ordinary files.
+
+A processed video in my project becomes:
+
+```text
+media/hls/{video_id}/
+├── thumbnail.jpg
+├── master.m3u8
+├── 720p/
+│   ├── index.m3u8
+│   └── segment_000.ts
+├── 480p/
+└── 360p/
+```
+
+The master playlist tells a player which renditions exist. Each rendition playlist points to a sequence of media segments. The player can then select a rendition based on its estimate of the available bandwidth.
+
+This made adaptive streaming feel much less mysterious. The browser is not receiving a magical continuous stream from my Rust process. It is requesting playlists and media files over HTTP, then deciding what to fetch next.
+
+## From a command to a resource
+
+The earliest useful version could have been a command that accepted one path and generated one folder. I moved beyond that because uploads introduce a lifecycle.
+
+Immediately after an upload, the video is not ready. It moves through a small state machine:
+
+```text
+pending -> processing -> ready
+                      -> failed
+```
+
+That led to two different records in the Rust application.
+
+A `VideoJob` represents internal work: the input path, output path, processing status, and an error if the worker fails. A `Video` represents what an API consumer cares about: a stable ID, original filename, source metadata, playback URL, thumbnail URL, and public status.
+
+At first those types looked like duplicated state. They are related, but they answer different questions. A job asks, "What is the worker doing?" A video asks, "Can this resource be played?"
+
+Keeping them separate also stopped implementation details such as filesystem paths from becoming part of the public video response.
+
+## Rust's role in the experiment
+
+Rust gave me useful friction. Paths could remain `PathBuf` values until I had to pass them to another process. FFprobe JSON could be deserialized into explicit structs. Shared state had to be synchronized instead of being treated as a global object that happened to work during local testing.
+
+It also forced me to acknowledge the boundary between Axum's asynchronous request handling and FFmpeg's blocking process execution. Calling FFmpeg directly inside an async upload handler would occupy a runtime worker thread for the entire encode. The current version moves that work into `tokio::task::spawn_blocking` and updates the in-memory state around it.
+
+This is enough for the experiment, but it is not a durable worker system. Restarting the process loses every `Video` and `VideoJob` record. The generated files remain on disk, while the API forgets that they exist.
+
+## What I actually built
+
+The current project accepts a multipart upload, stores the source, probes its metadata, extracts a JPEG frame, generates three HLS renditions, creates a master playlist, and serves the output through Axum. It also exposes endpoints for reading a video, reading its internal job, and deleting its files.
+
+That is a real local media-processing path. It is not a small Netflix or YouTube. Those systems add durable queues, distributed workers, object storage, authentication, observability, global delivery, and a large amount of failure handling that this experiment does not have.
+
+Calling the project a streaming engine is useful as a description of its responsibility, not as a claim about its scale.
+
+The first architecture answered where each responsibility belongs. The next question was more mechanical: what exactly must FFmpeg generate so that a player can move between different qualities without treating them as unrelated videos?

@@ -9,12 +9,12 @@ const { class: className, dir = "ltr", tabindex, ...props } = Astro.props;
 ---
 
 <Clipboard
-  size="sm"
-  class="absolute top-0 right-0"
+  size="icon"
+  class="absolute top-1 right-1 z-10 size-7 rounded-sm"
   value="$el.nextElementSibling.textContent.trim()"
 />
 <pre
   {...props}
   {dir}
   {tabindex}
-  class={cn("thin-scrollbar overflow-auto p-3.5", className)}><slot /></pre>
+  class={cn("thin-scrollbar overflow-auto p-3.5 pr-12", className)}><slot /></pre>

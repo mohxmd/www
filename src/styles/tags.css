@@ -50,7 +50,7 @@
 
 .lang-go,
 .lang-golang {
-  @apply bg-[#00add8] text-white;
+  @apply bg-[#00add8] text-[#12181a];
 }
 
 .lang-java {
@@ -89,7 +89,7 @@
 
 .lang-rust,
 .lang-rs {
-  @apply bg-[#000000] text-[#f74c00];
+  @apply bg-[#dea584] text-[#12181a];
 }
 
 .lang-php {
@@ -102,7 +102,7 @@
 }
 
 .lang-sql {
-  @apply bg-[#f29111] text-white;
+  @apply bg-[#f29111] text-[#12181a];
 }
 
 .lang-yaml,
@@ -124,5 +124,29 @@
 }
 
 .lang-svelte {
-  @apply bg-[#ff3e00] text-white;
+  @apply bg-[#ff3e00] text-[#12181a];
+}
+
+.lang-cpp,
+.lang-cxx,
+.lang-cplusplus {
+  @apply bg-[#00599c] text-white;
+}
+
+.lang-csharp,
+.lang-cs {
+  @apply bg-[#68217a] text-white;
+}
+
+.lang-kotlin,
+.lang-kt {
+  @apply bg-[#7f52ff] text-white;
+}
+
+.lang-swift {
+  @apply bg-[#f05138] text-white;
+}
+
+.lang-dart {
+  @apply bg-[#0175c2] text-white;
 }

@@ -8,7 +8,10 @@ import ProjectCard from "./_components/project-card.astro";
 
 export const prerender = true;
 
-const projects = await getCollection("projects");
+const projects = (await getCollection("projects")).sort(
+  (a, b) =>
+    new Date(b.data.createdAt ?? 0).valueOf() - new Date(a.data.createdAt ?? 0).valueOf()
+);
 ---
 
 <Layout

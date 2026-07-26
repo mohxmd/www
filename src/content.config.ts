@@ -119,6 +119,7 @@ const projectSchema = z.object({
 });
 
 const REPO_NAMES = [
+  "stream-engine",
   "vaultlet",
   "drizzle-redis-cache",
   "dbstudio",

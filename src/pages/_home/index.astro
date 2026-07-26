@@ -14,7 +14,10 @@ import ProjectCard from "../projects/_components/project-card.astro";
 import Armin from "#/assets/armin.gif";
 import Text from "#/components/ui/text.astro";
 
-const projects = await getCollection("projects");
+const projects = (await getCollection("projects")).sort(
+  (a, b) =>
+    new Date(b.data.createdAt ?? 0).valueOf() - new Date(a.data.createdAt ?? 0).valueOf()
+);
 const lastThreeProjects = projects.slice(0, 2);
 ---
 

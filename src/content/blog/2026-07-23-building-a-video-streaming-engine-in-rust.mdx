@@ -33,7 +33,7 @@ I chose a narrower boundary:
 
 The resulting flow looks like this:
 
-```bash
+```bash title="Processing flow"
 upload
   -> save the source
   -> inspect its streams
@@ -52,7 +52,7 @@ I wanted the output to be visible and inspectable. HLS is useful for that becaus
 
 A processed video in my project becomes:
 
-```bash
+```bash title="media/hls/{video_id}/"
 media/hls/{video_id}/
 ├── thumbnail.jpg
 ├── master.m3u8
@@ -73,7 +73,7 @@ The earliest useful version could have been a command that accepted one path and
 
 Immediately after an upload, the video is not ready. It moves through a small state machine:
 
-```bash
+```bash title="Video state"
 pending -> processing -> ready
                       -> failed
 ```

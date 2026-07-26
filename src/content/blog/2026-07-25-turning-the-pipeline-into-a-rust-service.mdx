@@ -22,7 +22,7 @@ Most of the service workflow lives in [`routes.rs`](https://github.com/mohxmd/st
 
 The upload route accepts multipart form data and looks for a field named `file`. Axum exposes that field as chunks, which I write to a Tokio file as they arrive:
 
-```rust
+```rust title="src/routes.rs" /chunk/#v /write_all/#s
 while let Some(chunk) = field.chunk().await? {
     output_file.write_all(&chunk).await?;
 }
@@ -40,7 +40,7 @@ Running the complete pipeline inside the request handler would keep the upload r
 
 The route instead creates the records and moves the processing closure to Tokio's blocking pool:
 
-```rust
+```rust title="src/routes.rs" /spawn_blocking/#s
 task::spawn_blocking(move || {
     process_job(
         worker_state,
@@ -64,7 +64,7 @@ I initially needed only a job status. Once the API returned metadata and playbac
 
 The current state keeps both:
 
-```bash
+```bash title="In-memory records"
 VideoJob
   id, video_id, input, output, status, error
 
@@ -85,7 +85,7 @@ The maps are wrapped in `Arc<RwLock<_>>`, allowing handlers and workers to share
 
 Uploads and generated files follow separate roots:
 
-```bash
+```bash title="media/"
 media/
 ├── uploads/{video_id}/source.mp4
 └── hls/{video_id}/
@@ -106,7 +106,7 @@ That incompleteness is useful to admit. An abstraction earns its name when calle
 
 Axum exposes the generated directory under `/hls` using `tower_http::services::ServeDir`:
 
-```rust
+```rust title="src/main.rs" /ServeDir/#s
 .nest_service("/hls", ServeDir::new("media/hls"))
 ```
 

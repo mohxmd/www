@@ -20,7 +20,7 @@ The media path discussed here is split across [`probe.rs`](https://github.com/mo
 
 FFprobe can return stream and container metadata as JSON. Rust starts it as a child process and asks for both:
 
-```rust
+```rust title="src/probe.rs" /ffprobe/#s /-show_format/#v /-show_streams/#v
 let output = Command::new("ffprobe")
     .args([
         "-v", "error",
@@ -42,7 +42,7 @@ The current code uses metadata for the API, but not yet for choosing the encodin
 
 I keep the encoding ladder as structured data:
 
-```rust
+```rust title="src/transcoder.rs" /bandwidth/#v /video_bitrate/#v
 pub struct Rendition {
     pub name: &'static str,
     pub width: u32,
@@ -64,7 +64,7 @@ That also means a fixed ladder is only a first version. If the source is 480p, g
 
 For each rendition, Rust creates a directory and starts FFmpeg with arguments for scaling, H.264 video, AAC audio, and VOD HLS output. The important part of the output is not one video file:
 
-```bash
+```bash title="720p/"
 720p/
 ├── index.m3u8
 ├── segment_000.ts
@@ -74,7 +74,7 @@ For each rendition, Rust creates a directory and starts FFmpeg with arguments fo
 
 The media playlist describes the segment order and duration. A shortened output looks like this:
 
-```m3u8
+```m3u8 title="720p/index.m3u8"
 #EXTM3U
 #EXT-X-TARGETDURATION:6
 #EXTINF:6.000000,
@@ -86,7 +86,7 @@ segment_001.ts
 
 My pipeline asks for six-second HLS segments and also uses:
 
-```bash
+```bash title="FFmpeg keyframe alignment"
 -force_key_frames expr:gte(t,n_forced*6)
 ```
 
@@ -98,7 +98,7 @@ The generated segment durations can still vary around the target. HLS segmentati
 
 FFmpeg creates each rendition's media playlist, while my Rust code writes the master playlist after all three commands succeed:
 
-```m3u8
+```m3u8 title="master.m3u8" /BANDWIDTH/#v /RESOLUTION/#i
 #EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-STREAM-INF:BANDWIDTH=2800000,RESOLUTION=1280x720
@@ -125,7 +125,7 @@ The trade-off is that the Rust code now owns process failures. A successful spaw
 
 Before transcoding, the worker asks FFmpeg for one JPEG frame at ten seconds:
 
-```bash
+```bash title="src/thumbnail.rs"
 -ss 00:00:10 -frames:v 1 -q:v 2
 ```
 

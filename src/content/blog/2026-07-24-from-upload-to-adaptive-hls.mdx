@@ -1,18 +1,20 @@
 ---
 title: "What Happens Between Upload and Adaptive HLS"
-draft: true
+draft: false
 pubDate: 2026-07-24
 description: "What I discovered while turning one uploaded video into metadata, a thumbnail, three HLS renditions, and a master playlist."
 author: "Mohammed"
 image: "./images/from-upload-to-adaptive-hls.png"
 tags: ["rust", "video", "streaming", "hls", "ffmpeg"]
-arc: "video-streaming-from-scratch"
+arc: "building-a-video-streaming-engine"
 arcOrder: 2
 ---
 
 Once the upload reached disk, I had one source file and several unanswered questions. Did it contain an audio stream? What resolution was it? How long was it? Which codec did it use? More importantly, what outputs should I generate from it?
 
 My first working pipeline answers the inspection questions, but only partially answers the planning question. That difference became one of the most useful discoveries in this experiment.
+
+The media path discussed here is split across [`probe.rs`](https://github.com/mohxmd/stream-engine/blob/main/src/probe.rs), [`transcoder.rs`](https://github.com/mohxmd/stream-engine/blob/main/src/transcoder.rs), and [`thumbnail.rs`](https://github.com/mohxmd/stream-engine/blob/main/src/thumbnail.rs).
 
 ## Inspect before processing
 
@@ -62,7 +64,7 @@ That also means a fixed ladder is only a first version. If the source is 480p, g
 
 For each rendition, Rust creates a directory and starts FFmpeg with arguments for scaling, H.264 video, AAC audio, and VOD HLS output. The important part of the output is not one video file:
 
-```text
+```bash
 720p/
 ├── index.m3u8
 ├── segment_000.ts
@@ -84,7 +86,7 @@ segment_001.ts
 
 My pipeline asks for six-second HLS segments and also uses:
 
-```text
+```bash
 -force_key_frames expr:gte(t,n_forced*6)
 ```
 
@@ -123,7 +125,7 @@ The trade-off is that the Rust code now owns process failures. A successful spaw
 
 Before transcoding, the worker asks FFmpeg for one JPEG frame at ten seconds:
 
-```text
+```bash
 -ss 00:00:10 -frames:v 1 -q:v 2
 ```
 

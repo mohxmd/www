@@ -1,12 +1,12 @@
 ---
 title: "Turning the Media Pipeline Into a Rust Service"
-draft: true
+draft: false
 pubDate: 2026-07-25
 description: "How uploads, background work, video state, local storage, and HLS delivery came together around the media pipeline."
 author: "Mohammed"
 image: "./images/turning-media-pipeline-into-rust-service.png"
 tags: ["rust", "axum", "video", "streaming", "hls"]
-arc: "video-streaming-from-scratch"
+arc: "building-a-video-streaming-engine"
 arcOrder: 3
 ---
 
@@ -15,6 +15,8 @@ The FFmpeg pipeline could turn a file path into adaptive HLS. That was enough to
 An HTTP API changes the timing of the problem. Encoding may take longer than the request that started it. The source must survive after the upload ends. A client needs an identity it can query while processing continues. Failures must become state, not terminal output disappearing in a shell.
 
 This is where the experiment stopped being an FFmpeg wrapper and started becoming a small backend.
+
+Most of the service workflow lives in [`routes.rs`](https://github.com/mohxmd/stream-engine/blob/main/src/routes.rs), with shared state in [`state.rs`](https://github.com/mohxmd/stream-engine/blob/main/src/state.rs) and the storage boundary under [`src/storage`](https://github.com/mohxmd/stream-engine/tree/main/src/storage).
 
 ## Accepting the source without holding it all in memory
 
@@ -62,7 +64,7 @@ I initially needed only a job status. Once the API returned metadata and playbac
 
 The current state keeps both:
 
-```text
+```bash
 VideoJob
   id, video_id, input, output, status, error
 
@@ -83,7 +85,7 @@ The maps are wrapped in `Arc<RwLock<_>>`, allowing handlers and workers to share
 
 Uploads and generated files follow separate roots:
 
-```text
+```bash
 media/
 ├── uploads/{video_id}/source.mp4
 └── hls/{video_id}/

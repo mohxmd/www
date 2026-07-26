@@ -1,0 +1,15 @@
+---
+title: "Building a Video Streaming Engine"
+description: "An engineering exploration of building a small video-on-demand pipeline with Rust, FFmpeg, Axum, and adaptive HLS."
+status: "complete"
+draft: false
+startedDate: 2026-07-23
+---
+
+I started this experiment to understand what actually happens after a video is uploaded and before a browser can play it as an adaptive stream.
+
+The code behind this exploration lives in [mohxmd/stream-engine](https://github.com/mohxmd/stream-engine).
+
+Across three posts, I follow the project from my initial assumptions to a working local pipeline: inspecting media with FFprobe, transcoding with FFmpeg, generating HLS playlists and segments, tracking background work, organizing storage, and serving the result through Axum.
+
+This is not an attempt to recreate Netflix or YouTube. It is a focused exploration of the mechanics and architectural boundaries that become visible when one uploaded file has to become a playback-ready video resource.

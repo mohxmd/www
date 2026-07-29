@@ -1,0 +1,129 @@
+---
+title: "A Tiny Tour of My Code Blocks"
+draft: true
+pubDate: 2026-07-29
+description: "A playful reference for the syntax highlighting, annotations, and small details available in my blog code blocks."
+author: "Mohammed"
+image: "./images/code-block-showcase.png"
+tags: ["astro", "markdown", "shiki", "rehype-pretty-code", "developer-tools"]
+---
+
+Code blocks are where a technical article either becomes easy to follow or turns into a wall of characters. This post is a small tour of the features available in the code blocks on this blog.
+
+It is also a living test page. When the code component grows a new trick, this is where I want to see it first.
+
+## Start with a language and a title
+
+The language controls syntax highlighting. The title gives the example a useful name instead of leaving the reader to guess what the snippet represents.
+
+```ts title="greeting.ts"
+const greeting = "Hello from the code block";
+console.log(greeting);
+```
+
+## Add line numbers when order matters
+
+The component keeps line numbers visible so longer examples are easy to discuss. Add `showLineNumbers` when you want the generated line-number metadata and use `showLineNumbers{18}` when an explanation needs to start from a real file position.
+
+```ts title="counter.ts" showLineNumbers
+let count = 0;
+count += 1;
+console.log(count);
+```
+
+You can also start at a meaningful number when showing only part of a real file.
+
+```ts title="counter.ts" showLineNumbers{18}
+const next = count + 1;
+return next;
+```
+
+## Highlight selected lines
+
+Use a range in the fence metadata to draw attention to important lines.
+
+```ts title="server.ts" {2,4-5}
+const port = 4321;
+const host = "0.0.0.0";
+
+const address = `${host}:${port}`;
+console.log(`Listening on ${address}`);
+```
+
+## Highlight words
+
+Use slash-delimited text in the metadata to highlight matching words.
+
+```ts title="logger.ts" /console/
+console.log("the first message");
+console.warn("the second message");
+```
+
+## Highlight different characters by meaning
+
+Character annotations can be grouped with ids. This example uses `v` for values, `s` for important symbols, and `i` for an interesting detail.
+
+```ts title="settings.ts" /"production"/#v /PORT/#s /4321/#i
+const environment = "production";
+const PORT = 4321;
+```
+
+## Show a change with diff lines
+
+The diff transformer understands `[!code --]` and `[!code ++]` comments.
+
+```ts title="config.ts"
+const port = 3000; // [!code --]
+const port = 4321; // [!code ++]
+```
+
+## Focus on one part of a larger example
+
+Focus keeps the complete example visible while making one line the visual center.
+
+```ts title="request.ts"
+const response = await fetch("/api/posts");
+const posts = await response.json(); // [!code focus]
+return posts;
+```
+
+## Mark errors, warnings, and information
+
+The error-level transformer supports `error`, `warning`, and `info` annotations.
+
+```ts title="validation.ts"
+const input = "";
+if (!input) console.error("A value is required"); // [!code error]
+console.warn("Using the fallback value"); // [!code warning]
+console.info("Validation finished"); // [!code info]
+```
+
+## Use plain text for diagrams and output
+
+Not every block is source code. Text blocks are useful for request flows, directory trees, logs, and output that should not receive language colors.
+
+```text title="request flow"
+browser -> Astro route -> database
+database -> Astro route -> browser
+```
+
+## Captions for extra context
+
+Captions are available when a title is not enough and the snippet needs a short explanation below it.
+
+```bash caption="The final command starts the local preview server."
+bun run build
+bun run preview
+```
+
+## The small details matter
+
+The component also keeps code horizontally scrollable when needed, includes a copy action, preserves keyboard focus, and uses build-time Shiki highlighting instead of doing syntax work in the browser.
+
+That combination is deliberate. The page gets real syntax colors without a client-side highlighter bundle, while the surrounding component still handles the practical things readers expect from a code example.
+
+## What comes next
+
+This post is a useful home for future content components too. A video player, terminal output block, diagram, or interactive demo can be documented beside the code block that explains it.
+
+The goal is simple: every component should have a small example that proves its useful path before it becomes part of a larger article.

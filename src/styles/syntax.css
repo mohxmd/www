@@ -17,9 +17,84 @@
   background-color: var(--shiki-dark-bg);
 }
 
+/* Titled blocks place the copy button in the header, so they do not need a wide right gutter. */
+figure:has(> figcaption) pre {
+  padding-right: 0.875rem;
+}
+
+/* Untitled blocks keep room for the copy button, which overlays the code area. */
+figure:not(:has(> figcaption)) pre {
+  padding-right: 3rem;
+}
+
+/* Keep annotation and line backgrounds visible over token backgrounds. */
+[data-theme*=" "] [data-line] span {
+  background-color: transparent;
+}
+
+[data-highlighted-chars] span,
+[data-chars-id] span {
+  background-color: inherit;
+}
+
+/* Line and word annotations emitted by @shikijs/transformers. */
+[data-highlighted-line],
+[data-highlighted-line] > *,
+[data-line].highlighted,
+[data-line].highlighted > * {
+  background-color: rgba(14, 165, 233, 0.2) !important;
+}
+
+[data-line].diff.add {
+  background-color: rgba(34, 197, 94, 0.15);
+}
+
+[data-line].diff.remove {
+  background-color: rgba(239, 68, 68, 0.15);
+}
+
+[data-line].focused {
+  background-color: rgba(14, 165, 233, 0.1);
+}
+
+pre.has-focused [data-line]:not(.focused) {
+  @apply opacity-40;
+}
+
+[data-line].error {
+  background-color: rgba(239, 68, 68, 0.25) !important;
+  border-left: 2px solid rgba(239, 68, 68, 0.85);
+}
+
+[data-line].error > * {
+  background-color: rgba(239, 68, 68, 0.25) !important;
+}
+
+[data-line].warning {
+  background-color: rgba(245, 158, 11, 0.25) !important;
+  border-left: 2px solid rgba(245, 158, 11, 0.85);
+}
+
+[data-line].warning > * {
+  background-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+[data-line].info {
+  background-color: rgba(59, 130, 246, 0.25) !important;
+  border-left: 2px solid rgba(59, 130, 246, 0.85);
+}
+
+[data-line].info > * {
+  background-color: rgba(59, 130, 246, 0.25) !important;
+}
+
+.highlighted-word {
+  @apply rounded bg-amber-300/70 px-0.5 dark:bg-amber-500/30;
+}
+
 /* Code annotations */
 [data-highlighted-chars] {
-  @apply rounded bg-zinc-600/50;
+  @apply rounded bg-zinc-300/80 dark:bg-zinc-600/50;
 }
 
 [data-chars-id] {
@@ -27,25 +102,25 @@
 }
 
 [data-chars-id="v"] {
-  @apply border-pink-600 bg-pink-900/60;
+  @apply border-pink-600 bg-pink-200/80 dark:bg-pink-900/60;
 }
 
 [data-chars-id="v"] span {
-  @apply text-pink-300!;
+  @apply text-pink-800! dark:text-pink-300!;
 }
 
 [data-chars-id="s"] {
-  @apply border-yellow-600 bg-yellow-900/50;
+  @apply border-yellow-600 bg-yellow-200/80 dark:bg-yellow-900/50;
 }
 
 [data-chars-id="s"] span {
-  @apply text-yellow-300!;
+  @apply text-yellow-900! dark:text-yellow-300!;
 }
 
 [data-chars-id="i"] {
-  @apply border-purple-600 bg-purple-900/50 font-bold;
+  @apply border-purple-600 bg-purple-200/80 font-bold dark:bg-purple-900/50;
 }
 
 [data-chars-id="i"] span {
-  @apply text-purple-200!;
+  @apply text-purple-900! dark:text-purple-200!;
 }

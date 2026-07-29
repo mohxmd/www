@@ -32,7 +32,7 @@
 }
 
 @utility gradient-text {
-  @apply bg-gradient-to-br from-[oklch(0.704_0.191_22.216)] via-[oklch(0.586_0.218_15.2)] to-[oklch(0.345_0.101_251.1)] bg-clip-text text-transparent;
+  @apply bg-linear-to-br from-[oklch(0.704_0.191_22.216)] via-[oklch(0.586_0.218_15.2)] to-[oklch(0.345_0.101_251.1)] bg-clip-text text-transparent;
 }
 
 @utility focusable {

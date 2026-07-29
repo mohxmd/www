@@ -1,3 +1,22 @@
+/* Shiki dual-theme output: the document .dark class is managed by astro-theme-toggle. */
+[data-theme*=" "] span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+.dark [data-theme*=" "] span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
+[data-theme*=" "] {
+  background-color: var(--shiki-light-bg);
+}
+
+.dark [data-theme*=" "] {
+  background-color: var(--shiki-dark-bg);
+}
+
 /* Code annotations */
 [data-highlighted-chars] {
   @apply rounded bg-zinc-600/50;
@@ -12,7 +31,7 @@
 }
 
 [data-chars-id="v"] span {
-  @apply !text-pink-300;
+  @apply text-pink-300!;
 }
 
 [data-chars-id="s"] {
@@ -20,7 +39,7 @@
 }
 
 [data-chars-id="s"] span {
-  @apply !text-yellow-300;
+  @apply text-yellow-300!;
 }
 
 [data-chars-id="i"] {
@@ -28,5 +47,5 @@
 }
 
 [data-chars-id="i"] span {
-  @apply !text-purple-200;
+  @apply text-purple-200!;
 }

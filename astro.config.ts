@@ -44,7 +44,10 @@ export default defineConfig({
         [
           prettyCode,
           {
-            theme: "vitesse-black",
+            theme: {
+              dark: "vitesse-black",
+              light: "vitesse-light",
+            },
             wrap: true,
             defaultLang: "bash",
             bypassInlineCode: true,

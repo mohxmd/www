@@ -1,0 +1,30 @@
+---
+import Layout from "#/layouts/layout.astro";
+import { VideoPlayer } from "#/components/media/video-player";
+import captionsUrl from "#/assets/private/001.vtt";
+import videoUrl from "#/assets/private/001.mp4";
+
+export const prerender = true;
+---
+
+<Layout title="One Way I Use AI | Mohammed">
+  <main
+    class="mx-auto flex min-h-[calc(100vh-220px)] w-full max-w-md flex-col justify-center gap-4 px-4 py-10"
+  >
+    <div class="space-y-1">
+      <h1 class="text-fluid-2xl font-bold">One Way I Use AI</h1>
+      <p class="text-muted-foreground text-fluid-sm">Private submission preview</p>
+    </div>
+
+    <VideoPlayer
+      src={videoUrl}
+      title="One Way I Use AI"
+      preload="metadata"
+      muted={false}
+      aspectRatio="9 / 16"
+      captions={captionsUrl}
+      captionsLanguage="en"
+      captionsLabel="English"
+    />
+  </main>
+</Layout>

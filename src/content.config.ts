@@ -133,6 +133,10 @@ const REPO_NAMES = [
 ] as const;
 
 export const collections = {
+  resumes: defineCollection({
+    loader: glob({ pattern: "*.md", base: "./src/content/resumes" }),
+    schema: z.object({ title: z.string() }),
+  }),
   blog: defineCollection({
     loader: glob({
       pattern: "**/*.{md,mdx}",

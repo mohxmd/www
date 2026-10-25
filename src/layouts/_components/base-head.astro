@@ -9,6 +9,7 @@ import { siteConfig } from "#/configs/site";
 import LDSchema from "./ld-schema.astro";
 
 export type Metadata = {
+  noindex?: boolean;
   title?: string;
   description?: string;
   og?: string;
@@ -22,6 +23,7 @@ export type Metadata = {
 type Props = { metadata: Metadata };
 const { metadata } = Astro.props;
 const {
+  noindex = false,
   title = siteConfig.title,
   description = siteConfig.description,
   og = siteConfig.og,
@@ -54,6 +56,7 @@ const schemaMetadata = {
 <meta name="description" content={description} />
 <meta name="author" content={author} />
 <meta name="generator" content={Astro.generator} />
+{noindex && <meta name="robots" content="noindex" />}
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={type === "blog" ? "article" : "website"} />

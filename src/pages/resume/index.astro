@@ -1,0 +1,58 @@
+---
+import { getEntry, render } from "astro:content";
+import Layout from "#/layouts/layout.astro";
+import MarkdownContent from "#/components/content/markdown-content.astro";
+import { resumeUpdatedDate, formatResumeDate, resumeFilename } from "#/data/resumes";
+
+export const prerender = true;
+
+const resume = await getEntry("resumes", "resume");
+if (!resume) throw new Error("Missing resume Markdown.");
+const { Content } = await render(resume);
+---
+
+<Layout
+  metadata={{
+    title: `${resume.data.title} | Resume`,
+    description: "Full Stack Engineer · Web & Mobile · GraphQL & AI Integration",
+    noindex: true,
+  }}
+>
+  <section class="mx-auto max-w-3xl space-y-10 py-8" data-pagefind-ignore>
+    <header class="space-y-5 border-b border-current/15 pb-6">
+      <div class="flex flex-wrap items-baseline justify-between gap-3">
+        <h1 class="text-fluid-3xl font-semibold tracking-tight">Resume</h1>
+        {
+          resumeUpdatedDate && (
+            <p class="text-sm opacity-60">
+              Updated{" "}
+              <time datetime={resumeUpdatedDate}>{formatResumeDate(resumeUpdatedDate)}</time>
+            </p>
+          )
+        }
+      </div>
+      <nav aria-label="Resume documents" class="flex flex-wrap gap-3">
+        <a
+          href="/resume.pdf"
+          data-astro-reload
+          class="rounded-lg border border-current/25 px-4 py-2 font-medium transition-colors hover:bg-current/5"
+          >View PDF</a
+        >
+        <a
+          href="/resume.pdf"
+          download={resumeFilename}
+          data-astro-reload
+          class="rounded-lg border border-current/25 px-4 py-2 font-medium transition-colors hover:bg-current/5"
+          >Download PDF</a
+        >
+      </nav>
+    </header>
+
+    <article aria-label="Resume">
+      <MarkdownContent
+        Content={Content}
+        class="[&_a]:underline [&_a]:underline-offset-4 [&_h2]:mt-10 [&_hr]:border-current/15"
+      />
+    </article>
+  </section>
+</Layout>

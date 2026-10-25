@@ -110,7 +110,11 @@ export default defineConfig({
     mdx(),
     icon(),
     alpine({ entrypoint: "/alpine.config.ts" }),
-    sitemap({ changefreq: "daily", lastmod: new Date() }),
+    sitemap({
+      changefreq: "daily",
+      lastmod: new Date(),
+      filter: (page) => !/^\/resume(?:[/.]|$)/.test(new URL(page).pathname),
+    }),
     robotsTxt({ policy: [{ userAgent: "*", disallow: ["/404"] }] }),
   ],
 });
